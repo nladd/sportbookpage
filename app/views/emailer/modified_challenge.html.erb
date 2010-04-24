@@ -1,0 +1,45 @@
+<table cellspacing="5" style="width: 100%">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='2' style="text-align: center">
+        <%= @user.first_name + " " + @user.last_name %> has modified your challenge.
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Challenge details:</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Game:</td>
+      <td><%= @challenge.favorite_full_name + " vs. " + @challenge.underdog_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Date:</td>
+      <td><%= @challenge.start_date_time.strftime("%D %I:%M%P") %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Favorite:</td>
+      <td><%= @challenge.favorite_full_name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Spread:</span>&nbsp;&nbsp;<%= @challenge.spread.to_s %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><span style="font-weight: bold">Your original spread:</span>&nbsp;&nbsp;<%= @old_challenge.spread.to_s %></td>
+    <tr>
+      <td style="font-weight: bold">Wager:</td>
+      <td><%= number_to_currency @challenge.wager %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Original wager:</td>
+      <td><%= number_to_currency @old_challenge.wager %></td>
+    </tr>
+    <% if !(@note.blank?) %>
+    <tr>
+      <td style="font-weight: bold">Note:</td>
+      <td><%= @note %></td>
+    </tr>
+    <% end %>
+    <tr></tr>
+    <tr>
+      <td colspan='2'>
+        To accept the modified challenge, login to <a href="www.sportbookpage.com">sportbookpage.com</a> and view your challenges. Modified challenges will have an option to accept.
+      </td>
+    </tr>
+</table>

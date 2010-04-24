@@ -1,0 +1,47 @@
+
+<% form_remote_tag(:url => {:controller => 'users', :action => 'create_modified_challenge'}, :multipart => true, :id => 'form') do %>
+
+<%= hidden_field (:challenge, :id ) %>
+<input type="hidden" name="drop_id" value="<%= @drop_id %>"/>
+
+<table cellspacing="5" style="margin: auto">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='2' style="text-align: center">
+        Modify <span style="font-variant: small-caps"><%= @challenger.first_name + " " + @challenger.last_name %>'s</span> Challenge
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Game:</td>
+      <td><%= @challenge.favorite_full_name + " vs. " + @challenge.underdog_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Date:</td>
+      <td><%= @challenge.start_date_time.strftime("%D %I:%M%P") %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Favorite:</td>
+      <td><%= @challenge.favorite_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Spread:</td>
+      <td>&nbsp;&nbsp;<%= text_field_tag ("spread", "0", :value => @challenge.spread, :size => 4, :maxlength => 4 ) %></td>
+      <%= observe_field( "spread", :function => "isNumeric(element, value, 'Home Team Differential')" ) %>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Wager:</td>
+      <td>$<%= text_field_tag ("wager", "0", :value => @challenge.wager, :size => 7, :maxlength => 12) %></td>
+      <%= observe_field( "wager", :function => "isNumeric(element, value, 'Wager Amount')" ) %>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Note:</td>
+      <td align='right'><%= text_area_tag( 'note', nil, {:size => '40x2'} ) %></td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td colspan='2' style="text-align: center">
+        <td colspan='2' align="right"><%= submit_tag( "Submit" , :class => "submit" ) %></td>
+      </td>
+    </tr>
+</table>
+
+<% end %>

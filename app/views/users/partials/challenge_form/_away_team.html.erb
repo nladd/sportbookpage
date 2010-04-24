@@ -1,0 +1,15 @@
+<%
+
+  if(@away_teams.blank?)
+    @away_teams = ""
+  end
+%>
+
+<%= 
+  collection_select(:away_team, :id, @away_teams, :entity_id, :last_name, 
+    {:include_blank => false,
+    :prompt => "Away Team..." },
+    {:onchange => "
+      new Ajax.Request('/users/select_away_team', {asynchronous:true, evalScripts:true, parameters:'away_team=' +  $('away_team_id').value + '&home_team=#{@home_team_id}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}') });",
+    } )
+%>

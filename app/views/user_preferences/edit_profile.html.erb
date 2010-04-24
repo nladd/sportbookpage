@@ -1,0 +1,105 @@
+  <% if flash[:notice] -%>
+  <div id ="flash_notice" class="flash_notice">    
+      <!-- javascript_tag( "new Effect.Highlight('flash_notice', {startcolor: '#fe0000', endcolor: '#000000', restorecolor: '#000000', duration: 1.0} );" ) -->
+      <%= flash[:notice] %>
+  </div>
+  <% end -%>
+
+
+<% form_tag('', :multipart => true, :id => 'register_form') do %>
+
+      
+<div class='title'><div class="title_font">Profile Information</div> <span style='font-size: .625em'>*denotes required fields</span></div>
+  
+<div class='form'>
+
+
+   <table cellspacing='2'>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          Display in profile?
+        </td>
+      </tr>
+      
+      <tr>
+        <td>Birthday:</td>
+        <td><%= @user.birthday %></td>
+        <td align='center'><%= check_box_tag( 'show[birthday]', nil, @currentValues['show_birthday']) %></td>
+      </tr>
+      <%= hidden_field_tag ( 'profile[birthday]', @user.birthday ) %>
+      
+      <tr>
+        <td valign='top'>*Hometown:</td><td><%= text_field_tag( "profile[hometown]", @currentValues['hometown'], :size => 20, :maxlength => 50 ) %></td>
+        <td align='center'><%= check_box_tag( 'show[hometown]', nil, @currentValues['show_hometown'], :class => 'checkbox' ) %></td>
+      </tr>
+      <% if @user.errors[:hometown] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:hometown] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td valign='top'>Favorite Sport:</td><td><%= text_field_tag( 'profile[favorite_sport]', @currentValues['favorite_sport'], :size => 20, :maxlength => 20 ) %></td>
+        <td align='center'><%= check_box_tag( 'show[favorite_sport]', nil, @currentValues['show_favorite_sport'], :class => 'checkbox') %></td>
+       </tr>
+       
+       <tr>
+        <td valign='top'>Jersey #:</td>
+        <td><%= text_field_tag( "profile[jersey_number]", @currentValues['jersey_number'], :size => 3, :maxlength => 3 )%></td>
+        <td align='center'><%= check_box_tag( 'show[jersey_number]', nil, @currentValues['show_jersey_number'], :class => 'checkbox') %></td>
+      </tr>
+      
+      <tr>
+        <td valign='top'>Favorite Team:</td><td><%= text_field_tag( 'profile[favorite_team]', @currentValues['favorite_team'], :size => 20, :maxlength => 30 ) %></td>
+        <td align='center'><%= check_box_tag( 'show[favorite_team]', nil, @currentValues['show_favorite_team'], :class => 'checkbox') %></td>
+      </tr>
+      
+      <tr>
+        <td valign='top'>Favorite Athlete:</td><td><%= text_field_tag( 'profile[favorite_athlete]', @currentValues['favorite_athlete'], :size => 25, :maxlength => 30 ) %></td>
+        <td align='center'><%= check_box_tag( 'show[favorite_athlete]', nil, @currentValues['show_favorite_athlete'], :class => 'checkbox') %></td>
+      </tr>
+      
+      <tr>   
+        <td valign='top'>Favorite Coach:</td><td><%= text_field_tag( 'profile[favorite_coach]', @currentValues['favorite_coach'], :size => 25, :maxlength => 30 ) %></td>
+        <td align='center'><%= check_box_tag( 'show[favorite_coach]', nil, @currentValues['show_favorite_coach'], :class => 'checkbox') %></td>
+      </tr>
+      
+      <tr>
+        <td valign='top'>Bio:</td>
+      </tr>
+      
+      <tr>
+        <td colspan='2'><%= text_area_tag( 'profile[about_me]', @currentValues['about_me'], {:size => '50x3', :value => '', :id => 'profile_about_me'} ) %></td>
+        <td align='center'><%= check_box_tag( 'show[about_me]', nil, @currentValues['show_about_me'], :class => 'checkbox') %></td>
+      </tr>
+      
+      <tr>
+        <td valign='top'>Profile Photo:</td>
+      </tr>
+      <tr>
+        <td id="photo_cell"><img src="/users/<%= @user.id %>/<%= @user.id %>.png" alt="No photo uploaded"/></td>
+        <td>
+          <a href="javascript:void();" onclick="$('file_field').show(); return false;">Change...</a><br/><br/>
+          <%= link_to_remote "Delete", :url => {:controller => "user_preferences", :action => "delete_photo"} %>
+        </td>
+        <!--<td align='center'><%= check_box_tag( 'show[photo]', nil, @currentValues['show_photo']) %></td>-->
+      </tr>
+      <tr id='file_field' style='display: none'>
+        <td colspan='2'><%= file_field_tag 'photo', :size => 40, :id => 'profile_photo'%></td>
+      </tr>
+      
+      <tr>
+        <td colspan='3' align='right'><%= submit_tag( "Save", :class => "submit" ) %></td>
+      </tr>
+      
+    </table>
+
+    
+</div>
+
+<% end %>
+
+<%= javascript_tag "$('user_path').update(\"" + @path_html + "\")" %>
+<%= javascript_tag "createGradient(document.body);" %>

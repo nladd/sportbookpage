@@ -1,0 +1,51 @@
+<div class="sportbookpage">SportBookPage.com<br/><span class="quote">"Your sports. Your way."</span></div>
+
+<div class="message">
+Welcome to sportbookpage.com. Already have a user name? Then go ahead and sign-in. New to sportbookpage.com? Click <a href="javascript:void(0);">here</a> to find out what sportbookpage.com is all about. When you're done checking that out, click the <a href="/register">Sign up!</a> link.
+</div>
+
+
+<div class="loginArea">
+
+  <div class="label">Sign in</div>
+
+  <div id ="login_failed" class="login_failed">    
+    <% if flash[:notice] -%>
+      <%= javascript_tag( "new Effect.Highlight('login_failed', {startcolor: '#fe0000', endcolor: '#000000', restorecolor: '#000000', duration: 1.0} );" ) %>
+      <%= flash[:notice] %>
+    <% end -%>
+  </div>
+
+  <% form_tag do %>
+    
+    <div class="username_label">
+			E-mail:
+		</div>
+		<div class="username_box">
+		<%= text_field_tag :email, nil, :class => "inputbox", :size => '20' %>
+        </div>
+        
+    	<div class="username_forgot">
+  			Forgot your email address?
+  		</div>
+  		
+        <div class="password_label">     
+	        Password:
+		</div>
+		<div class="password_box">
+		<%= password_field_tag :password, nil, :class => "inputbox", :size => '20' %>
+		</div>
+    	<div class="password_forgot">
+  			Forgot your password?
+  		</div>
+	    
+	    <%= submit_tag "Login", :class => "submit" %>
+        
+        <div class="sign_up">
+        	Not a member? <%= link_to 'Sign Up!', register_url %>
+		</div>
+   
+    <% end %>
+
+</div>
+

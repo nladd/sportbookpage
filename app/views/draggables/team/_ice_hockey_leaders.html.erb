@@ -1,0 +1,37 @@
+
+<div class="row_title">
+  League Offensive Leaders
+</div>
+
+<div class="row" style="font-weight: bold" align="center">
+  <div class="cell_200" align="left">Player</div>
+  <div class="cell_40">Points</div>
+  <div class="cell_60">Goals</div>
+  <div class="cell_40">Ass</div>
+  <div class="cell_60">+/-</div>
+</div>
+
+<% 
+  i = 0
+  @leaders.each do |leader|
+    if (i%2 == 0)
+      html_class = "even_row"
+    else
+      html_class = "odd_row"
+    end
+    
+    goals = leader.points.to_i - leader.assists.to_i
+%>
+
+  <div class="<%= html_class %>" align="center">
+    <div class="cell_200" align="left"><%= leader.first_name + " " + leader.last_name %></div>
+    <div class="cell_40"><%= leader.points %></div>
+    <div class="cell_40"><%= goals %></div>
+    <div class="cell_60"><%= leader.assists %></div>
+    <div class="cell_60"><%= leader.plus_minus %></div>
+  </div>
+  
+<%
+    i += 1
+  end
+%>

@@ -1,0 +1,48 @@
+
+  
+  <div class="row" style="font-weight: bold">
+    <div class="cell_20">&nbsp;</div>
+    <div class="cell_110">Opponent</div>
+    <div class="cell_90">Date</div>
+    <div class="cell_90">Time</div>
+    <div class="cell_140">TV</div>
+  </div>
+<%
+    
+    j = 0
+    @games.each do |game|
+
+      if (game.t1_alignment == 'home') then
+        home_away = 'vs'
+      else
+        home_away = '@'
+      end
+
+      if ( (j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+%>
+
+  <div class="<%= html_class %>">
+    <div class="cell_20"><%= home_away %></div>
+    <div class="cell_110"><a href="/team/<%= game.opponent_id %>"><%= game.opponent_last_name %></a></div>
+    <div class="cell_90"><%= game.start_date_time.strftime("%a, %m/%d") %></div>
+    <div class="cell_90"><%= game.start_date_time.strftime("%I:%M%P") %></div>
+    <div class="cell_140" style="font-size: .75em"><%= game.broadcast_listing.to_s %></div>
+    
+    <% if game.event_status == "pre-event" %>
+      <div class="cell_60"><%= link_to_remote "Preview",
+           :url => {:controller => "article", :action => "event_preview"},
+           :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+      </div>
+    <% end %>
+  </div>
+
+<%
+      j += 1 
+    end # close games loop
+    
+%>
+

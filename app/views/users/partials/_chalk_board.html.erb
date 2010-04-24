@@ -1,0 +1,25 @@
+
+<%
+    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".chalkboard"
+    parser = XML::Parser.file(path)
+    profile = parser.parse
+    comments = profile.find('//root/comment')
+    (comments.length - 1).downto(0) do |i|
+      comment = comments[i] %>
+      <table>
+        <tr><td>
+        <span style='color: green'>At <%=h CGI.unescape(comment.find('time').first.content) %>
+          <%=h CGI.unescape(comment.find('date').first.content) %><br/>
+          <%=h CGI.unescape(comment.find('from').first.content) %> wrote:<br/>
+        </span>
+        </td></tr>
+        <tr><td>
+          <% text = CGI.unescape(comment.find('text').first.content) %>
+      <%= text.gsub(/\n/, '<br/>') %>
+        </td></tr>
+        <tr><tr>  
+      </table>
+<%  end %>
+
+
+     

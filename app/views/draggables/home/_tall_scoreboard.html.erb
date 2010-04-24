@@ -1,0 +1,81 @@
+
+<%
+  @leagues.size.times do |@i|
+%>
+  <div class="row_title" align="center">
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
+      <span><%= @leagues[@i].abbreviation %> Scoreboard</span>
+    </div>
+  </div>
+  
+ <%
+    @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
+    @size = @games[@i].size
+    @j = -1
+    @games[@i].each do |game|
+    
+      @j += 1
+      
+  %>
+
+  <%= render :partial => "draggables/partials/more_less" %>
+
+  <%
+      if ( (@j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+  %>
+  
+  <div class="<%= html_class %>">
+      <span style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>">
+        <div class="cell_120"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></div>
+        <div class="cell_40"><%= game.t1_score %></div>
+      </span>
+   <% if game.event_status == "post-event" %>
+      <div class="cell_50">Final</div>
+      <div class="cell_90"><%= game.start_date_time.strftime("%m/%d/%y") %></div>
+   <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
+        sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)
+        state = Event.get_event_state(game.event_id, sport.full_name)
+   %>
+      <div class="cell_70">
+        <%= state %>
+      </div>
+   <% end %>
+      
+  
+      <br/>
+      <span style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>">
+        <div class="cell_120"><span style="font-weight: normal">vs</span> <a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></div>
+        <div class="cell_40"><%= game.t2_score %></div>
+      </span>
+      
+    <% if game.event_status == "post-event" %>
+      <div class="cell_80">
+        <%= link_to_remote "Recap",
+         :url => {:controller => "article", :action => "event_recap"},
+         :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'"
+      %>
+      </div>
+    <% end %>
+ 
+    </div> <!-- close <row> -->
+<%
+      
+    end # close games loop
+    
+    if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
+%>
+     <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>" class="row">
+        <div class="cell_60" style="font-size: .75em; float: left; text-align: right">
+          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
+         </div>
+      </div>
+    </div> <!-- close last <hide_#> -->
+<%
+    end
+  end   # close leagues loop
+%>
+

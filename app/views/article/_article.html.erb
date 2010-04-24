@@ -1,0 +1,12 @@
+
+
+<div class="article_content">
+  <%= @content %>
+</div>
+
+<div class="row">
+<%= link_to_remote "Back", 
+        :url => {:controller => 'draggables', :action => 'route_action'},
+        :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
+%>
+</div>

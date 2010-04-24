@@ -1,0 +1,66 @@
+
+<div class="row">
+    <div class="cell_80">
+      <%= link_to_remote "Division",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;standings_type=division&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+      %>
+    </div>
+    <div class="cell_80">
+      <%= link_to_remote "Conference",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;standings_type=conference&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+      %>
+    </div>
+</div>
+
+
+
+  <%
+    i = 0
+    
+    @standings.each do |division_standings|
+    
+%>     
+  <div class="row_title" style="" align="center">
+    <%= @sub_affiliations[i].full_name + " " + @sub_affiliation_type %>
+  </div>
+  <div class="row" style="font-weight: bold">
+    <div class="cell_90">Team</div>
+    <div class="cell_30">GP</div>
+    <div class="cell_50">%</div>
+    <div class="cell_30">W</div>
+    <div class="cell_30">L</div>
+    <div class="cell_30">Streak</div>
+  </div>
+
+<%
+     j = 0 
+     division_standings.each do |standing|
+        streak_type = ""
+        if standing.streak_type.to_s == 'loss' then
+          streak_type = "L"
+        elsif standing.streak_type.to_s == 'win'
+          streak_type = "W"
+        end
+        
+        if ( (j % 2) == 0) then
+          html_class = "even_row"
+        else
+          html_class = "odd_row"
+        end
+%>
+        <div class="<%= html_class %>">
+          <div class="cell_90"><a href="/team/<%= standing.team_id %>"><%= standing.last_name %></a></div>
+          <div class="cell_30"><%= standing.events_played.to_s %></div>
+          <div class="cell_50"><%= (standing.winning_percentage.to_s)[1..-1] %></div>
+          <div class="cell_30"><%= standing.wins.to_s %></div>
+          <div class="cell_30"><%= standing.losses.to_s %></div>
+          <div class="cell_30"><%= streak_type + standing.streak_total.to_s %></div>
+        </div>
+
+<%      j += 1
+      end   # close division_standings loop
+      i += 1
+    end   # close standings loop
+%>

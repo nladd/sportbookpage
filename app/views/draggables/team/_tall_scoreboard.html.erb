@@ -1,0 +1,60 @@
+
+  <div class="row">
+    <div class="cell_20">&nbsp;</div>
+    <div class="cell_120" style="font-weight: bold">Opponent</div>
+    <div class="cell_80" style="font-weight: bold">Score</div>
+    <div class="cell_80" style="font-weight: bold">Date</div>
+  </div>
+  
+  <%
+    j = 0
+    @games.each do |game|
+      
+      if (game.t1_alignment == 'home') then
+        home_away = 'vs'
+      else
+        home_away = '@'
+      end
+      
+      outcome = ""
+      if(game.t1_outcome == 'win') then
+        outcome = "Win"
+      elsif(game.t1_outcome == 'loss') then
+        outcome = "Loss"
+      end
+
+      if ( (j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+%>
+
+  <div class="<%= html_class %>">
+      <div class="cell_20"><%= home_away %></div>
+      <div class="cell_120"><a href="/team/<%= game.opponent_id %>"><%= game.opponent_last_name %></a></div>
+      <div class="cell_80"><%= game.t1_score + "-" + game.t2_score + " " + outcome%></div>
+      <div class="cell_80"><%= game.start_date_time.strftime("%m/%d/%y") %></div>
+      <br/>
+      <div class="cell_20">&nbsp;</div>
+  <% if game.event_status == "post-event" %>
+      <div class="cell_80">Final <%= link_to_remote "Recap",
+           :url => {:controller => "article", :action => "event_recap"},
+           :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+      </div>
+  <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
+      sport = Affiliation.get_sport_by_league_id(@league.affiliation_id)
+      state = Event.get_event_state(game.event_id, sport.full_name)
+  
+  %>
+      <div class="cell_100">
+        <%= state %>
+      </div>
+  <% end %>
+
+    </div> <!-- close <row> -->
+<%
+       j += 1  
+    end # close games loop
+    
+%>

@@ -1,0 +1,343 @@
+
+
+.drag_n_drop {
+position: absolute;
+top: 160px;
+left: 150px;
+width: 648px;
+height: 100px;
+white-space: nowrap;
+border: 3px solid #C10707;
+z-index: 12;
+}
+
+.drag_n_drop_2 {
+position: absolute;
+top: 1800px;
+left: 150px;
+width: 648px;
+height: 100px;
+white-space: nowrap;
+border: 3px solid #C10707;
+z-index: 12;
+}
+	
+/*
+ * Draggable and droppable elements
+ */
+
+.draggables {
+white-space: nowrap;
+display: inline;
+width: 900px
+}
+
+.drop_item {
+float: left;
+display: block;
+overflow: hidden;
+width: 115px;
+height: 35px;
+margin: 2px;
+cursor: move;
+color: #7B0606;
+white-space: normal;
+background-color: #49A3FF;     /* #053616; dark green */
+font-size: 1.1em;
+font-weight: bold;
+text-align: center;
+z-index: 8000;
+border: 5px solid #7B0606;
+-moz-border-radius: 1ex;
+-webkit-border-radius: 1ex;
+}
+
+.space_holder {
+float: left;
+display: block;
+overflow: hidden;
+width: 115px;
+height: 35px;
+margin: 2px;
+cursor: move;
+color: #7B0606;
+white-space: normal;
+background-color: #000049;
+font-weight: bold;
+text-align: center;
+border: 5px solid #7B0606;
+-moz-border-radius: 1ex;
+-webkit-border-radius: 1ex;
+}
+
+
+.half_space_holder {
+float: left;
+display: block;
+overflow: hidden;
+width: 50px;
+height: 35px;
+margin: 2px;
+cursor: move;
+color: #7B0606;
+white-space: normal;
+background-color: #000049;
+font-weight: bold;
+text-align: center;
+border: 5px solid #7B0606
+}
+
+
+/*
+ * Styles for displaying content within a draggable
+ */
+
+.side_bar {
+position: absolute;
+display: block;
+width: 15px;
+top: 0px;
+left: 0px;
+font-size: .75em;
+line-height: .9;
+text-align: center;
+height: 100%;
+
+}
+
+.vertical_tab {
+position: relative;
+display: block;
+margin-bottom: 5px;
+left: 0px;
+width: 100%;
+height: 90px;
+color: white;
+/*font-weight: bold;*/
+text-align: center;
+padding: 0;
+background: #d9d9db; 
+border: none;
+text-decoration: none;
+z-index: 11;
+-moz-border-radius-bottomright: 1ex;
+-moz-border-radius-topright: 1ex;
+-webkit-border-bottom-right-radius: 1ex;
+-webkit-border-top-right-radius: 1ex;
+}
+
+.vertical_tab:hover {
+background: #7e9ef8;
+z-index: 15;
+}
+
+.selected {
+background: #5380ff; 
+border-bottom: 2px #315ad0 solid; 
+border-top: 2px #315ad0 solid; 
+border-right: 2px #315ad0 solid;
+}
+
+.row_title {
+position: relative;
+display: block;
+margin-left: 15px;
+margin-top: 3px;
+padding: 4px;
+float: left;
+min-width: 92%;
+font-weight: bold; 
+font-size: 1.1em;
+color: white;
+}
+
+.row_title_gradient {
+position: relative; 
+width: 100%; 
+height: 100%;
+}
+
+.row {
+position: relative;
+display: block;
+margin-left: 15px;
+padding: 4px;
+float: left;
+min-width: 92%;
+overflow: visible;
+white-space: nowrap;
+}
+
+.even_row {
+position: relative;
+display: block;
+margin-left: 15px;
+padding: 4px;
+float: left;
+min-width: 92%;
+border: 2px #030f55 solid; 
+background: #eafffe;
+white-space: nowrap;
+}
+
+.odd_row {
+position: relative;
+display: block;
+margin-left: 15px;
+padding: 4px;
+float: left;
+min-width: 92%;
+border-right: 2px #030f55 solid; 
+border-left: 2px #030f55 solid;
+white-space: nowrap;
+}
+
+
+.tall_row {
+position: relative;
+display: block;
+margin-left: 2px;
+padding: 4px;
+float: left;
+min-width: 305px;
+height: 42px;
+white-space: nowrap;
+}
+
+.tall_even_row {
+position: relative;
+display: block;
+margin-left: 2px;
+padding: 4px;
+float: left;
+min-width: 305px;
+height: 42px;
+white-space: nowrap;
+border: 2px #030f55 solid; 
+background: #b5f0f9
+}
+
+.tall_odd_row {
+position: relative;
+display: block;
+margin-left: 2px;
+padding: 4px;
+float: left;
+min-width: 305px;
+height: 42px;
+white-space: nowrap;
+background: #ffe8c0; 
+border-right: 2px #030f55 solid; 
+border-left: 2px #030f55 solid
+}
+
+
+/****************************
+
+Styles for the profile draggable
+
+*****************************/
+
+.profile_content {
+margin: 3px;
+width: 99%;
+height: 99%;
+/*background-image: url("/images/football/football_field_resize.jpg")*/
+}
+
+.tall_profile_content {
+margin: 3px;
+width: 99%;
+height: 99%;
+/*background-image: url("/images/football/tall_football_field.jpg")*/
+}
+
+.profile_table {
+padding: 5px;
+font-weight: bold;
+color: #870c0c
+}
+
+.profile_pic {
+border: thin blue solid;
+text-align: left;
+}
+
+
+.pic_div {
+position: relative;
+display: block;
+float: left;
+border: thin red solid;
+}
+
+
+.about_me {
+position: relative;
+display: block;
+border: thin red solid;
+}
+
+
+/*
+ * Styles to display headlines
+ */
+
+.headlines {
+position: relative;
+display: block;
+margin-top: 6px;
+margin-left: 15px;
+float: left;
+padding: 3px;
+width: 610px;
+height: 400px;
+overflow: auto;
+border: 2px solid red
+}
+
+.tall_headlines {
+position: relative;
+display: block;
+margin-top: 6px;
+margin-left: 15px;
+float: left;
+padding: 3px;
+width: 280px;
+height: 530px;
+overflow: auto;
+border: 2px solid red
+}
+
+.tab_cell {
+position: relative;
+display: inline;
+float: left;
+min-width: 60px;
+color: black;
+font-weight: bold;
+text-align: center;
+border: 2px solid red;
+border-top: none;
+margin: 0;
+padding: 0;
+top: 0px;
+left: 0px
+}
+
+/*
+ * Style to display an artcle
+ */
+.article_content {
+position: relative;
+margin-top: 1%;
+margin-left: 1%;
+padding: 4px;
+float: left;
+width: 96%;
+background: white;
+color: black;
+font-weight: bold;
+border: 1px solid black;
+}
+

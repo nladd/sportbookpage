@@ -1,0 +1,118 @@
+/*
+ * Universal styles
+ */
+ 
+body {
+width: 100%;
+height: 100%;
+padding: 0;
+margin: 0;
+font-size: .75em;
+overflow: auto;
+}
+
+a {
+color: #131bb8;
+}
+
+.background {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%
+}
+
+.fade {
+position: absolute;
+height: 100%;
+width: 100%;
+background-color: white;
+z-index: -1
+}
+
+.content {
+position: relative;
+margin-left: auto;
+margin-right: auto;
+text-align: left;
+border: 2px solid white;
+top: 5px;
+width: 1000px;
+min-height: 2000px;
+color: #05086d;
+z-index: 5
+}
+ 
+.banner {
+position: relative;
+top: 0px;
+width: 1000px;
+height: 110px;
+color: white;
+/*background-image: url('/images/red_to_green.png');
+background-repeat: repeat-x;*/
+/*background: black;*/
+font-style: italic;
+font-variant: small-caps;
+font-weight: 700;
+font-size: 5em;
+text-align: center;
+/*border-bottom: black;
+border-bottom-width: thick*/
+}
+
+/* banner showing the user location within the site */
+.user_path {
+position: relative;
+top: 0px;
+width: 1000px;
+height: 20px;
+padding: 2px 2px 2px 5px;
+color: blue;
+font-weight: 900;
+font-size: 1.25em;
+}
+
+.user_path a {
+text-decoration: none
+}
+
+.user_path a:hover {
+text-decoration: underline
+}
+
+.user_path a:visited {
+color: #131bb8;
+}
+
+.message_banner {
+position: absolute;
+width: 995px;
+height: 20px;
+background: #49A3FF;
+color: red;
+padding: 2px 2px 2px 5px;
+font-weight: 900;
+text-align: center;
+z-index: 10;
+}
+
+.advertisement_1 {
+position: absolute;
+top: 160px;
+left: 808px;
+width: 185px;
+height: 200px;
+border: medium solid black
+}
+
+.advertisement_2 {
+display: block;
+width: 138px;
+height: 300px;
+padding: 2px 2px 0px 0px;
+margin: 10px 0px 0px 0px;
+border: medium solid black
+}
+

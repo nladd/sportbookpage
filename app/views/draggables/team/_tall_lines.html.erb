@@ -1,0 +1,205 @@
+
+<div class="row">
+    <%= link_to_remote "Show all teams",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+    %>
+</div>
+
+
+<div class="row">
+  <div class="cell_140">
+    <a href="javascript:void(0);" onclick="$('<%= @drop_id %>_straight_spread').show(); $('<%= @drop_id %>_moneylines').hide();">Straight Spread Lines</a>
+  </div>
+  <div class="cell_140">
+    <a href="javascript:void(0);" onclick="$('<%= @drop_id %>_straight_spread').hide(); $('<%= @drop_id %>_moneylines').show();">Money Lines</a>
+  </div>
+</div>
+
+
+<div id="<%= @drop_id %>_straight_spread">
+  <div class="row_title" align="center">
+    <%= @league.abbreviation %> Straight Spread Lines
+  </div>
+  
+  <div class="row" style="font-weight: bold">
+    <div class="cell_90">Date</div>
+    <div class="cell_90">Time</div>
+    <br/>
+    <div class="cell_110">Favorite</div>
+    <div class="cell_110">Underdog</div>
+    <div class="cell_40">Line</div>
+  </div>
+<%
+
+    j = -1
+    @games.each do |game|
+    
+      favorite = WageringStraightSpreadLine.get_event_favorite(game.event_id)
+      underdog = WageringStraightSpreadLine.get_event_underdog(game.event_id)
+      
+      if(favorite.blank? || underdog.blank?)
+        next
+      end
+
+      j += 1
+    
+      if ( j == 0 ) then
+%>    
+        <div id="<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>">
+<%    
+      elsif (j % 8) == 0
+%>
+        <div id="<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>" class="row" style="width: 96%">
+        <% if j != 8 then %>
+          <a href="javascript:void(0);" 
+             style="text-align: left" 
+             onclick="Effect.SlideUp('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + (j-8).to_s %>', 'slide' ); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>').hide(); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (j-8).to_s %>').show(); ">Less...</a>
+        <% end %>
+          <a href="javascript:void(0);" 
+             style="text-align: right" 
+             onclick="Effect.SlideDown('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>', 'slide' ); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>').hide(); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + ( (j+8) > @games.size ? @games.size : (j+8) ).to_s %>').show(); ">More...</a>
+
+        </div>
+        
+        
+        </div> <!-- close <hide_#> -->
+        <div id="<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>" style="display:none">
+<%
+      end
+      
+      
+      if ( (j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+%>
+
+  <div class="<%= html_class %>">
+    <div class="cell_90"><%= game.start_date_time.strftime("%a, %m/%d") %></div>
+    <div class="cell_90"><%= game.start_date_time.strftime("%I:%M%P") %></div>
+    <br/>
+    <div class="cell_110"><a href="/team/<%= game.t1_id %>"><%= favorite.last_name %></a></div>
+    <div class="cell_110"><a href="/team/<%= game.t2_id %>"><%= underdog.last_name %></a></div>
+    <div class="cell_40"><%= favorite.line %></div>
+  </div>
+
+<%
+    end # close games loop
+    if ( (j > -1) && (j > 7) ) && (j % 8 > 0) then
+%>
+     <div id="<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size).to_s %>" class="row">
+        <a href="javascript:void(0);" 
+           style="text-align: left" 
+           onclick="Effect.SlideUp('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + ((@games.size - @games.size % 8).to_s).to_s %>', 'slide' ); 
+           $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size).to_s %>').hide(); 
+           $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size - @games.size % 8).to_s.to_s %>').show(); ">Less...</a>
+      </div>
+    </div> <!-- close last <hide_#> -->
+<%
+    end
+%>
+</div> <!-- close <straight_spread> -->
+
+
+
+<!-----------------------   Money Lines ----------------------------------->
+
+<div id="<%= @drop_id %>_moneylines" style="display: none">
+
+  <div class="row_title" align="center">
+    <%= @league.abbreviation %> Money Lines
+  </div>
+  
+  <div class="row" style="font-weight: bold">
+    <div class="cell_90">Date</div>
+    <div class="cell_90">Time</div>
+    <div class="cell_110">Favorite</div>
+    <div class="cell_110">Underdog</div>
+    <div class="cell_40">Line</div>
+  </div>
+<%
+
+    j = -1
+    @games.each do |game|
+    
+      favorite = WageringMoneyline.get_event_favorite(game.event_id)
+      underdog = WageringMoneyline.get_event_underdog(game.event_id)
+      
+      if(favorite.blank? || underdog.blank?)
+        next
+      end
+
+      j += 1
+
+      if ( j == 0 ) then
+%>    
+        <div id="<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>">
+<%    
+      elsif (j % 8) == 0
+%>
+        <div id="<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>" class="row" style="width: 96%">
+        <% if j != 8 then %>
+          <a href="javascript:void(0);" 
+             style="text-align: left" 
+             onclick="Effect.SlideUp('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + (j-8).to_s %>', 'slide' ); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>').hide(); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (j-8).to_s %>').show(); ">Less...</a>
+        <% end %>
+          <a href="javascript:void(0);" 
+             style="text-align: right" 
+             onclick="Effect.SlideDown('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>', 'slide' ); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + j.to_s %>').hide(); 
+             $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + ( (j+8) > @games.size ? @games.size : (j+8) ).to_s %>').show(); ">More...</a>
+
+        </div>
+        
+        
+        </div> <!-- close <hide_#> -->
+        <div id="<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + j.to_s %>" style="display:none">
+<%
+      end
+      
+      
+       if ( (j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+%>
+
+  <div class="<%= html_class %>">
+    <div class="cell_90"><%= game.start_date_time.strftime("%a, %m/%d") %></div>
+    <div class="cell_90"><%= game.start_date_time.strftime("%I:%M%P") %></div>
+    <div class="cell_110"><a href="/team/<%= game.t1_id %>"><%= favorite.last_name %></a></div>
+    <div class="cell_110"><a href="/team/<%= game.t2_id %>"><%= underdog.last_name %></a></div>
+    <div class="cell_40"><%= favorite.line %></div>
+  </div>
+
+<%
+    end # close games loop
+
+    if ( (j > -1) && (j > 7) ) && (j % 8 > 0) then
+%>
+     <div id="<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size).to_s %>" class="row">
+        <a href="javascript:void(0);" 
+           style="text-align: left" 
+           onclick="Effect.SlideUp('<%= @drop_id %>_hide_<%= @league.abbreviation + '_' + ((@games.size - @games.size % 8).to_s).to_s %>', 'slide' ); 
+           $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size).to_s %>').hide(); 
+           $('<%= @drop_id %>_more_<%= @league.abbreviation + '_' + (@games.size - @games.size % 8).to_s.to_s %>').show(); ">Less...</a>
+      </div>
+    </div> <!-- close last <hide_#> -->
+<%
+    end
+%>
+</div> <!-- close <moneyline> -->
+
+
+
+
+

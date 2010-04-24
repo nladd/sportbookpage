@@ -1,0 +1,50 @@
+
+<%
+  @leagues.size.times do |i|
+%>
+
+<div id="<%= @drop_id %>_headlines_<%= i.to_s %>" class="<%= 'tall_' if ( @drop_id == 'drop_2' || @drop_id == 'drop_3' ) %>headlines">
+
+  <div class="row_title" align="center">
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
+      <%= @leagues[i].full_name %>
+    </div>
+  </div>
+  
+<%
+    @articles[i].size.times do |a|
+%>
+
+
+    <%= link_to_remote @titles[i][a],
+           :url => {:controller => "article", :action => "article"},
+           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[i][a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+    %>
+    <br/>
+    <%= @dates[i][a].strftime("%x %I:%M%p") %>
+    <br/>
+    <%= @abstracts[i][a] %>
+  
+    <br/>
+    <br/>
+  
+<%
+    end  #close articles loop 
+%>
+</div>
+<%
+  end  #close leagues loop
+%>
+
+<div class="row">
+<%
+    @leagues.size.times do |i|
+%>
+  <div id="<%= @drop_id %>_tab_<%= i.to_s %>" class="tab_cell" onmouseover="stop_slideshow(<%= i.to_s %>, '<%= @drop_id %>');" onmouseout="next_slide(<%= i.to_s %>, '<%= @drop_id %>');">
+    <%= @leagues[i].abbreviation %>
+  </div>
+<%  end %>
+</div>
+
+<%= javascript_tag "start_slideshow(#{@leagues.size}, '#{@drop_id}');" %>
+

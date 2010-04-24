@@ -1,0 +1,90 @@
+
+<div class="drag_n_drop" id="drag_n_drop"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
+    
+
+    
+  <div class="drop_1_frame" id="drop_1_frame">
+    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_1_title"></div>
+    <div id="drop_1_side_bar" class="side_bar"></div>
+    <div id="drop_1" class="drop_content">
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_1 + "&drop_id=drop_1&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </div>
+  </div> 
+    
+<%= drop_receiving_element('drop_1_frame',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_1&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                 }"
+       )
+       %>
+
+  <div class="drop_2_frame" id="drop_2_frame">
+    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_2_title"></div>
+    <div id="drop_2_side_bar" class="side_bar"></div>
+    <div id="drop_2" class="tall_drop_content">
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_2 + "&drop_id=drop_2&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </div>
+  </div>
+  
+<%= drop_receiving_element('drop_2_frame',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_2&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+    
+  <div class="drop_3_frame" id="drop_3_frame">
+    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_3_title"></div>
+    <div id="drop_3_side_bar" class="side_bar"></div>
+    <div id="drop_3" class="tall_drop_content">
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_3 + "&drop_id=drop_3&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+     </div>
+  </div>
+<%= drop_receiving_element('drop_3_frame',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_3&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+
+  <div class="drop_4_frame" id="drop_4_frame">
+    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_4_title"></div>
+    <div id="drop_4_side_bar" class="side_bar"></div>
+    <div id="drop_4" class="drop_content">
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_4 + "&drop_id=drop_4&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </div>
+  </div>
+  
+<%= drop_receiving_element('drop_4_frame',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_4&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+
+  <div class="drag_n_drop_2" id="drag_n_drop_2"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
+    
+    <%= sortable_element('drag_n_drop', :only => "drop_item", :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+    
+    <%= sortable_element('drag_n_drop_2', :only => 'drop_item', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+
+
+<%= javascript_tag "$('user_path').update(\"" + @path_html + "\")" %>
+
+<%= javascript_tag "createGradient();" %>

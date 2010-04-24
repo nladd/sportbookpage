@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  challengee_id: 1
+  challenger_id: 1
+  event_id: 1
+  amount: 1.5
+  home_spread: 1.5
+  end_date_time: 2009-12-23 09:14:30
+
+two:
+  challengee_id: 1
+  challenger_id: 1
+  event_id: 1
+  amount: 1.5
+  home_spread: 1.5
+  end_date_time: 2009-12-23 09:14:30

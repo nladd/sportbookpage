@@ -1,0 +1,13 @@
+
+<%
+  if(@dates.blank?)
+    @dates = ""
+  end
+%>
+
+<%= 
+  collection_select(:event, :id, @events, :id, :start_date_time, 
+    {:include_blank => false,
+    :prompt => "Game Date..." })
+%>
+

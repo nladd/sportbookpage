@@ -1,0 +1,145 @@
+
+.flash_notice {
+position: relative;
+margin: 10px auto 0 auto;
+padding: 5px;
+width: 400px;
+color: green;
+text-align: center;
+font-weight: bold;
+border: 3px solid #315ad0
+}
+
+.main {
+position: absolute;
+top: 160px;
+left: 150px;
+min-height: 1000px;
+width: 648px;
+/*background: #d9d9de;*/
+color: black;
+border: 3px solid #315ad0;
+z-index: 10
+}
+
+/* styles for the title div of each section */
+.title {
+position: relative;
+margin: 10px;
+padding: 2px;
+left: 15px;
+height: 20px;
+width: 570px;
+border-bottom: 3px solid #d44b0b;
+}
+
+ /* Font styles for section headers ie "Account Details" */
+.title_font {
+display: inline;
+color: black;
+font-variant: small-caps;
+font-weight: 600;
+font-size: 1.375em;
+}
+
+
+.tab_row {
+position: relative;
+display: block;
+margin: 2px 10px;
+width: 95%;
+height: 20px;
+}
+
+.tab {
+position: relative;
+float: left;
+margin: 0;
+width: 80px;
+height: 100%;
+color: white;
+text-align: center;
+vertical-align: middle;
+padding: 0;
+border: none;
+text-decoration: none;
+font-weight: bold;
+background: #d9d9db; 
+border: 2px #d9d9db solid;
+z-index: 12;
+-moz-border-radius-topleft: 1ex;
+-moz-border-radius-topright: 1ex;
+-webkit-border-top-left-radius: 1ex;
+-webkit-border-top-right-radius: 1ex;
+}
+
+.tab:hover {
+background: #7e9ef8;
+border: 2px #7e9ef8 solid; 
+}
+
+.selected {
+background: #5380ff; 
+border: 2px #315ad0 solid; 
+}
+
+
+
+/* styles for the div that holds the input elements for each section */
+.form {
+position: relative;
+display: block;
+margin: 0px 10px;
+width: 95%;
+overflow: auto;
+font-weight: bold;
+font-size: .75em;
+border: 2px solid black
+}
+
+.sport_label {
+position: relative;
+left: 10px;
+color: #001a63;
+width: 800px;
+}
+
+/* styles for the table that holds the input elements for each section */
+.sport_list table {
+position: relative;
+/*width: 95%;*/
+left: 15px;
+color: #700c0c;
+border-top: 2px solid #001a63;
+font-weight: bold;
+}
+
+.sport_list table td {
+margin: 0 5px 0 5px
+}
+
+input {
+border: thin solid black;
+background-color: #ffe8c0
+}
+
+textarea {
+border: thin solid #90c4ff;
+background-color: #ffe8c0
+}
+
+.terms {
+left: 5%;
+text-align: center;
+border: medium solid black
+}
+/* form submit botton */
+.submit {
+background-color: white;
+}
+
+.error_text {
+color: red;
+font-weight: bold;
+}
+

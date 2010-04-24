@@ -1,0 +1,75 @@
+
+<%= javascript_tag "alert('alert');" %>
+<div class="drag_n_drop" id="drag_n_drop"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
+    
+
+    
+  <div class="drop_1" id="drop_1">
+    <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_1 + "&drop_id=drop_1&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+  </div> 
+    
+<%= drop_receiving_element('drop_1',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=' + $(droppable).id + '&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                 }"
+       )
+       %>
+
+  <div class="drop_2" id="drop_2">
+    <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_2 + "&drop_id=drop_2&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+  </div>
+  
+<%= drop_receiving_element('drop_2',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=' + $(droppable).id + '&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+    
+  <div class="drop_3" id="drop_3">
+    <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_3 + "&drop_id=drop_3&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+  </div>
+<%= drop_receiving_element('drop_3',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=' + $(droppable).id + '&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+
+  <div class="drop_4" id="drop_4">
+    <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_4 + "&drop_id=drop_4&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+  </div>
+  
+<%= drop_receiving_element('drop_4',
+      :accept   => 'drop_item',
+      :hoverclass => "hover",
+      :onDrop => "function(dragged, droppable){
+                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=' + $(droppable).id + '&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+                   return false;
+                   }"
+      )
+      %>
+
+  <div class="drag_n_drop_2" id="drag_n_drop_2"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
+    
+    <%= sortable_element('drag_n_drop', :only => "drop_item", :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+    
+    <%= sortable_element('drag_n_drop_2', :only => 'drop_item', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+
+
+<%= javascript_tag "$('user_path').update(\"" + @path_html + "\")" %>
+
+

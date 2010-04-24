@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  sport: MyString
+  wagering_table: MyString
+
+two:
+  sport: MyString
+  wagering_table: MyString

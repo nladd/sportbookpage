@@ -1,0 +1,32 @@
+
+  <div class="row" style="font-weight: bold">
+    <div class="cell_50">NUM</div>
+    <div class="cell_200">Name</div>
+    <div class="cell_100">Pos</div>
+    <div class="cell_40">HT</div>
+    <div class="cell_40">WT</div>
+    <div class="cell_60">DOB</div>
+  </div>
+  
+  <%
+    i = 0
+    @roster.each do |player|
+      if (i%2 == 0) 
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+  %>
+  <div class="<%= html_class %>">
+    <div class="cell_50"><%= player.uniform_number %></div>
+    <div class="cell_200"><a href="/player/<%= player.person_id %>"><%= player.full_name %></a></div>
+    <div class="cell_100"><%= player.position %></div>
+    <div class="cell_40"><%= player.height %></div>
+    <div class="cell_40"><%= player.weight %></div>
+    <div class="cell_60"><%= datetime_to_time(player.birth_date).strftime("%m/%d/%y") %></div>
+  </div>
+  
+  <%
+      i += 1
+    end
+  %>

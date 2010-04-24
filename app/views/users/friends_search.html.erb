@@ -1,0 +1,59 @@
+
+
+  <div id="simple_search" class="simple_search">
+    <% form_tag do %>
+      <table>
+        <tr>
+          <td>Name:</td>
+          <td><%= text_field_tag :name, params['name'], :class => 'inputbox', :size => 30 %></td>
+          <td><%= submit_tag "Search", :class => 'submit' %></td>
+        </tr>
+        <tr>
+          <td>&nbsp</td>
+          <td style="text-align: right; font-size: .75em">Advanced Search</td>
+        </tr>
+      </table>
+    <% end %>
+  </div>
+  
+  
+  <div id="results" class="results">
+  <% if (@results == "NONE") then %>
+    <h3>No results found for query "<%= params['name'] %>"</h3>
+  <% elsif (@results != nil) then %>
+    <div id="results_title" class="results_title">Results</div>
+    <table cellspacing="20">
+    <%
+         i = 0 
+         @results.each do |result|
+          i = i + 1
+          path = "/users/" + (result.id).to_s + "/" + (result.id).to_s + "_thumbnail.png"
+          cgi_name = CGI.escape(result.first_name + " " + result.last_name)
+    %>
+    
+      <tr id="results_name" class="results_name">
+        <td><%= i.to_s + "." %></td>
+        <td><img src="<%= path %>" alt="No image available"/></td>
+        <td>
+          <form id="form_<%= result.id %>" action="/fanatic/<%= cgi_name %>">
+            <input type="hidden" name="friend_id" value="<%= result.id %>"/>
+            <a href="javascript:void(0);" onclick="$('form_<%= result.id %>').submit();"><%= result.first_name + " " + result.last_name %></a>
+          </form>
+        </td>
+        <td id="add_<%= result.id %>" class="add_<%= result.id %>" style="font-size: .825em; width: 25%">
+          <%= link_to_remote "Add",
+                        {:url => { :controller => "users", :action => "add_friend" },
+                        :with => "'friend_id=#{result.id}'" }                        
+          %>
+            
+        </td>
+      </tr>  
+  
+    <% end %>
+    
+    </table>
+    <% end %>
+  </div>
+
+
+<%= javascript_tag " $('user_path').update(\"" + @path_html + "\");" %>

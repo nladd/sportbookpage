@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>sportbookpage.com - Home</title>
+  
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag "drop_down_menu" %>
+  <%= javascript_include_tag "curvycorners", "gradient", "gradientText" %>
+  
+  
+<!--[if IE]>
+  <%= stylesheet_link_tag 'common/ie_common', 'common/ie_menus' %>
+<![endif]-->
+<![if !(IE) ]>
+  <%= stylesheet_link_tag 'common/common', 'common/menus' %>
+<![endif]>
+  
+  <%= stylesheet_link_tag 'user_preferences/user_preferences', 'friends/search' %>
+  <%= stylesheet_link_tag 'draggables/draggables', 'draggables/cell' %>
+  
+  <%= javascript_tag "Ajax.Responders.register({
+    onCreate: function(){ document.body.style.cursor = 'progress'},
+    onComplete: function(){ document.body.style.cursor = 'default' }
+  });"
+  %>
+  
+</head>
+<body>
+  <!--<img src="/images/backgrounds/runner.jpg" alt="full_page_background" class="background"/>-->
+  
+  <div id="body_content" class="content">
+ 
+   <div id="fade" class="fade"></div> <!-- close <div> fade -->
+    
+    <div class="gradient 000000 ffffff vertical banner">
+      <!--<span class="gradient_ffffff_000000">-->SportBookPage.com<!--</span>-->
+    </div>
+    
+    
+    <%= render :partial => 'layouts/menus' %>
+         
+    <div class="advertisement_1">Advertisement 1</div>
+    
+    <div id=advertisement_3" class="advertisement_3">Advertisement 3</div>
+    
+    <div id="main" class="main">
+      <%= yield %>
+    </div>
+    
+      
+      <br style="clear: both"/>
+	</div> <!-- close <div> content --> 
+   
+   
+  <%= 
+    javascript_tag "$('fade').setOpacity(.85);"
+  %>
+  
+</body>
+</html>

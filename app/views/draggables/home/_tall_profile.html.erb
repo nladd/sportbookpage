@@ -1,0 +1,61 @@
+
+<div id="tall_profile_content" class="tall_profile_content">
+
+<table id="profile_table" class="profile_table" cellspacing=2>
+  <tr><td valign="top">
+    <img src='/users/<%= (@user.id).to_s %>/<%= (@user.id).to_s %>.png' alt='No image available' id="profile_pic" class="profile_pic" />
+  </td>
+  </tr>
+  
+  
+  
+  <tr><td>
+    <span style="font-weight: bold">Name: </span><%= @user.first_name + " " + @user.last_name %>
+  </td>
+  </tr>
+<%
+      if (!(@status.blank?) && @status['show'] == 'yes')
+%>
+  <td>
+    <div id="status_text">
+      <span style="font-weight: bold">Status: </span><%= @status.content %>
+    </div>
+    <div id="status_input" style="display:none">
+      <span style="font-weight: bold">Status: </span><%= text_field_tag ("status", @status.content, {:size => 40, :maxLength => 80, :id=>"status" } ) %>
+    </div>
+  </td>
+
+  <% if (session[:visiting_id].blank?) %>
+    <td style="float: right">
+      <div id="update_status">
+        <a href="javascript:void(0);" onclick="$('save_status').show(); $('status_input').show(); $('status_text').hide(); $('update_status').hide();">Update</a>
+      </div>
+      <div id="save_status" style="display: none">
+        <%= link_to_remote "Save", :url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status').value", :complete => "$('save_status').hide(); $('status_input').hide(); $('status_text').show(); $('update_status').show();" %>
+      </div>
+    </td>
+  <% end %>
+
+  </tr>
+  <%
+end
+
+    PROFILE_KEYS.each do |key|
+
+      node = @profile.find("//root/" + key)
+      if (!(node[0].blank?) && node[0]['show'] == 'yes')
+        text = CGI.unescape(node[0].content)
+    %>
+          <tr colspan='2'><td>
+            <span style="font-variant: small-caps"><%= @options[key] + ": " %></span><%= text.gsub(/\n/, '<br/>') %>
+          </td></tr>
+          <%
+      end
+      
+    end  # end loop
+
+  %>
+  </table>
+</div> <!-- profile_content div -->
+
+

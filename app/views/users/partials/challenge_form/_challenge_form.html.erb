@@ -1,0 +1,91 @@
+
+
+<% form_remote_tag(:url => '/challenge', :multipart => true, :id => 'form') do %>
+
+  <%= hidden_field (:challengee, :id ) %>
+
+
+<div id="challenge_form" class="challenge_form">
+
+  <table cellspacing="5">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='5' style="text-align: center">
+        You are challenging: <span style="font-variant: small-caps"><%= @challengee.first_name + " " + @challengee.last_name %></span>
+      </td>
+    </tr>
+    <tr style="font-weight: bold">
+      <td>&nbsp</td>
+      <td>League:</td>
+      <td>Home Team:</td>
+      <td>Away Team:</td>
+      <td>Date:</td>
+    </tr>
+    <tr>
+      <td>Select event:</td>
+      <td>
+        <!-- League -->
+        <%=
+        collection_select(:league, :id, Affiliation.get_pro_leagues, :affiliation_id, :abbreviation, 
+            {:include_blank => false,
+            :prompt => "Select..." },
+            {:onchange => "
+              new Ajax.Request('/users/select_league', {asynchronous:true, evalScripts:true, parameters:'league=' +  $('league_id').value + '&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}') });
+              $('home_team_id').enable()"
+            } )
+        %>
+      </td>
+      <td id='challenge_home_team' class='challenge_home_team'>
+        <!-- Home Team -->
+        <select id="home_team_id">
+          <option>Home Team...</option>
+        </select>
+      </td>
+      <td id='challenge_away_team' class='challenge_away_team'>
+        <!-- Away team -->
+        <select id="away_team_id">
+          <option>Away Team...</option>
+        </select>
+      </td>
+      <td id='dates' class='dates'>
+        <!-- Date -->
+        <select id="event_id">
+          <option>Game Date...</option>
+        </select>
+      </td>
+     
+    </tr>
+    <tr>&nbsp</tr>
+    <tr>
+      <td colspan="2">Favorite:</td>
+      <td id="favorite" align="right">
+        <select name="dummy" disabled="true"><option>Favorite...</option></select>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">Spread:</td>
+      <td align="right"><%= text_field_tag ("spread", "0", :size => 4, :maxlength => 4 ) %></td>
+      <td style="font-size: .825em"><a href="#">What's this?</a></td>
+      <%= observe_field( "spread", :function => "isNumeric(element, value, 'Home Team Differential')" ) %>
+    </tr>
+    <tr>
+      <td colspan="2">Wager Amount:</td>
+      <td align="right">$<%= text_field_tag ("wager", "0", :size => 7, :maxlength => 12) %></td>
+      <%= observe_field( "wager", :function => "isNumeric(element, value, 'Wager Amount')" ) %>
+    </tr>
+    <tr>
+      <td colspan='2'>Taunt:</td>
+      <td colspan='3' align='right'><%= text_area_tag( 'taunt', nil, {:size => '40x2'} ) %></td>
+    </tr>
+    <tr>&nbsp</tr>
+    <tr>
+      <td colspan='5' align="right"><%= submit_tag( "Submit" , :class => "submit" ) %></td>
+    </tr>
+  </table>
+
+
+</div>
+
+<%= javascript_tag "$('home_team_id').disable(); $('away_team_id').disable(); $('event_id').disable();" %>
+
+<% end %>

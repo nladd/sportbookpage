@@ -1,0 +1,59 @@
+
+<%
+  @leagues.size.times do |i|
+%>
+
+<div id="headlines_<%= i.to_s %>" class="headlines" style="display: none;">
+
+  <div class="row_title"><%= @leagues[i].full_name %></div>
+  
+<%
+    @articles[i].each do |article|
+      article_path = "/home/sportboo/FeedFetcherDeluxe/archive/" + article.sportsml
+      
+      parser = XML::Parser.file(article_path)
+      article_xml = parser.parse
+      title = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
+      #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
+      
+      abstract = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
+      if abstract.length > 200
+        abstract = abstract[0, 200] + "..."
+      end
+      
+      content = article_xml.find_first('//sports-content/article/nitf/body/body.content').content
+    
+    date = datetime_to_time(article.date_time)
+%>
+
+  <div class="row">  
+    <%= link_to_remote title,
+                            :url => {:controller => "article", :action => "article"},
+                            :with => "'drop_id=#{@drop_id}&amp;document_id=#{article.document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+        %>
+        <%= date.strftime("%D") %>
+    <br/>
+    <%= abstract %>
+  
+  </div>
+  
+<%
+    end  #close articles loop 
+%>
+</div>
+<%
+  end  #close leagues loop
+%>
+
+<div class="row">
+<%
+    @leagues.size.times do |i|
+%>
+  <div id="tab_<%= i.to_s %>" class="tab_cell" onmouseover="stop_slideshow(<%= i.to_s %>);" onmouseout="next_slide(<%= i.to_s %>);">
+    <%= @leagues[i].abbreviation %>
+  </div>
+<%  end %>
+</div>
+
+<%= javascript_tag "start_slideshow(" + @leagues.size.to_s + ");" %>
+

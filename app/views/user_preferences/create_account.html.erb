@@ -1,0 +1,104 @@
+
+<% form_tag('', :multipart => true, :id => 'register_form') do %>
+
+
+  <div class='title'><div class="title_font">Account Details</div> <span style='font-size: 10px'>*denotes required fields</span></div>
+
+<div class="form">
+
+    <table cellspacing='8' style='left: 140px'>
+      <tr>
+        <td>*First Name:</td><td><%= text_field_tag( 'first_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.first_name}" ) %></td>
+        <td>Middle Name:</td><td><%= text_field_tag( 'middle_name', nil, :size => 15, :maxlength => 25, :value => "#{@user.middle_name}" ) %></td>
+      </tr>
+      <% if @user.errors[:first_name] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:first_name] %></span></td>
+      </tr>
+      <% end %>
+        
+      <tr>
+        <td>*Last Name:</td><td><%= text_field_tag( 'last_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.last_name}" ) %></td>
+      </tr>
+       <% if @user.errors[:last_name] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:last_name] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*E-mail Address:</td><td colspan='3'><%= text_field_tag( 'email', nil, :size => 30, :maxlength => 255, :value => "#{@user.email}" ) %></td>
+      </tr>
+      <% if @user.errors[:email] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:email] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Password:</td><td><%= password_field_tag( 'password', nil, :size => 20, :maxlength => 20 ) %></td><td colspan='2'><span style='font-size: .75em'>(must be at least 6 characters in length)</span></td>
+      </tr>
+      <% if @user.errors[:password] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:password] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Confirm Password:</td><td><%= password_field_tag( 'password_confirmation', nil, :size => 20, :maxlength => 20 ) %></td>
+      </tr>
+      <% if @user.errors[:password_confirmation] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:password_confirmation] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Security Question 1:</td><td colspan='3'><%= text_field_tag( 'question_1', nil, :size => 60, :maxlength => 255, :value => "#{@user.question_1}" ) %></td>
+      </tr>
+      <% if @user.errors[:question_1] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:question_1] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Answer:</td><td><%= text_field_tag( 'answer_1', nil, :size=> 15, :maxlength => 127, :value => "#{@user.answer_1}" ) %></td>
+      </tr>
+      <% if @user.errors[:answer_1] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:answer_1] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Security Question 2:</td><td colspan='3'><%= text_field_tag( 'question_2', nil, :size => 60, :maxlength => 255, :value => "#{@user.question_2}" ) %></td>
+      </tr>
+      <% if @user.errors[:question_2] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:question_2] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Answer:</td><td><%= text_field_tag( 'answer_2', nil, :size=> 15, :maxlength => 127, :value => "#{@user.answer_2}" ) %></td>
+      </tr>
+      <% if @user.errors[:answer_2] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:answer_2] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td colspan='5' align='right'><%= submit_tag( "Next" , :class => "submit" ) %></td>
+      </tr>
+    </table>
+
+</div>
+
+<% end %>
+
+<%= javascript_tag "createGradient(document.body);" %>
+      
+      
+      

@@ -1,0 +1,64 @@
+
+<div class="row">
+  <div class="cell_250">Stat:</div>
+</div>
+<div class="row">
+  <div class="cell_250">
+        <%= 
+          collection_select(:stat, :stats_field, 
+            @stats_mappings,
+            :stats_field, :stats_name, 
+            {:include_blank => "Select Stat...."})
+        %>
+  </div>
+  <div class="cell_60">
+    <%= button_to_remote("Go", 
+                      {:url => {:controller => "draggables", :action => "route_action"},
+                      :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;stat_field=' + $('stat_stats_field').value"} )
+    %>
+  </div>
+</div>
+
+
+      
+<div class="row">
+  <div class="cell_180" align="left">Player</div>
+  <div class="cell_50" align="center"><%= @stat.abbreviation %></div>
+  <div class="cell_50" align="center">GP</div>
+  <% @stats_fields.each do |field| %>
+    <div class="cell_50" align="center">
+      <%= field.abbreviation %>
+    </div>
+  <% end %>
+</div>
+
+<% 
+  i = 0
+  @leaders.each do |leader|
+    if (i%2 == 0)
+      html_class = "even_row"
+    else
+      html_class = "odd_row"
+    end
+%>
+  <div class="<%= html_class %>">
+    <div class="cell_180" align="left"><a href="/player/<%= leader.person_id %>"><%= leader.full_name %></a></div>
+    <div class="cell_50" align="center"><%= leader[@stat.stats_field] %><% if !(@stat.counter_field).blank? %>/<%= leader[@stat.counter_field] %><% end %></div>
+    <div class="cell_50" align="center"><%= leader.events_played %></div>
+    <% @stats_fields.each do |field| %>
+      <div class="cell_50" align="center">
+        <% if leader[field.stats_field] == nil %>
+          NA
+        <% else %>
+          <%= leader[field.stats_field] %><% if !(field.counter_field).blank? %>/<%= leader[field.counter_field] %>  
+          <% end %>
+            
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  
+<%
+    i += 1
+  end
+%>

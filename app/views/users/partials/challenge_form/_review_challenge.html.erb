@@ -1,0 +1,48 @@
+
+<table cellspacing="5" style="width: 100%">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='2' style="text-align: center">
+        Challenge created!
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Opponent:</td>
+      <td><%= @challengee.first_name + " " + @challengee.last_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Game:</td>
+      <td><%= @event.home_full_name + " vs. " + @event.away_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Date:</td>
+      <td><%= @event.start_date_time.strftime("%D %I:%M%P") %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Favorite:</td>
+      <td><%= @favorite.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Spread:</span>&nbsp;&nbsp;<%= @challenge.spread.to_s %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Wager:</td>
+      <td><%= number_to_currency @challenge.wager %></td>
+    </tr>
+    <% if !(@taunt.blank?) %>
+    <tr>
+      <td style="font-weight: bold">Taunt:</td>
+      <td><%= @taunt %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td colspan='2' style="text-align: center">
+        An acceptance e-mail has been sent to <%= @challengee.first_name %>. <%= @challengee.first_name %> must accept the challenge for it to be valid.
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td colspan='2' style="text-align: center">
+      <a href="javascript:void(0)"
+        onclick = "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); return false; $('selections').hide();">
+      Close
+      </a>
+      </td>
+    </tr>
+</table>

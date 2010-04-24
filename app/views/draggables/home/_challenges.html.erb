@@ -1,0 +1,55 @@
+
+<div class="row_title" align="center">
+  Challenges
+</div>
+<div class="row" style="border-bottom: 2px solid black">
+  <div class="cell_60" style="font-weight: bold">League</div>
+  <div class="cell_90" style="font-weight: bold">Game Date</div>
+  <br/>
+  <div class="cell_90" style="font-weight: bold">Favorite</div>
+  <div class="cell_90" style="font-weight: bold">Underdog</div>
+  <div class="cell_60" style="font-weight: bold">Spread</div>
+  <div class="cell_110" style="font-weight: bold">Opponent</div>
+  <div class="cell_60" style="font-weight: bold">Wager</div>
+  <div class="cell_200" style="font-weight: bold">Status</div>
+</div>
+
+<%
+  @challenges.each do |challenge|
+    if( @user.id != challenge.challengee_id )
+      opponent = User.find(challenge.challengee_id)
+    else
+      opponent = User.find(challenge.challenger_id)
+    end
+    if(challenge.accepted == 'no' && challenge.challengee_id == @user.id)
+      status = link_to_remote ("Accept", 
+                {:url => {:controller => 'users', :action => 'accept_challenge'},
+                 :with => "'drop_id=#{@drop_id}&amp;challenge_id=#{challenge.id}'"} )
+      status = status + "/" + link_to_remote ("Reject",
+                {:url => {:controller => 'users', :action => 'reject_challenge'},
+                 :with => "'drop_id=#{@drop_id}&amp;challenge_id=#{challenge.id}'"} )
+      status = status + "/" + link_to_remote ("Modify",
+                {:url => {:controller => 'users', :action => 'modify_challenge'},
+                 :with => "'drop_id=#{@drop_id}&amp;challenge_id=#{challenge.id}'",
+                 :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); "} )    
+    elsif (challenge.accepted == 'no' && challenge.challenger_id == @user.id)
+      status = "Pending acceptance"
+    else
+      status = "Accepted"
+    end
+%>
+
+<div class="row" style="border-bottom: 1px solid black">
+  <div class="cell_60"><%= challenge.league_abbreviation %></div>
+  <div class="cell_60"><%= challenge.start_date_time.strftime("%D") %></div>
+  <br/>
+  <div class="cell_90"><a href="/team/<%= challenge.favorite_id %>"><%= challenge.favorite_last_name %></a></div>
+  <div class="cell_90"><a href="/team/<%= challenge.underdog_id %>"><%= challenge.underdog_last_name %></a></div>
+  <div class="cell_60"><%= challenge.spread %></div>
+  <div class="cell_110"><%= opponent.first_name + " " + opponent.last_name %></div>
+  <div class="cell_60"><%= number_to_currency challenge.wager %></div>
+  <div class="cell_200"><%= status %></div>
+</div>
+
+
+<% end %>

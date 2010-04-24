@@ -1,0 +1,43 @@
+
+<div class="row_title">
+  League Offensive Leaders
+</div>
+
+<div class="row" style="font-weight: bold" align="center">
+  <div class="cell_200" align="left">Player</div>
+  <div class="cell_40">GP</div>
+  <div class="cell_40">ppg</div>
+  <div class="cell_40">rpg</div>
+  <div class="cell_60">off reb</div>
+  <div class="cell_60">def reb</div>
+  <div class="cell_40">apg</div>
+  <div class="cell_60">blocks</div>
+  <div class="cell_60">steals</div>
+</div>
+
+<% 
+  i = 0
+  @leaders.each do |leader|
+    if (i%2 == 0)
+      html_class = "even_row"
+    else
+      html_class = "odd_row"
+    end
+%>
+
+  <div class="<%= html_class %>" align="center">
+    <div class="cell_200" align="left"><a href="/player/<%= leader.person_id %>"><%= leader.first_name + " " + leader.last_name %></a></div>
+    <div class="cell_40"><%= leader.events_played %></div>
+    <div class="cell_40"><%= leader.points_scored_per_game %></div>
+    <div class="cell_40"><%= leader.rebounds_per_game %></div>
+    <div class="cell_60"><%= leader.rebounds_defensive %></div>
+    <div class="cell_60"><%= leader.rebounds_offensive %></div>
+    <div class="cell_40"><%= leader.assists_per_game %></div>
+    <div class="cell_60"><%= leader.blocks_total %></div>
+    <div class="cell_60"><%= leader.steals_total %></div>
+  </div>
+  
+<%
+    i += 1
+  end
+%>

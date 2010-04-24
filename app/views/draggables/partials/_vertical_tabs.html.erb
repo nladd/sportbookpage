@@ -1,0 +1,23 @@
+
+
+  
+  <%
+    html_class = @filter.blank? ? "" : "selected"
+  %>
+   <!-- d9d9db  -->
+    <%= link_to_remote "<br/>S<br/>H<br/>O<br/>W<br/><br/>A<br/>L<br/>L",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
+          {:style => "color: white", :class => "vertical_tab #{html_class}"}
+    %>
+
+  <%
+    html_class = @filter.blank? ? "selected" : ""
+  %>
+  
+    <%= link_to_remote "S<br/>H<br/>O<br/>W<br/><br/>T<br/>A<br/>G<br/>G<br/>E<br/>D",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
+          {:style => "color: white", :class => "vertical_tab #{html_class}"}
+    %>
+

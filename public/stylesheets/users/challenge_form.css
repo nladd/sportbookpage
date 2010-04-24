@@ -1,0 +1,36 @@
+/*
+ * Sytle to define the lightbox that displays the challenge form
+ */
+
+.lightbox_fade {
+position: absolute;
+top: 0%;
+left: 0%;
+width: 100%;
+height: 1350px;
+background-color: black;
+-moz-opacity: 0.8;
+opacity: .80;
+filter: alpha(opacity=80);
+z-index:100;
+}
+
+.light {
+position: absolute;
+top: 25%;
+left: 25%;
+width: 550px;
+height: 300px;
+padding: 16px;
+border: 16px solid orange;
+background-color: white;
+font-size: .75em;
+z-index: 102;
+}
+
+.close_lightbox {
+position: absolute;
+right: -10px;
+top: -16px;
+}
+

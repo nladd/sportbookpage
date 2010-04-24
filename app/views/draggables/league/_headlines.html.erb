@@ -1,0 +1,27 @@
+
+<div id="<%= @drop_id %>_headline" class="<%= 'tall_' if ( @drop_id == 'drop_2' || @drop_id == 'drop_3' ) %>headlines">
+ 
+<%
+    @articles.size.times do |a|
+%>
+
+
+    <%= link_to_remote @titles[a],
+           :url => {:controller => "article", :action => "article"},
+           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+        %>
+    <br/>
+        <%= @dates[a].strftime("%x %I:%M%p") %>
+    <br/>
+    <%= @abstracts[a] %>
+    
+    <br/>
+    <br/>  
+
+  
+<%
+    end  #close articles loop 
+%>
+</div>
+
+

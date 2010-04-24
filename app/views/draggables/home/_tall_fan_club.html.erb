@@ -1,0 +1,49 @@
+
+
+  <div class="row"><a href="/search">Search for Friends</a></div>
+<%
+      xml_path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+      parser = XML::Parser.file(xml_path)
+      profile = parser.parse
+      friends_node = (profile.find('//root/friends')).first
+      friends = friends_node.children
+
+      i = 0
+      friends.each do |friend|
+        friend_id = friend['id']
+        img_path = "/users/" + friend_id.to_s + "/" + friend_id.to_s + "_thumbnail.png"
+        friend_profile_path = RAILS_ROOT + "/public/users/" + friend_id.to_s + "/" + friend_id.to_s + ".profile"
+        parser = XML::Parser.file(friend_profile_path)
+        profile = parser.parse
+        status = profile.find_first('//root/status')
+        if !(status.blank?)
+          status = status.content
+        else
+          status = ""
+        end
+        cgi_name = CGI.escape(friend.content)
+        
+%>
+          <div class="row">       
+            <div class="cell_70"><img src="<%= img_path %>" alt="No image available"/></div>
+            <div class="cell_130">
+              <span style="font-weight: bold">
+                <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
+                  <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
+                  <a href="javascript:void(0);" onclick="$('form_<%= friend_id %>').submit();"><%= friend.content %></a>
+                </form>
+              </span>  
+              <br/>
+              <%= link_to_remote "Challenge",
+                      {:url => {:controller => "users", :action => "load_challenge_form"},
+                      :with => "'challengee_id=#{friend_id}'",
+                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " } 
+              %>
+              <br/>
+              Status: <%= status %>
+            </div>
+          </div>
+<% 
+    i += 1
+  end 
+%>

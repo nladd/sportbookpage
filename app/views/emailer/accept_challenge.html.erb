@@ -1,0 +1,38 @@
+<table cellspacing="5" style="width: 100%">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='2' style="text-align: center">
+        <%= @user.first_name + " " + @user.last_name %> has issued you a challenge.
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Challenge details:</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Game:</td>
+      <td><%= @event.home_full_name + " vs. " + @event.away_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Date:</td>
+      <td><%= @event.start_date_time.strftime("%D %I:%M%P") %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Favorite:</td>
+      <td><%= @favorite.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Spread:</span>&nbsp;&nbsp;<%= @challenge.spread.to_s %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Wager:</td>
+      <td><%= number_to_currency @challenge.wager %></td>
+    </tr>
+    <% if !(@taunt.blank?) %>
+    <tr>
+      <td style="font-weight: bold">Taunt:</td>
+      <td><%= @taunt %></td>
+    </tr>
+    <% end %>
+    <tr></tr>
+    <tr>
+      <td colspan='2'>
+        To accept the challenge, login to <a href="www.sportbookpage.com">sportbookpage.com</a> and view your challenges. New challenges will have an option to accept.
+      </td>
+    </tr>
+</table>

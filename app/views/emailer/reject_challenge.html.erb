@@ -1,0 +1,26 @@
+<table cellspacing="5" style="width: 100%">
+    <tr style="font-weight: bold; font-size: 1.125em">
+      <td colspan='2' style="text-align: center">
+        <%= @user.first_name + " " + @user.last_name %> has rejected your challenge.
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Challenge details:</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Game:</td>
+      <td><%= @challenge.favorite_full_name + " vs. " + @challenge.underdog_full_name %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Date:</td>
+      <td><%= @challenge.start_date_time.strftime("%D %I:%M%P") %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Favorite:</td>
+      <td><%= @challenge.favorite_full_name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Spread:</span>&nbsp;&nbsp;<%= @challenge.spread.to_s %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold">Wager:</td>
+      <td><%= number_to_currency @challenge.wager %></td>
+    </tr>
+</table>

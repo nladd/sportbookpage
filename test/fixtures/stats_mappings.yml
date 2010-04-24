@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  stats_table: MyString
+  stats_type: MyString
+  stats_name: MyString
+  stats_field: MyString
+  sport: MyString
+
+two:
+  stats_table: MyString
+  stats_type: MyString
+  stats_name: MyString
+  stats_field: MyString
+  sport: MyString

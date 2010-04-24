@@ -1,0 +1,3 @@
+
+page.replace_html('chalk_board', :partial => 'chalk_board')
+

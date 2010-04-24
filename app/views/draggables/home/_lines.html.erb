@@ -1,0 +1,85 @@
+
+
+
+<%
+  @leagues.size.times do |@i|
+%>
+   <div class="row_title" align="center">
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
+      <span><%= @leagues[@i].abbreviation %> Lines</span>
+    </div>
+  </div>
+  
+  <div class="row" style="font-size: .8em; font-weight: bold">
+    <div class="cell_90">Date</div>
+    <div class="cell_130">Team</div>
+    <div class="cell_60" style="text-align: center">Spread</div>
+    <div class="cell_60" style="text-align: center">O/U</div>
+    <div class="cell_60" style="text-align: center">Money</div>
+  </div>
+ <%
+    @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
+    @size = @lines[@i].size
+    @j = -1
+    @lines[@i].each do |line|
+  
+      @j += 1        
+  %>
+  
+     <%= render :partial => "draggables/partials/more_less" %>
+     
+  <%  
+      if ( (@j % 2) == 0) then
+        html_class = "even_row"
+      else
+        html_class = "odd_row"
+      end
+  %>
+
+  <div class="<%= html_class %>">
+    <div class="cell_90">
+      <%= line.start_date_time.strftime("%a, %m/%d") %>
+      <br/>  
+      <%= line.start_date_time.strftime("%I:%M%P") %>
+    </div>
+    <div class="cell_130">
+      <a href="/team/<%= line.t1_id %>"><%= line.t1_last_name %></a>
+      <br/>
+      <a href="/team/<%= line.t2_id %>"><%= line.t2_last_name %></a>
+    </div>
+    <div class="cell_60" style="text-align: center">
+      <%= line.t1_spread_line == nil ? "off" : line.t1_spread_line %>
+      <br/>
+      <%= line.t2_spread_line == nil ? "off" : line.t2_spread_line %>
+    </div>
+    <div class="cell_60" style="text-align: center">
+      <%= line.t1_line_total == nil ? "off" : line.t1_line_total %>
+      <br/>
+      <%= line.t2_line_total == nil ? "off" : line.t2_line_total %>
+    </div>
+    <div class="cell_60" style="text-align: center">
+      <%= line.t1_money_line == nil ? "off" : line.t1_money_line %>
+      <br/>
+      <%= line.t2_money_line == nil ? "off" : line.t2_money_line %>
+    </div>
+  </div>
+
+
+<%
+    end # close lines loop
+    if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
+%>
+      <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>" class="row">
+        <div class="cell_60" style="font-size: .75em; float: left; text-align: right">
+          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
+         </div>
+      </div>
+    </div> <!-- close last <hide_#> --> 
+<%
+    end
+  end # close leagues loop
+%>
+
+<div>&nbsp;</div>
+
+

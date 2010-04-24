@@ -1,0 +1,13 @@
+
+<%= 
+  collection_select(:home_team, :id, @home_teams, :entity_id, :last_name, 
+    {:include_blank => false,
+    :prompt => "Home Team..." },
+    {:onchange => "
+     new Ajax.Request('/users/select_home_team', {asynchronous:true, evalScripts:true, parameters:'home_team=' +  $('home_team_id').value + '&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}') });
+
+      $('away_team_id').enable();"
+    } )
+%>
+
+<%= javascript_tag "$('away_team_id').disable();" %>

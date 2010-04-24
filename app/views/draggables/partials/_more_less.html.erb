@@ -1,0 +1,24 @@
+ <%
+      if ( @j == 0 ) then
+%>
+        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
+<%    
+      elsif (@j % 12) == 0
+%>
+        <div id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>" class="row">
+        <% if @j != 12 then %>
+          <div class="cell_60" style="font-size: .75em; float: left; text-align: right">
+            <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
+          </div>
+        <% end %>
+          <div class="cell_60" style="font-size: .75em; float: right; text-align: left">
+            <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
+          </div>
+        </div>
+        
+        
+        </div> <!-- close <hide_#> -->
+        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none">
+<%
+      end
+%>

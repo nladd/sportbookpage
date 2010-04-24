@@ -1,0 +1,100 @@
+
+<% form_tag('/register/2', :multipart => true, :id => 'register_form') do %>
+
+      
+<div class='title'><div class="title_font">Profile Information</div> <span style='font-size: .625em'>*denotes required fields</span></div>
+  
+<div class='form'>
+
+
+  <table cellspacing='8' style='left: 85px'>
+        
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Display in profile?</td>
+    </tr>
+  
+    <tr>
+      <td valign='top'>*Birthday:</td>
+      <td><%= select_date( date = Date.new(y=(Time.now).year,m=1,d=1), { :order => [:month, :day, :year], :start_year => Time.now.year, :end_year => Time.now.year - 90 }, { :onchange => "checkProfileBox('show_birthday');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[birthday]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    <% if @user.errors[:birthday] then %>
+    <tr>
+      <td></td>
+      <td><span class="error_text"><%= @user.errors[:birthday] %></span></td>
+    </tr>
+    <% end %>
+      
+    <tr>
+      <td>*Hometown:</td>
+      <td><%= text_field_tag( "profile[hometown]", nil, { :size => 20, :maxlength => 50, :onchange => "checkProfileBox('show_hometown');" }) %></td>
+      <td align='center'><%= check_box_tag( 'show[hometown]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td>Jersey #:</td>
+      <td><%= text_field_tag( "profile[jersey_number]", nil, { :size => 3, :maxlength => 3, :onchange => "checkProfileBox('show_jersey_number');" } )%></td>
+      <td align='center'><%= check_box_tag( 'show[jersey_number]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    <% if @user.errors[:hometown] then %>
+    <tr>
+      <td></td><td><span class="error_text"><%= @user.errors[:hometown] %></span></td>
+    </tr>
+    <% end %>
+    
+    <tr>
+      <td>Favorite Sport:</td>
+      <td><%= text_field_tag( 'profile[favorite_sport]', nil, { :size => 20, :maxlength => 20, :onchange => "checkProfileBox('show_favorite_sport');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[favorite_sport]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td>Favorite Team:</td>
+      <td><%= text_field_tag( 'profile[favorite_team]', nil, { :size => 20, :maxlength => 30, :onchange => "checkProfileBox('show_favorite_team');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[favorite_team]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td>Favorite Athlete:</td>
+      <td><%= text_field_tag( 'profile[favorite_athlete]', nil, { :size => 25, :maxlength => 30, :onchange => "checkProfileBox('show_favorite_athlete');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[favorite_athlete]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td>Favorite Coach:</td>
+      <td><%= text_field_tag( 'profile[favorite_coach]', nil, { :size => 25, :maxlength => 30, :onchange => "checkProfileBox('show_favorite_coach');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[favorite_coach]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td>Profile Photo:</td>
+    </tr>
+    <tr>
+      <td colspan='2'><%= file_field_tag 'photo', :size => 40 %></td>
+    </tr>
+    
+    <tr>
+      <td>Bio:</td>
+    </tr>
+    <tr>
+      <td colspan='2'><%= text_area_tag( 'profile[about_me]', nil, { :size => '50x3', :value => '', :onchange => "checkProfileBox('show_about_me');" } ) %></td>
+      <td align='center'><%= check_box_tag( 'show[about_me]', nil, false, :class => 'checkbox') %></td>
+    </tr>
+    
+    <tr>
+      <td colspan='3' align='right'><%= submit_tag( "Next" , :class => "submit" ) %></td>
+    </tr>
+    
+  </table>
+
+    
+</div>
+
+
+
+<% end %>
+
+<%= javascript_tag "createGradient(document.body);" %>
+

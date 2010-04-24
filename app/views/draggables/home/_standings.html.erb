@@ -1,0 +1,86 @@
+
+
+<div class="row">
+    <div class="cell_80">
+      <%= link_to_remote "Division",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;standings_type=division&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+      %>
+    </div>
+    <div class="cell_80">
+      <%= link_to_remote "Conference",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;standings_type=conference&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+      %>
+    </div>
+</div>
+
+<%
+  @leagues.size.times do |l|
+%>
+
+  <div class="row_title" align="center">
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
+      <span><%= @leagues[l].abbreviation %> Standings</span>
+    </div>
+  </div>
+
+<%
+   
+    @sub_affiliations[l].size.times do |d|
+    
+%>     
+  <div class="row_title" style="color: black" align="center">
+    <%= @sub_affiliations[l][d].full_name + " " + @sub_affiliation_type %> 
+  </div>
+  <div class="row" style="font-size: .8em; font-weight: bold">
+    <div class="cell_20">&nbsp;</div>
+    <div class="cell_160">Team</div>
+    <div class="cell_30" style="text-align: center;">GP</div>
+    <div class="cell_40" style="text-align: center;">%</div>
+    <div class="cell_30"style="text-align: center;">W</div>
+    <div class="cell_30" style="text-align: center;">L</div>
+	<div class="cell_50" style="text-align: center;">Home</div>
+	<div class="cell_50" style="text-align: center;">Road</div>
+    <div class="cell_60" style="text-align: center;">Streak</div>
+  </div>
+
+<%
+     j = 0 
+     @standings[l][d].each do |standing|
+        streak_type = ""
+        if standing.streak_type.to_s == 'loss' then
+          streak_type = "L"
+        elsif standing.streak_type.to_s == 'win'
+          streak_type = "W"
+        end
+      
+        if ( (j % 2) == 0) then
+          html_class = "even_row"
+        else
+          html_class = "odd_row"
+        end
+%>
+        <div class="<%= html_class %>">
+          <div class="cell_20" style="text-align: center;"><%= standing.rank.to_s %></div>
+          <div class="cell_160"><a href="/team/<%= standing.team_id %>"><%= standing.full_name %></a></div>
+          <div class="cell_30" style="text-align: center;"><%= standing.events_played.to_s %></div>
+          <div class="cell_40" style="text-align: center;"><%= (standing.winning_percentage.to_s)[1..-1] %></div>
+          <div class="cell_30" style="text-align: center;"><%= standing.wins.to_s %></div>
+          <div class="cell_30" style="text-align: center;"><%= standing.losses.to_s %></div>
+		  <div class="cell_50" style="text-align: center;"><%= standing.home_wins.to_s + "-" + standing.home_losses.to_s %></div>
+          <div class="cell_50" style="text-align: center;"><%= standing.away_wins.to_s + "-" + standing.away_losses.to_s %></div>
+          <div class="cell_60" style="text-align: center;"><%= streak_type + standing.streak_total.to_s %></div>
+        </div>
+
+<%      
+        j += 1
+      end   # close standings loop
+     
+    end   # close sub_affiliations loop
+
+    end # close leagues loop
+%>
+
+<div class="row">&nbsp;</div> 
+

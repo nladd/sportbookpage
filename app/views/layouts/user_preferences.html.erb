@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>sportbookpage.com - Registration</title>
+  
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag "curvycorners", "gradient", "gradientText" %>
+  
+
+<![if !(IE) ]>
+  <%= stylesheet_link_tag 'common/common' %>
+<![endif]>
+  
+  <%= stylesheet_link_tag 'user_preferences/user_preferences' %>
+  
+  <%= javascript_tag "Ajax.Responders.register({
+    onCreate: function(){ document.body.style.cursor = 'progress'},
+    onComplete: function(){ document.body.style.cursor = 'default' }
+  });"
+  %>
+</head>
+<body>
+  <img src="/images/backgrounds/blue_bubbles.png" alt="background" class="background"/> 
+    
+ 
+  <div class="content" id="body_content">
+    <div class="fade" id="fade"></div>
+      <div class="gradient 000000 ffffff vertical banner">
+        <!--<span class="gradient_ffffff_000000">-->SportBookPage.com<!--</span>-->
+      </div>
+      
+        <%= yield %>
+     
+
+  </div>  <!-- close content div -->
+  
+  <%= 
+    javascript_tag "$('fade').setOpacity(.85);"
+  %>
+  
+</body>
+
+</html>

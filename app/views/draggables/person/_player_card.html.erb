@@ -1,0 +1,50 @@
+
+
+<div class="row" style="font-size: 1.5em; color: DimGray">
+  <div class="cell_60" style="border-right: 2px solid LightGray">#<%= @player.uniform_number %></div>
+  <div class="cell_180" style="border-right: 2px solid LightGrey"><%= @player.full_name %></div>
+  <div class="cell_80"><%= (@player.position).capitalize! %></div>
+</div>
+
+<div class="row">
+  <div class="cell_40">&nbsp;</div>
+</div>
+
+<div class="row">
+  <div class="cell_40" style="font-weight: bold;">PPG</div>
+  <div class="cell_100" style="text-align: center"><%= @player.points_scored_per_game %></div>
+  <div class="cell_100" style="font-weight: bold; text-align: right">Weight:</div>
+  <div class="cell_60"><%= @player.weight %>lbs</div>
+</div>
+
+<div class="row">
+  <div class="cell_40" style="font-weight: bold;">APG</div>
+  <div class="cell_100" style="text-align: center"><%= @player.assists_per_game %></div>
+  <div class="cell_100" style="font-weight: bold; text-align: right">Height:</div>
+  <div class="cell_60"><%= @player.height %>"</div>
+</div>
+
+<div class="row">
+  <div class="cell_40" style="font-weight: bold;">RPG</div>
+  <div class="cell_100" style="text-align: center"><%= @player.rebounds_per_game %></div>
+  <div class="cell_100" style="font-weight: bold; text-align: right">DOB:</div>
+  <div class="cell_60"><%= datetime_to_time(@player.birth_date).strftime("%m/%d/%y") %></div>
+</div>
+
+<!--
+<div class="row">
+  <div class="cell_100" style="font-weight: bold; text-align: right">Weight:</div>
+  <div class="cell_60"><%= @player.weight %>lbs</div>
+</div>
+  
+<div class="row">
+  <div class="cell_100" style="font-weight: bold; text-align: right">Height:</div>
+  <div class="cell_60"><%= @player.height %>"</div>
+</div>
+
+<div class="row">
+  <div class="cell_100" style="font-weight: bold; text-align: right">DOB:</div>
+  <div class="cell_60"><%= datetime_to_time(@player.birth_date).strftime("%m/%d/%y") %></div>
+</div>
+-->
+

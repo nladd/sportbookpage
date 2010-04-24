@@ -1,0 +1,179 @@
+
+div.drop_1_frame {
+position: absolute;
+top: 270px;
+left: 150px;
+width: 648px;
+height: 450px;
+background-color: white; /*#d9d9de; */
+color: black;
+overflow: hidden;
+font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
+border: 3px solid #315ad0;
+}
+
+div.drop_1_frame.hover {
+border: 3px dashed #315ad0;
+}
+
+.drop_1_frame a:visited {
+color: #131bb8;
+}
+
+
+.drop_2_frame {
+position: absolute;
+top: 730px;
+left: 150px;
+width: 319px;
+height: 600px;
+background-color: white;
+color: black;
+overflow: hidden;
+border: 3px solid #315ad0;
+font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
+}
+
+div.drop_2_frame.hover {
+border: 3px dashed #315ad0;
+}
+
+.drop_2_frame a:visited {
+color: #131bb8;
+}
+
+.drop_3_frame {
+position: absolute;
+top: 730px;
+left: 479px;
+width: 319px;
+height: 600px;
+background-color: white;
+color: black;
+overflow: hidden;
+border: 3px solid #315ad0;
+font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
+}
+
+div.drop_3_frame.hover {
+border: 3px dashed #315ad0;
+}
+
+.drop_3_frame a:visited {
+color: #131bb8;
+}
+
+.drop_4_frame {
+position: absolute;
+top: 1340px;
+left: 150px;
+width: 648px;
+height: 450px;
+background-color: white;
+color: black;
+overflow: hidden;
+border: 3px solid #315ad0;
+font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
+}
+
+div.drop_4_frame.hover {
+border: medium dashed #315ad0;
+}
+
+.drop_4_frame a:visited {
+color: #131bb8;
+}
+
+.drop_title {
+position: relative;
+display: block;
+top: 0;
+min-width: 100%;
+color: black;
+font-weight: bold; 
+font-size: 1.1em;
+text-align: center;
+}
+
+.drop_content {
+position: relative;
+display: block;
+height: 435px;
+overflow: auto;
+}
+
+.tall_drop_content {
+position: relative;
+display: block;
+height: 585px;
+overflow: auto;
+}
+
+.overlay {
+position: absolute;
+height: 100%;
+width: 100%;
+padding: 4px;
+z-index: 25
+}
+
+
+/*
+ *Styles for the chalk board
+ */
+
+.chalk_board_title {
+position: absolute;
+top: 370px;
+left: 807px;
+height: 15px;
+width: 183px;
+margin: 0;
+padding: 0;
+background: #C10707;
+color: white;
+text-align: center;
+font-variant: small-caps;
+font-weight: bold;
+font-size: 1.125em;
+border: 5px solid #C10707
+}
+
+
+.chalk_board {
+position: absolute;
+top: 390px;
+left: 807px;
+width: 183px;
+height: 500px;
+color: white;
+background-color: #1d1c1c;
+overflow: auto;
+font-size: .9em;
+border: 5px solid #C10707
+}
+
+.add_comment_link {
+position: absolute;
+text-align: center;
+top: 900px;
+left: 807px;
+width: 193px;
+font-variant: small-caps;
+font-weight: bold;
+background: #C10707
+}
+
+.add_comment_text_box {
+position: absolute;
+padding: 2px 2px;
+top: 770px;
+left: 630px;
+width: 358px;
+z-index: 7;
+background: white;
+white-space: nowrap;
+border: medium solid black
+}
+
+
