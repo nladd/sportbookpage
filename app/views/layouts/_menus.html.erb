@@ -1,6 +1,6 @@
- <div class="top_menu">   
-    <ul id="top_menu_item" class="top_menu_item">
-    
+<div class="top_menu">   
+   <ul id="top_menu_item" class="top_menu_item">
+   
     <li class="float_left">
       <a class="tm_a" href="/home">Home</a>
     </li>
@@ -8,7 +8,7 @@
     
     
     <li class="float_left">
-      <a class="tm_a" href="#" onmouseover="$('sports').show();" onmouseout="StartParentTimer('sports');">Sports</a>
+      <a class="tm_a" href="#" onmouseover="$('sports').show();" onmouseout="StartParentTimer('sports');">Pro</a>
         
       <div class="parent_div" id="sports" style="display: none" onmouseover="StopParentTimer();" onmouseout="StartParentTimer('sports');">
          
@@ -136,41 +136,59 @@
     </li>
     
     
-      
- 
+    
      <li class="float_right">
-      <a class="tm_a" href="javascript:void(0);" onmouseover="$('settings').show();" onmouseout="StartParentTimer('settings')">Account Settings</a>
+      <a class="tm_a" href="javascript:void(0);" onmouseover="$('settings').show();" onmouseout="StartParentTimer('settings')">Settings</a>
         <div class="parent_div" id="settings" style="display: none" onmouseover="StopParentTimer()" onmouseout="StartParentTimer('settings')">
             <div class="menu_row">
-              <a class="menu_row_a" href="/edit/account">Edit Account Details</a>
+              <a class="menu_row_a" href="/edit/account">Edit Account</a>
             </div>
             <div class="menu_row">
               <a class="menu_row_a" href="/edit/profile">Edit Profile</a>
             </div>
-            <div class="menu_row">
+            <!--<div class="menu_row">
               <a class="menu_row_a" href="/edit/sports_and_teams">Change Tagged Teams</a>
-            </div>
-            <div class="menu_row">
+            </div>-->
+            <!-- <div class="menu_row">
               <%= link_to_remote "Save Draggables", 
                   { :url => { :controller => "user_preferences", :action => "save_drag_n_drop" } },
                   { :class => "menu_row_a",
                     :onclick => "$('settings').hide();" }
               %>
-            </div>
+            </div> -->
 
         </div> 
      </li>
  
-    </ul>
- </div>
+   <li class="float_right">
+      <a class="tm_a" href="javascript:void(0);" onmouseover="$('fans').show();" onmouseout="StartParentTimer('fans')">Fans</a>
+      <div class="parent_div" id="fans" style="display: none" onmouseover="StopParentTimer()" onmouseout="StartParentTimer('fans')">
+         <div class="menu_row">
+           <a class="menu_row_a" href="/search">Search Fans</a>
+         </div>
+         <div class="menu_row">
+           <a class="menu_row_a" href="javascript:void(0);">Invite Fans</a>
+         </div>
+      </div> 
+   </li>
  
-<div id="message_banner" class="message_banner" style="display:none"></div>
- <div id="user_path" class="user_path"></div>
+    </ul>
+  </div>
+ 
+  <div id="message_banner" class="message_banner" style="display:none"></div>
+  <div class="save_draggables">
+      <a href="javascript:void(0);">Invite New Fans</a>
+      <br/>
+      <%= link_to_remote "Save Draggables", 
+         :url => { :controller => "user_preferences", :action => "save_drag_n_drop" }
+     %>
+  </div>
+  <div id="user_path" class="user_path"></div>
  
  
   <div class="left_menu">
     <ul id="left_menu_item">
-      <li class="my_sports">Tagged Teams</li>
+      <li class="my_sports"><a style="background: #053616; width: auto" href="/edit/sports_and_teams">Change<br/>Tagged Teams</a></li>
       <%
         path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
         parser = XML::Parser.file(path)
