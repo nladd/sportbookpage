@@ -24,7 +24,7 @@ PUBLISHER_ID = "1"
 
 BOOKMAKER_ID = 6
 
-FEEDFETCHER_ARCHIVE = "/home/sportboo/FeedFetcherDeluxe/archive/"
+FEEDFETCHER_ARCHIVE = ENV['HOME'] + "/FeedFetcherDeluxe/archive/"
 
 PROFILE_KEYS =
           ["birthday",

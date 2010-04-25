@@ -1,11 +1,11 @@
 
-<% form_tag('', :multipart => true, :id => 'register_form') do %>
+<% form_tag('/register', :multipart => true, :id => 'register_form') do %>
 
 <div style="width: 80%; margin: auto">
   <p style="text-align: center; font-size: 1.1em">SportbookPage.com let's you follow the teams you want at the drag of a mouse. Here you'll tag the teams you want to follow, and don't worry, you can always change your tagged teams later.</p>
 </div>
 
-<div class="title"><div class="title_font">Sports and Teams</div></div>
+<div class="title"><div class="title_font">Tagged Teams</div></div>
 
 <div class="tab_row">
   <a href="javascript:void(0);" onclick="$('pro').show(); $('ncaa_d1').hide(); $('pro_tab').setStyle({background: '#5380ff', border: '2px #315ad0 solid'}); $('ncaa_d1_tab').setStyle({background: '#d9d9db', border: '2px #d9d9db solid' });"><div id="pro_tab" class="tab selected">Pro</div></a>
@@ -63,7 +63,7 @@
   end # close pro_leagues loop 
 %>  
     <tr>&nbsp;</tr>
-    <tr><td align="left"><%= submit_tag( "Finish" , :class => "submit" ) %></td></tr></table>
+    <tr><td align="left"><%= submit_tag( "Next" , :class => "submit" ) %></td></tr></table>
     
 </div>
 
@@ -160,7 +160,7 @@
 %>  
     <tr>&nbsp;</tr>
     <tr>
-      <td align="left"><%= submit_tag( "Finish" , :class => "submit" ) %></td>
+      <td align="left"><%= submit_tag( "Next" , :class => "submit" ) %></td>
     </tr>
     
   </table>

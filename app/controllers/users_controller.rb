@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'xml/libxml'
+#require '/usr/lib/ruby/gems/1.8/gems/libxml-ruby-1.1.3/lib/xml/libxml'
 require 'helpers/challenge_form_helper.rb'
 
 class UsersController < ApplicationController

@@ -48,6 +48,7 @@ ActionController::Routing::Routes.draw do |map|
   map.search '/search/', :controller => 'users', :action => 'friends_search'
   map.drop '/drop/', :controller => 'draggables', :action => 'route_action'
   
+  map.register '/register', :controller => 'user_preferences', :action => 'create_sports_and_teams'
   map.connect '/register', :controller => 'user_preferences', :action => 'create_sports_and_teams'
   map.connect '/register/2', :controller => 'user_preferences', :action => 'create_profile'
   map.connect '/register/3', :controller => 'user_preferences', :action => 'create_account'

@@ -77,7 +77,8 @@
         <td></td><td><span class="error_text"><%= @user.errors[:password_confirmation] %></span></td>
       </tr>
       <% end %>
-      
+
+<!--      
       <tr>
         <td>*Security Question 1:</td><td colspan='3'><%= text_field_tag( 'question_1', @user.question_1, :size => 60, :maxlength => 255 ) %></td>
       </tr>
@@ -113,6 +114,7 @@
         <td></td><td><span class="error_text"><%= @user.errors[:answer_2] %></span></td>
       </tr>
       <% end %>
+-->
       
       <tr>
         <td colspan='5' align='right'><%= submit_tag( "Save" , :class => "submit" ) %></td>

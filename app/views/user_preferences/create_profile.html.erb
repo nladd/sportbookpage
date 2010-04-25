@@ -2,22 +2,71 @@
 <% form_tag('/register/2', :multipart => true, :id => 'register_form') do %>
 
       
-<div class='title'><div class="title_font">Profile Information</div> <span style='font-size: .625em'>*denotes required fields</span></div>
+<div class='title'><div class="title_font">Create Account and Profile</div> <span style='font-size: .625em'>*denotes required fields</span></div>
   
 <div class='form'>
 
 
   <table cellspacing='8' style='left: 85px'>
+    
+      <tr>
+        <td>*First Name:</td><td><%= text_field_tag( 'first_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.first_name}" ) %></td>
+        <td>Middle Name:</td><td><%= text_field_tag( 'middle_name', nil, :size => 15, :maxlength => 25, :value => "#{@user.middle_name}" ) %></td>
+      </tr>
+      <% if @user.errors[:first_name] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:first_name] %></span></td>
+      </tr>
+      <% end %>
+        
+      <tr>
+        <td>*Last Name:</td><td><%= text_field_tag( 'last_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.last_name}" ) %></td>
+      </tr>
+       <% if @user.errors[:last_name] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:last_name] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*E-mail Address:</td><td colspan='3'><%= text_field_tag( 'email', nil, :size => 30, :maxlength => 255, :value => "#{@user.email}" ) %></td>
+      </tr>
+      <% if @user.errors[:email] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:email] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Password:</td><td><%= password_field_tag( 'password', nil, :size => 20, :maxlength => 20 ) %></td><td colspan='2'><span style='font-size: .90em; font-weight: 400'>(must be at least 6 characters in length)</span></td>
+      </tr>
+      <% if @user.errors[:password] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:password] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Confirm Password:</td><td><%= password_field_tag( 'password_confirmation', nil, :size => 20, :maxlength => 20 ) %></td>
+      </tr>
+      <% if @user.errors[:password_confirmation] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:password_confirmation] %></span></td>
+      </tr>
+      <% end %>
+    
         
     <tr>
       <td></td>
       <td></td>
-      <td>Display in profile?</td>
+      <td></td>
+      <td align="center">Display in profile?</td>
     </tr>
   
     <tr>
       <td valign='top'>*Birthday:</td>
       <td><%= select_date( date = Date.new(y=(Time.now).year,m=1,d=1), { :order => [:month, :day, :year], :start_year => Time.now.year, :end_year => Time.now.year - 90 }, { :onchange => "checkProfileBox('show_birthday');" } ) %></td>
+      <td></td>
       <td align='center'><%= check_box_tag( 'show[birthday]', nil, false, :class => 'checkbox') %></td>
     </tr>
     <% if @user.errors[:birthday] then %>
@@ -30,9 +79,11 @@
     <tr>
       <td>*Hometown:</td>
       <td><%= text_field_tag( "profile[hometown]", nil, { :size => 20, :maxlength => 50, :onchange => "checkProfileBox('show_hometown');" }) %></td>
+      <td></td>
       <td align='center'><%= check_box_tag( 'show[hometown]', nil, false, :class => 'checkbox') %></td>
     </tr>
-    
+
+<!--
     <tr>
       <td>Jersey #:</td>
       <td><%= text_field_tag( "profile[jersey_number]", nil, { :size => 3, :maxlength => 3, :onchange => "checkProfileBox('show_jersey_number');" } )%></td>
@@ -67,7 +118,8 @@
       <td><%= text_field_tag( 'profile[favorite_coach]', nil, { :size => 25, :maxlength => 30, :onchange => "checkProfileBox('show_favorite_coach');" } ) %></td>
       <td align='center'><%= check_box_tag( 'show[favorite_coach]', nil, false, :class => 'checkbox') %></td>
     </tr>
-    
+-->
+
     <tr>
       <td>Profile Photo:</td>
     </tr>
@@ -80,11 +132,12 @@
     </tr>
     <tr>
       <td colspan='2'><%= text_area_tag( 'profile[about_me]', nil, { :size => '50x3', :value => '', :onchange => "checkProfileBox('show_about_me');" } ) %></td>
+      <td></td>
       <td align='center'><%= check_box_tag( 'show[about_me]', nil, false, :class => 'checkbox') %></td>
     </tr>
     
     <tr>
-      <td colspan='3' align='right'><%= submit_tag( "Next" , :class => "submit" ) %></td>
+      <td align='left'><%= submit_tag( "Finish" , :class => "submit" ) %></td>
     </tr>
     
   </table>

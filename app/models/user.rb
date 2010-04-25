@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :email, :message => "Specified e-mail address is already registered with sportbookpage.com"
 
-  validate :validate_presence_of_attributes
+  validates_presence_of :first_name, :last_name
   validate :valid_password
   validate :valid_email
   validate :sportbucks_is_positive
@@ -43,13 +43,13 @@ class User < ActiveRecord::Base
     write_attribute(:email, e.downcase)
   end
   
-  def answer_1=(ans_1)
-    write_attribute(:answer_1, ans_1.downcase)
-  end
-  
-  def answer_2=(ans_2)
-    write_attribute(:answer_2, ans_2.downcase)
-  end
+  #def answer_1=(ans_1)
+  #  write_attribute(:answer_1, ans_1.downcase)
+  #end
+  #
+  #def answer_2=(ans_2)
+  #  write_attribute(:answer_2, ans_2.downcase)
+  #end
   
   
   def self.encrypted_field(password, salt)

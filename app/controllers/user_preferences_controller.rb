@@ -26,36 +26,36 @@ class UserPreferencesController < ApplicationController
   #     is successfully created, the user is directed to the profile info page
   #
   #############################################################################
-  def create_account
-        
-    save_successful = false
-    match = false
-    
-    session[:user] == nil ? @user = User.new : @user = session[:user]
-    @user.errors.clear
-    
-    if request.post? then
-      if params[:password] == params[:password_confirmation] then
-        match = true
-        save_successful = save_user
-      else
-        @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
-      end
-    end
-    
-    #store the user's account details from the previous form  
-    if (save_successful && match) then
-      session[:user_id] = @user.id
-      session[:user] = nil
-      redirect_to home_url
-    else
-      session[:user] = @user
-      respond_to do |format|
-        format.html # create_account.html.erb
-      end
-    end
-    
-  end
+  #def create_account
+  #      
+  #  save_successful = false
+  #  match = false
+  #  
+  #  @user = User.find(session[:user_id])
+  #  @user.errors.clear
+  #  
+  #  if request.post? then
+  #    if params[:password] == params[:password_confirmation] then
+  #      match = true
+  #      save_successful = save_user
+  #    else
+  #      @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+  #    end
+  #  end
+  #  
+  #  #store the user's account details from the previous form  
+  #  if (save_successful && match) then
+  #    session[:user_id] = @user.id
+  #    session[:user] = nil
+  #    redirect_to home_url
+  #  else
+  #    session[:user] = @user
+  #    respond_to do |format|
+  #      format.html # create_account.html.erb
+  #    end
+  #  end
+  #  
+  #end
 
 
   #############################################################################
@@ -124,7 +124,7 @@ class UserPreferencesController < ApplicationController
   #
   #############################################################################
   def create_profile
-    session[:user] = nil
+    
     begin    
       @user = User.find(session[:user_id])
     rescue 
@@ -133,10 +133,19 @@ class UserPreferencesController < ApplicationController
     end
     
     @user.errors.clear
+    save_successful = false
+    match = false
     valid = false
 
     if request.post? then
-
+  
+      if params[:password] == params[:password_confirmation] then
+        match = true
+        save_successful = save_user
+      else
+        @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+      end
+  
       date = params[:date]
       #don't let newborn babies register
       if ((date[:year]).to_i >= (Time.now.year - 4))
@@ -156,7 +165,7 @@ class UserPreferencesController < ApplicationController
 
     end
     
-    if valid then
+    if valid && save_successful && match then
       #validation should have already been performed so this call is safe
       @user.save(false)
       write_profile(@user)
@@ -168,8 +177,9 @@ class UserPreferencesController < ApplicationController
         `cp #{RAILS_ROOT}/public/images/default_profile_image_thumbnail.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}_thumbnail.png`
         
       end
+      session[:user] = nil
       session[:user_id] = @user.id
-      redirect_to :action => 'create_sports_and_teams'
+      redirect_to home_url
     else
       session[:user] = @user
       respond_to do |format|
@@ -266,42 +276,42 @@ class UserPreferencesController < ApplicationController
   #############################################################################
   def create_sports_and_teams
     
-    session[:user] == nil ? @user = User.new : @user = session[:user]
-    
-    
-    @pro_leagues = Affiliation.get_pro_leagues()
-     
-    @pro_teams = Array.new(@pro_leagues.size)
-    @pro_leagues.size.times do |i|
-      @pro_teams[i] = Affiliation.get_teams_by_league(@pro_leagues[i].affiliation_id, @pro_leagues[i].affiliation_key)
-    end
-    
-    @college_leagues = Affiliation.get_college_leagues()
-     
-    @college_conferences = Array.new(@college_leagues.size)
-    @college_teams = Array.new(@college_leagues.size)
-    
-    @college_conferences.size.times do |i|
-      @college_conferences[i] = Affiliation.get_conferences_by_league(@college_leagues[i].affiliation_id)
-      
-      @college_teams[i] = Array.new(@college_conferences[i].size)
-      
-      @college_conferences[i].size.times do |j|
-        
-        @college_teams[i][j] = Affiliation.get_teams_by_conference(@college_conferences[i][j].affiliation_id, @college_leagues[i].affiliation_key)
-      
-      end
-      
-    end
-    
+    @user = User.new
     
     if request.post? then
+      @user.save_without_validation!
       create_directories_and_files(@user)
       write_sports_and_teams(@user)
       session[:user] = @user
       session[:user_id] = @user.id
       redirect_to :action => "create_profile"
     else
+      @pro_leagues = Affiliation.get_pro_leagues()
+     
+      @pro_teams = Array.new(@pro_leagues.size)
+      @pro_leagues.size.times do |i|
+        @pro_teams[i] = Affiliation.get_teams_by_league(@pro_leagues[i].affiliation_id, @pro_leagues[i].affiliation_key)
+      end
+      
+      @college_leagues = Affiliation.get_college_leagues()
+       
+      @college_conferences = Array.new(@college_leagues.size)
+      @college_teams = Array.new(@college_leagues.size)
+      
+      @college_conferences.size.times do |i|
+        @college_conferences[i] = Affiliation.get_conferences_by_league(@college_leagues[i].affiliation_id)
+        
+        @college_teams[i] = Array.new(@college_conferences[i].size)
+        
+        @college_conferences[i].size.times do |j|
+          
+          @college_teams[i][j] = Affiliation.get_teams_by_conference(@college_conferences[i][j].affiliation_id, @college_leagues[i].affiliation_key)
+        
+        end
+        
+      end
+      
+      
       respond_to do |format|
         format.html
       end
@@ -646,10 +656,9 @@ private
     keys.each do |key| 
     
       # get the node if it previously exists
-      nlist = profile.find('//root/' + key)
-      node = nlist[0]
+      node = profile.find('//root/' + key).first
     
-      if node == nil
+      if node.blank?
         # the node didn't exist so create the node, then write the value
         root << node = XML::Node.new(key)
       end
@@ -685,10 +694,9 @@ private
     profile = parser.parse
     root = profile.root
   
-    sports_node_list = profile.find('//root/sports')
+    sports_node = profile.find('//root/sports').first
   
-    if sports_node_list[0] != nil
-      sports_node = sports_node_list[0]
+    if sports_node != nil
       sports_node.content = ""
     else
       root << sports_node = XML::Node.new('sports')
