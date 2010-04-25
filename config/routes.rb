@@ -43,15 +43,14 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing the them or commenting them out if you're using named routes and resources.
 
   map.home '/home/', :controller => 'users', :action => 'index'
-  
   map.login '/login/', :controller => 'login', :action => 'index'
-  map.register 'register/', :controller => 'user_preferences', :action => 'create_account'
+  
   map.search '/search/', :controller => 'users', :action => 'friends_search'
   map.drop '/drop/', :controller => 'draggables', :action => 'route_action'
   
-  
+  map.connect '/register', :controller => 'user_preferences', :action => 'create_sports_and_teams'
   map.connect '/register/2', :controller => 'user_preferences', :action => 'create_profile'
-  map.connect '/register/3', :controller => 'user_preferences', :action => 'create_sports_and_teams'
+  map.connect '/register/3', :controller => 'user_preferences', :action => 'create_account'
   
   map.connect '/edit/sports_and_teams', :controller => 'user_preferences', :action => 'edit_sports_and_teams'
   map.connect '/edit/profile', :controller => 'user_preferences', :action => 'edit_profile'

@@ -46,12 +46,12 @@ class UserPreferencesController < ApplicationController
     #store the user's account details from the previous form  
     if (save_successful && match) then
       session[:user_id] = @user.id
-      redirect_to :action => "create_profile"
+      session[:user] = nil
+      redirect_to home_url
     else
-      #if !match : @user.errors.add(:password_confirmation, "Password and password confirmation did not match")  end
       session[:user] = @user
       respond_to do |format|
-        format.html # account_info.html.erb
+        format.html # create_account.html.erb
       end
     end
     
@@ -159,7 +159,6 @@ class UserPreferencesController < ApplicationController
     if valid then
       #validation should have already been performed so this call is safe
       @user.save(false)
-      create_directories_and_files(@user)
       write_profile(@user)
       file = params[:photo]
       if !file.blank? then 
@@ -267,7 +266,8 @@ class UserPreferencesController < ApplicationController
   #############################################################################
   def create_sports_and_teams
     
-    @user = User.find(session[:user_id])
+    session[:user] == nil ? @user = User.new : @user = session[:user]
+    
     
     @pro_leagues = Affiliation.get_pro_leagues()
      
@@ -296,10 +296,11 @@ class UserPreferencesController < ApplicationController
     
     
     if request.post? then
+      create_directories_and_files(@user)
       write_sports_and_teams(@user)
-      session[:user] = nil
+      session[:user] = @user
       session[:user_id] = @user.id
-      redirect_to home_url
+      redirect_to :action => "create_profile"
     else
       respond_to do |format|
         format.html
