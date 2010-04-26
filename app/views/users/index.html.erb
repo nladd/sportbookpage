@@ -1,8 +1,6 @@
 
 <div class="drag_n_drop" id="drag_n_drop"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
     
-
-    
   <div class="drop_1_frame" id="drop_1_frame">
     <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_1_title"></div>
     <div id="drop_1_side_bar" class="side_bar"></div>
@@ -80,11 +78,11 @@
 
   <div class="drag_n_drop_2" id="drag_n_drop_2"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
     
-    <%= sortable_element('drag_n_drop', :only => "drop_item", :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+  <%= sortable_element('drag_n_drop', :only => "drop_item", :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
     
-    <%= sortable_element('drag_n_drop_2', :only => 'drop_item', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
+  <%= sortable_element('drag_n_drop_2', :only => 'drop_item', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
 
 
 <%= javascript_tag "$('user_path').update(\"" + @path_html + "\")" %>
-
 <%= javascript_tag "createGradient();" %>
+

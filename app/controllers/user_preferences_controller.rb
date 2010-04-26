@@ -139,6 +139,8 @@ class UserPreferencesController < ApplicationController
 
     if request.post? then
   
+      params[:profile]["birthday"] = ""
+  
       if params[:password] == params[:password_confirmation] then
         match = true
         save_successful = save_user
@@ -195,7 +197,6 @@ class UserPreferencesController < ApplicationController
   #
   #############################################################################
   def edit_profile
-    session[:user] = nil
 
     begin    
       @user = User.find(session[:user_id])
@@ -665,7 +666,7 @@ private
       
       node.content = CGI.escape(profile_hash[key])
       
-      # determine if the user has elected to the item in their profile
+      # determine if the user has elected to show the item in their profile
       if(show[key])
         logger.info "show[" + key + "] = " + show[key]
         node['show'] = 'yes'

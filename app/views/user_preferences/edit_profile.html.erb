@@ -92,6 +92,16 @@
         <td colspan='2'><%= file_field_tag 'photo', :size => 40, :id => 'profile_photo'%></td>
       </tr>
       
+      <tr><td>&nbsp;</td></tr>
+      
+      <tr>
+        <td colspan='2'>Check this box if you'd like to show popup help menus when available</td>
+        <%= hidden_field_tag ( 'profile[popupHelp]', '' ) %>
+        <td align='center'><%= check_box_tag( 'show[popupHelp]', nil, @currentValues['show_popupHelp'], :class => 'checkbox' ) %></td>
+      </tr>
+      
+      <tr><td>&nbsp;</td></tr>
+      
       <tr>
         <td colspan='3' align='right'><%= submit_tag( "Save", :class => "submit" ) %></td>
       </tr>

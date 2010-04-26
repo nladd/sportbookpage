@@ -14,6 +14,9 @@ var drop_2_timer = 0;
 var drop_3_timer = 0;
 var drop_4_timer = 0;
 
+/* Timer to close help messages when no longer needed */
+var help_timer = 0;
+
 /*
  * Uncheck all checkboxes in a form
  */
@@ -296,3 +299,22 @@ function finalShowLess(drop_id, abbr, size) {
 }
 
 
+/******************************************************************************
+ * Show the popup help menu
+ ******************************************************************************/
+function ShowHelp(event) {
+  
+  window.clearTimeout(help_timer);
+  
+  var posX = Event.pointerX(event) + 10;
+  var posY = Event.pointerY(event) + 10;
+  
+  var parameters = $A(arguments);
+  
+  $('popup_help').setStyle({top: posY + 'px', left: posX + 'px'});
+  $('popup_help').update(parameters[1]);
+  $('popup_help').show();
+  
+  help_timer = setTimeout(function(){$('popup_help').hide();}, 1000);
+  
+}

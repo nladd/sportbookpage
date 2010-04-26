@@ -41,7 +41,7 @@ end
     PROFILE_KEYS.each do |key|
 
       node = @profile.find_first("//root/" + key)
-      if (!(node.blank?) && node['show'] == 'yes')
+      if (@options[key] && node && node['show'] == 'yes')
         text = CGI.unescape(node.content)
     %>
           <tr colspan='2'><td>

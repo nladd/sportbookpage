@@ -8,7 +8,7 @@
       Schedule
   </li>
   
-  <li class='drop_item' id='lines'>
+  <li class='drop_item' id='lines'> 
       Vegas Lines
   </li>
  
@@ -40,3 +40,28 @@
  
   <li class='space_holder'></li> 
  
+<%
+    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+    parser = XML::Parser.file(path)
+    profile = parser.parse
+    
+    help_node = profile.find_first('//root/popupHelp')
+    
+    if help_node && help_node['show'] == 'yes' then
+%>    
+
+    <%=
+        javascript_tag "
+            Event.observe($('scoreboard'), 'mousemove', ShowHelp.bindAsEventListener($('scoreboard'), 'Drag and drop this icon onto one of the boxes below to see the latest scores for your tagged teams'));
+            Event.observe($('schedule'), 'mousemove', ShowHelp.bindAsEventListener($('schedule'), 'Drag and drop this icon onto one of the boxes below to see upcoming schedules for your tagged teams'));
+            Event.observe($('lines'), 'mousemove', ShowHelp.bindAsEventListener($('lines'), 'Drag and drop this icon onto one of the boxes below to see the vegas lines for your tagged teams upcoming games'));
+            Event.observe($('headlines'), 'mousemove', ShowHelp.bindAsEventListener($('headlines'), 'Drag and drop this icon onto one of the boxes below to see the latest headlines for your tagged teams'));
+            Event.observe($('standings'), 'mousemove', ShowHelp.bindAsEventListener($('standings'), 'Drag and drop this icon onto one of the boxes below to see the latest standings for your tagged teams'));
+            Event.observe($('friends'), 'mousemove', ShowHelp.bindAsEventListener($('friends'), 'Drag and drop this icon onto one of the boxes below to see who is in your fan club'));
+            Event.observe($('profile'), 'mousemove', ShowHelp.bindAsEventListener($('profile'), 'Drag and drop this icon onto one of the boxes below to see your profile'));
+        "
+    %>
+
+<%
+    end
+%>

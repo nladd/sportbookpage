@@ -34,7 +34,8 @@ PROFILE_KEYS =
            "favorite_team",
            "favorite_athlete",
            "favorite_sport",
-           "about_me"]
+           "about_me",
+           "popupHelp"]
 
 SPORTS =
     ["Basketball",

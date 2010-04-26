@@ -136,6 +136,17 @@
       <td align='center'><%= check_box_tag( 'show[about_me]', nil, false, :class => 'checkbox') %></td>
     </tr>
     
+    <tr><td>&nbsp;</td></tr>
+    
+    <tr>
+      <td colspan='2'>Check this box if you'd like to show popup help menus when available.<br/>This is recommended for new users and can be turned off at any time in you profile settings.</td>
+      <%= hidden_field_tag ( 'profile[popupHelp]', '' ) %>
+      <td></td>
+      <td valign='top' align='center'><%= check_box_tag( 'show[popupHelp]', nil, true, :class => 'checkbox' ) %></td>
+    </tr>
+    
+    <tr><td>&nbsp;</td></tr>
+    
     <tr>
       <td align='left'><%= submit_tag( "Finish" , :class => "submit" ) %></td>
     </tr>
