@@ -4,7 +4,9 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :email, :message => "Specified e-mail address is already registered with sportbookpage.com"
 
-  validates_presence_of :first_name, :last_name
+  validates_presence_of :first_name, :message => "First name is a required field"
+  validates_presence_of :last_name, :message => "Last name is a required field"
+  validates_presence_of :sex, :message => "Sex is a required field"
   validate :valid_password
   validate :valid_email
   validate :sportbucks_is_positive

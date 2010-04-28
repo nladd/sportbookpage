@@ -10,8 +10,8 @@
   <table cellspacing='8' style='left: 85px'>
     
       <tr>
-        <td>*First Name:</td><td><%= text_field_tag( 'first_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.first_name}" ) %></td>
-        <td>Middle Name:</td><td><%= text_field_tag( 'middle_name', nil, :size => 15, :maxlength => 25, :value => "#{@user.middle_name}" ) %></td>
+        <td>*First Name:</td><td><%= text_field_tag( 'first_name', nil, :size => 15, :maxlength => 50, :value => "#{params[:first_name]}" ) %></td>
+        <td>Middle Name:</td><td><%= text_field_tag( 'middle_name', nil, :size => 15, :maxlength => 25, :value => "#{params[:middle_name]}" ) %></td>
       </tr>
       <% if @user.errors[:first_name] then %>
       <tr>
@@ -20,7 +20,7 @@
       <% end %>
         
       <tr>
-        <td>*Last Name:</td><td><%= text_field_tag( 'last_name', nil, :size => 15, :maxlength => 50, :value => "#{@user.last_name}" ) %></td>
+        <td>*Last Name:</td><td><%= text_field_tag( 'last_name', nil, :size => 15, :maxlength => 50, :value => "#{params[:last_name]}" ) %></td>
       </tr>
        <% if @user.errors[:last_name] then %>
       <tr>
@@ -29,7 +29,7 @@
       <% end %>
       
       <tr>
-        <td>*E-mail Address:</td><td colspan='3'><%= text_field_tag( 'email', nil, :size => 30, :maxlength => 255, :value => "#{@user.email}" ) %></td>
+        <td>*E-mail Address:</td><td colspan='3'><%= text_field_tag( 'email', nil, :size => 30, :maxlength => 255, :value => "#{params[:email]}" ) %></td>
       </tr>
       <% if @user.errors[:email] then %>
       <tr>
@@ -54,7 +54,15 @@
         <td></td><td><span class="error_text"><%= @user.errors[:password_confirmation] %></span></td>
       </tr>
       <% end %>
-    
+      
+      <tr>
+        <td>*Sex:</td><td><input type="radio" name="sex" value="m" /> Male <input type="radio" name="sex" value="f" /> Female</td>
+      </tr>
+      <% if @user.errors[:sex] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:sex] %></span></td>
+      </tr>
+      <% end %>
         
     <tr>
       <td></td>
@@ -82,6 +90,12 @@
       <td></td>
       <td align='center'><%= check_box_tag( 'show[hometown]', nil, false, :class => 'checkbox') %></td>
     </tr>
+    <% if @user.errors[:hometown] then %>
+    <tr>
+      <td></td>
+      <td><span class="error_text"><%= @user.errors[:hometown] %></span></td>
+    </tr>
+    <% end %>
 
 <!--
     <tr>

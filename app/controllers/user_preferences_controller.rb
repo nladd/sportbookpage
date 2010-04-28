@@ -133,17 +133,17 @@ class UserPreferencesController < ApplicationController
     end
     
     @user.errors.clear
-    save_successful = false
-    match = false
-    valid = false
+    save_successful = false #boolean indicator if the @user object was able to be persisted
+    match = false   #boolean indicator if the password was correctly confirmed
+    valid = false   #boolean indicator if hometown and sex were provided and birthdate is of age
 
     if request.post? then
-  
-      if params[:password] == params[:password_confirmation] then
-        match = true
-        save_successful = save_user
+    
+      if params[:sex] != nil then
+        @user.sex = params[:sex]
       else
-        @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+        @user.errors.add(:sex, "Sex is a required field")
+        valid = false
       end
   
       date = params[:date]
@@ -162,12 +162,19 @@ class UserPreferencesController < ApplicationController
         @user.errors.add(:hometown, "Hometown is a required field")
         valid = false
       end
+      
+      if params[:password] == params[:password_confirmation] then
+        match = true
+        save_successful = save_user
+      else
+        @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+      end
 
     end
     
     if valid && save_successful && match then
       #validation should have already been performed so this call is safe
-      @user.save(false)
+      #@user.save
       write_profile(@user)
       file = params[:photo]
       if !file.blank? then 
