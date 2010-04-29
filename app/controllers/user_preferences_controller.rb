@@ -138,18 +138,9 @@ class UserPreferencesController < ApplicationController
     valid = false   #boolean indicator if hometown and sex were provided and birthdate is of age
 
     if request.post? then
-<<<<<<< HEAD:app/controllers/user_preferences_controller.rb
     
       if params[:sex] != nil then
         @user.sex = params[:sex]
-=======
-  
-      params[:profile]["birthday"] = ""
-  
-      if params[:password] == params[:password_confirmation] then
-        match = true
-        save_successful = save_user
->>>>>>> master:app/controllers/user_preferences_controller.rb
       else
         @user.errors.add(:sex, "Sex is a required field")
         valid = false
@@ -211,6 +202,7 @@ class UserPreferencesController < ApplicationController
   #
   #############################################################################
   def edit_profile
+    session[:user] = nil
 
     begin    
       @user = User.find(session[:user_id])
@@ -680,7 +672,7 @@ private
       
       node.content = CGI.escape(profile_hash[key])
       
-      # determine if the user has elected to show the item in their profile
+      # determine if the user has elected to the item in their profile
       if(show[key])
         logger.info "show[" + key + "] = " + show[key]
         node['show'] = 'yes'
