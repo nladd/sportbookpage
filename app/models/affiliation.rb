@@ -231,6 +231,10 @@ class Affiliation < ActiveRecord::Base
                                 order = "display_names.full_name ASC", 
                                 publisher_id = PUBLISHER_ID)
 
+    # college football needs to be treated as a specail case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+      affiliation_key = "l.ncaa.org.mfoot"
+    end
     
     return Affiliation.find_all_by_affiliation_type(
                         "league",
@@ -266,6 +270,10 @@ class Affiliation < ActiveRecord::Base
       order = "display_names.abbreviation ASC"
     end
 
+    # college football needs to be treated as a specail case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+      affiliation_key = "l.ncaa.org.mfoot"
+    end
     
     return Affiliation.find_all_by_affiliation_type(
                         "conference",
@@ -294,12 +302,14 @@ class Affiliation < ActiveRecord::Base
   # Return:
   #   :select => "teams.id AS team_id, teams.team_key, display_names.*, display_names.abbreviation",
   #############################################################################
-  def self.get_teams_by_division(division_id, affiliation_key, order = nil, publisher_id = nil)
+  def self.get_teams_by_division(division_id, affiliation_key, order = nil, publisher_id = PUBLISHER_ID)
     if order.blank?
       order = "display_names.abbreviation ASC"
     end
-    if publisher_id.blank?
-      publisher_id = PUBLISHER_ID
+
+    # college football needs to be treated as a specail case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+      affiliation_key = "l.ncaa.org.mfoot"
     end
     
     return Affiliation.find_all_by_affiliation_type(

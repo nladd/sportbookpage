@@ -51,20 +51,23 @@ PROFESSIONAL_LEAGUES =
             "Major League Baseball"]
 
 
-COLLEGE_LEAGUES = ["NCAA Men's Basketball Division 1"]
+COLLEGE_LEAGUES = ["NCAA Men's Basketball Division 1",
+				   "NCAA Men's Football Division 1A"]
 
 ALL_LEAGUES = ["National Basketball Association",
             "National Hockey League",
             "National Football League",
             "Major League Baseball",
-	    "NCAA Men's Basketball Division 1"]
+			"NCAA Men's Basketball Division 1",
+			"NCAA Men's Football Division 1A"]
 
 
 STANDINGS_SCOPE = {"National Basketball Association" => "all",
             "National Hockey League" => "league",
             "National Football League" => "all",
             "Major League Baseball" => "all",
-            "NCAA Men's Basketball Division 1" => "league"}
+            "NCAA Men's Basketball Division 1" => "league",
+            "NCAA Men's Football Division 1A" => "league"}
 
 
 
