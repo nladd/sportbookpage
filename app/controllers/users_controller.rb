@@ -27,12 +27,16 @@ class UsersController < ApplicationController
     @profile = parser.parse
     drop_1_node = @profile.find_first('//root/drop_1')
     @drop_1 = drop_1_node.content
+    session['drop_1'] = @drop_1
     drop_2_node = @profile.find_first('//root/drop_2')
     @drop_2 = drop_2_node.content
+    session['drop_2'] = @drop_2
     drop_3_node = @profile.find_first('//root/drop_3')
     @drop_3 = drop_3_node.content
+    session['drop_3'] = @drop_3
     drop_4_node = @profile.find_first('//root/drop_4')
     @drop_4 = drop_4_node.content
+    session['drop_4'] = @drop_4
         
     user_path = ["Home"] 
     user_path_urls = ["/home"] 
