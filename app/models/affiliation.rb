@@ -723,10 +723,10 @@ class Affiliation < ActiveRecord::Base
  			                    events.broadcast_listing,
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
-			 INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'
-			 INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                         INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                         INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
+                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
+                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
               :conditions => "events.start_date_time <= '#{end_date}'",                                    
               :order => "events.start_date_time DESC",
               :limit => limit)
@@ -793,7 +793,7 @@ class Affiliation < ActiveRecord::Base
                         INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
                         INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
               :conditions => "events.start_date_time >= '#{start_date}'",                                    
-              :group => "start_date_time ASC",
+              :group => "events.id",
               :order => "start_date_time ASC",
               :limit => n)
 
