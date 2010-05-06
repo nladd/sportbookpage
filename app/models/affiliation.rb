@@ -765,7 +765,7 @@ class Affiliation < ActiveRecord::Base
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
-              :select => "MAX(t1_score_lines.date_time),
+              :select => "MAX(t1_score_lines.date_time),  
                           d1.abbreviation AS t1_abbr, d1.entity_id AS t1_id, d1.first_name AS t1_first_name, d1.last_name AS t1_last_name, d1.full_name AS t1_full_name, d1.alias AS t1_alias, d1.url AS t1_url,
                           d2.abbreviation AS t2_abbr, d2.entity_id AS t2_id, d2.first_name AS t2_first_name, d2.last_name AS t2_last_name, d2.full_name AS t2_full_name, d2.alias AS t2_alias, d2.url AS t2_url,
                           t1.alignment AS t1_alignment, t1.score AS t1_score,  t1.event_outcome AS t1_outcome,
