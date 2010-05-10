@@ -1,0 +1,101 @@
+
+
+
+<div class="row">
+  <%
+    @max_round.times do |r|
+      style = ""
+      if (r+1) == @round
+        style = "background: #5380ff; color: white"
+      else
+        style = ""
+      end
+  
+  %>
+    
+  <div class="cell_60">
+    <%= link_to_remote "Round #{r+1}",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;round=#{r+1}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
+          {:style => style}
+    %>
+  </div>
+  <% end %>
+</diV>
+
+<%
+  @conferences.size.times do |c|
+%>
+  <div class="row_title" align="center">
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient"><%= @conferences[c].full_name %> Conference</div>
+  </div>
+<%
+    @series[c].size.times do |t|
+%>
+
+<div class="playoff_series">
+  
+  <div id="matchup_<%= @series[c][t][0].t1_id + "_" + @series[c][t][0].t2_id %>" class="matchup">
+    <br/>
+    <%= @series[c][t][0].t1_abbr %><br/>
+    vs.<br/>
+    <%= @series[c][t][0].t2_abbr %><br/>
+    <br/>
+  </div>
+  
+  <div class="series_games">
+    <div class="row">
+      <div class="cell_40">&nbsp;</div>
+      <div class="cell_40" style="text-align: center"><%= @series[c][t][0].t1_abbr %></div>
+      <div class="cell_40" style="text-align: center"><%= @series[c][t][0].t2_abbr %></div>
+    </div>
+
+<%
+    t1_wins = 0
+    t2_wins = 0
+    @series[c][t].size.times do |g|
+%>
+
+    <div class="row">
+      <div class="cell_40">Gm <%= (g + 1) %></div>
+      <% if (@series[c][t][g].t1_outcome == "win")
+            t1_wins += 1
+      %>
+        <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[c][t][g].t1_score %></div>
+        <div class="cell_40" style="text-align: center"><%= @series[c][t][g].t2_score %></div>
+      <% elsif (@series[c][t][g].t2_outcome == "win")
+            t2_wins += 1
+      %>
+        <div class="cell_40" style="text-align: center"><%= @series[c][t][g].t1_score %></div>
+        <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[c][t][g].t2_score %></div>
+      <% else %>
+        <div class="cell_80" style="text-align: center"><%= @series[c][t][g].start_date_time.strftime("%a, %m/%d %I:%M%P")  %></div>
+      <% end %>
+    </div>
+    
+<%
+    end # close @series[g], games, loop
+%>
+
+  </div> <!-- close series_games div -->
+
+<%
+  series_score = ""
+  if (t1_wins > t2_wins) 
+    series_score = "#{@series[c][t][0].t1_abbr} leads #{t1_wins} - #{t2_wins}"
+  elsif (t2_wins > t1_wins)
+    series_score = "#{@series[c][t][0].t2_abbr} leads #{t2_wins} - #{t1_wins}"
+  else
+    series_score = "Series tied #{t1_wins} - #{t2_wins}"
+  end
+%>
+
+<%= javascript_tag "$('matchup_#{@series[c][t][0].t1_id}_#{@series[c][t][0].t2_id}').insert('<span style=\"font-size: .75em; font-weight: normal\">#{series_score}</span>');" %>
+
+</div> <!-- close playoff_series div -->
+
+<%
+    end # close @series[t], teams, loop
+  end # close conferences loop
+%>
+

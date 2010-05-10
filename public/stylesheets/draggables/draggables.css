@@ -279,9 +279,9 @@ border: thin red solid;
 }
 
 
-/*
+/*****************************
  * Styles to display headlines
- */
+ *****************************/
 
 .headlines {
 position: relative;
@@ -325,9 +325,9 @@ top: 0px;
 left: 0px
 }
 
-/*
+/****************************
  * Style to display an artcle
- */
+ ****************************/
 .article_content {
 position: relative;
 margin-top: 1%;
@@ -337,7 +337,39 @@ float: left;
 width: 96%;
 background: white;
 color: black;
-font-weight: bold;
 border: 1px solid black;
 }
 
+/*********************************
+ * Style to display playoff series
+ * *******************************/
+.playoff_series {
+position: relative;
+display: inline-block;
+margin: 5px;
+width: 300px;
+vertical-align: top;
+height: 200px;
+border: 2px solid blue;
+}
+
+.matchup {
+position: relative;
+display: inline-block;
+width: 95px;
+text-align: center;
+vertical-align: top;
+font-size: 1.25em;
+font-weight: 900;
+color: white;
+background: black;
+height: 100%;
+}
+
+.series_games {
+position: relative;
+display: inline-block;
+width: 200px;
+background: lightGray;
+height: 100%;
+}

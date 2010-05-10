@@ -42,6 +42,8 @@ class DraggablesController < ApplicationController
       load_standings()
     elsif (@dragged_id == "scoreboard")
       load_scoreboard()
+    elsif (@dragged_id == "playoffs")
+        load_playoffs()
     elsif (@dragged_id == "challenges")
       load_challenges()
     elsif (@dragged_id == "headlines")
@@ -464,6 +466,120 @@ class DraggablesController < ApplicationController
 
   end
 
+  #############################################################################
+  # Description:
+  #     Load the variables needed to render the playoffs partial
+  #
+  #############################################################################
+  def load_playoffs()
+  
+    side_bar = "/draggables/partials/blank"
+    @filter = params['full_partial']
+  
+    if (@level == "home")
+        
+      @leagues = Affiliation.get_all_leagues()
+      @series = Array.new(@leagues.size)
+      @conferences = Array.new(@leagues.size)
+      @max_rounds = Array.new(@leagues.size)
+      @rounds = Array.new(@leagues.size)
+      
+      @leagues.size.times do |i|
+      
+        if (!Affiliation.is_in_post_season(@leagues[i].affiliation_id)) then
+          @leagues[i] = nil
+          next
+        end
+       
+        if (@filter.blank?) then
+          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
+            @leagues[i] = nil
+            next
+          end
+        end
+        
+        @conferences[i] = Affiliation.get_conferences_by_league(@leagues[i].affiliation_id)
+        
+        #get the season key
+        season_key = get_season_key(@leagues[i].affiliation_id, TIME)
+        #get the season
+        season = Season.find_by_season_key_and_league_id(season_key, @leagues[i].affiliation_id)
+        
+        #get the most recent playoff round
+        max_round = EventsSubSeason.find(:all,
+                                    :select => "MAX(events.playoff_round) AS round",
+                                    :joins => "INNER JOIN sub_seasons ON sub_seasons.id = events_sub_seasons.sub_season_id
+                                                INNER JOIN events ON events.id = events_sub_seasons.event_id
+                                                INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'",
+                                    :conditions => "sub_seasons.season_id = #{season.id} AND sub_seasons.sub_season_type = 'post-season'")
+        @max_rounds[i] = max_round[0].round.to_i
+        
+        if (params[:round].blank?) 
+            @rounds[i] = @max_rounds[i]
+        else
+            @rounds[i] = params[:round].to_i
+        end
+        
+        
+        @series[i] = Affiliation.get_pro_playoff_series(@leagues[i].affiliation_id, @rounds[i])
+        
+        
+      end
+      
+      # compact the leagues and games to remove nil references
+      @leagues = @leagues.compact
+      @series = @series.compact
+      @conferences = @conferences.compact
+      @max_rounds = @max_rounds.compact
+      @rounds = @rounds.compact
+      
+      
+      side_bar = "draggables/partials/vertical_tabs"
+            
+    elsif (@level == "league")
+        
+        @league = Affiliation.get_league(session[:league_id])
+        @conferences = Affiliation.get_conferences_by_league(@league.affiliation_id)
+        
+        #get the season key
+        season_key = get_season_key(@league.affiliation_id, TIME)
+        #get the season
+        season = Season.find_by_season_key_and_league_id(season_key, @league.affiliation_id)
+        
+        #get the most recent playoff round
+        max_round = EventsSubSeason.find(:all,
+                                    :select => "MAX(events.playoff_round) AS round",
+                                    :joins => "INNER JOIN sub_seasons ON sub_seasons.id = events_sub_seasons.sub_season_id
+                                                INNER JOIN events ON events.id = events_sub_seasons.event_id
+                                                INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'",
+                                    :conditions => "sub_seasons.season_id = #{season.id} AND sub_seasons.sub_season_type = 'post-season'")
+        @max_round = max_round[0].round.to_i
+        
+        if (params[:round].blank?) 
+            @round = @max_round
+        else
+            @round = params[:round].to_i
+        end
+        
+        
+        @series = Affiliation.get_pro_playoff_series(@league.affiliation_id, @round)
+            
+    end
+    
+    @drop_title = "Playoffs"
+    @partial_path = "draggables/" + @level + "/" + choose_template + "playoffs" 
+
+    render(:update) {|page| 
+                page.replace_html(@drop_id + "_title", @drop_title)
+                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
+                page.replace_html(@drop_id, :partial => @partial_path)
+                page.call('createGradient', @drop_id + "_frame")
+                page.call("drawCurvyCorners")
+    }
+        
+      
+  end
+  
 
   #############################################################################
   # Description:
