@@ -1,6 +1,25 @@
-  <li class="drop_item" id="playoffs">
-    Playoffs
-  </li>
+  
+  <%
+    leagues = Affiliation.get_all_leagues
+    show_playoffs = false
+    leagues.each do |league|
+        if Affiliation.is_in_post_season(league.affiliation_id)
+            show_playoffs = true
+            break
+        end
+    end
+    
+    if show_playoffs
+  %>
+    <li class="drop_item" id="playoffs">
+      Playoffs
+    </li>
+    <%=
+        javascript_tag "Event.observe($('playoffs'), 'mousemove', ShowHelp.bindAsEventListener($('playoffs'), 'Drag and drop this icon onto one of the boxes below to see the playoff matchups for your tagged teams that are in post season play'));"
+    %>
+  <% else %>
+    <li class='space_holder'></li> 
+  <% end %>
 
   <li class='drop_item' id='scoreboard'>
       Scoreboard

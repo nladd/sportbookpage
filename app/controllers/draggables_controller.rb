@@ -514,14 +514,14 @@ class DraggablesController < ApplicationController
                                     :conditions => "sub_seasons.season_id = #{season.id} AND sub_seasons.sub_season_type = 'post-season'")
         @max_rounds[i] = max_round[0].round.to_i
         
-        if (params[:round].blank?) 
-            @rounds[i] = @max_rounds[i]
-        else
+        if (!(params[:round].blank?) && (params[:league_id] == @leagues[i].affiliation_id))
             @rounds[i] = params[:round].to_i
+        else
+            @rounds[i] = @max_rounds[i]
         end
         
         
-        @series[i] = Affiliation.get_pro_playoff_series(@leagues[i].affiliation_id, @rounds[i])
+        @series[i] = Professional.get_playoff_series(@leagues[i].affiliation_id, @rounds[i])
         
         
       end
@@ -562,12 +562,12 @@ class DraggablesController < ApplicationController
         end
         
         
-        @series = Affiliation.get_pro_playoff_series(@league.affiliation_id, @round)
+        @series = Professional.get_playoff_series(@league.affiliation_id, @round)
             
     end
     
     @drop_title = "Playoffs"
-    @partial_path = "draggables/" + @level + "/" + choose_template + "playoffs" 
+    @partial_path = "draggables/" + @level + "/playoffs" 
 
     render(:update) {|page| 
                 page.replace_html(@drop_id + "_title", @drop_title)

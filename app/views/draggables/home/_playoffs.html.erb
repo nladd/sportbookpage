@@ -23,7 +23,7 @@
     <div class="cell_60">
       <%= link_to_remote "Round #{r+1}",
             {:url => { :controller => 'draggables', :action => 'route_action' },
-            :with => "'level=#{@level}&amp;round=#{r+1}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
+            :with => "'level=#{@level}&amp;round=#{r+1}&amp;league_id=#{@leagues[l].affiliation_id}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
             {:style => style}
       %>
     </div>
