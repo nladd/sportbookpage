@@ -11,7 +11,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 # Used for debugging, offset the time to October 15, 2009 by subtracting the # of seconds
 # from the current time. This should be in GMT time.
 # year * month * day * hour * minute * second
-TIME = Time.now.getutc
+TIME = Time.now.utc
 
 # A blank string means times will be displayed in ET
 if TIME.dst?
