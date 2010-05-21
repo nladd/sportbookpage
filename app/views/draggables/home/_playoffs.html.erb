@@ -75,8 +75,11 @@
         %>
           <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
           <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[l][c][t][g].t2_score %></div>
+        <% elsif ((@series[l][c][t][g].event_status == 'mid-event') || (@series[l][c][t][g].event_status == 'period-end') || (@series[l][c][t][g].event_status == 'intermission')) %>
+          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
+          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t2_score %></div>
         <% else %>
-          <div class="cell_80" style="text-align: center"><%= @series[l][c][t][g].start_date_time.strftime("%a, %m/%d %I:%M%P")  %></div>
+          <div class="cell_80" style="text-align: center"><%= @series[l][c][t][g].start_date_time.strftime("%a, %m/%d %I:%M%P")  %></div>        
         <% end %>
       </div>
       
