@@ -181,6 +181,32 @@ class UsersController < ApplicationController
   
   end
 
+
+  #############################################################################
+  # Description:
+  #   Load the form for a user to send an invitation to join sportbookpage.com
+  #
+  #############################################################################
+  def invite_friend
+    
+    @user = User.find(session[:user_id])
+    
+    if request.post? && !params[:emails].blank?
+      @emails = params[:emails]
+      @emails = @emails.gsub(/\s/, "").split(",")
+      message = params[:message]
+      
+      @emails.each do |email|
+        Emailer.deliver_join_invitation(@user, email, message)
+      end
+      
+      partial = "users/partials/invitation_sent"
+    else
+      partial = "users/partials/invitation_form"
+    end
+    
+    render(:update) { |page| page.replace_html('light_form', :partial => partial) }
+  end
   
   #############################################################################
   # Description:

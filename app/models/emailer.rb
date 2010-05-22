@@ -1,5 +1,6 @@
 class Emailer < ActionMailer::Base
 
+
   #############################################################################
   # Description:
   #   Send an acceptance e-mail to the challengee for a newly created challenge
@@ -59,10 +60,29 @@ class Emailer < ActionMailer::Base
 
     @recipients = @recipient.email
     @from = "no-reply@sportbookpage.com"
-    @subject = "Sportbookpage.com: " + @user.first_name + " " + @user.last_name + " has rejected your challenge"
+    @subject = "SportbookPage.com: " + @user.first_name + " " + @user.last_name + " has rejected your challenge"
     @sent_on = Time.now
     @content_type = "text/html"
 
+  end
+  
+  
+  #############################################################################
+  # Description:
+  #   Send an e-mail to invite a new user to join SportbookPage.com
+  #
+  #############################################################################
+  def join_invitation(sender, recipient, message)
+    
+    @user = sender
+    @message = message
+    
+    @recipients = recipient
+    @from = "no-reply@sportbookpage.com"
+    @subject = "SportbookPage.com: " + @user.first_name + " " + @user.last_name + " has invited you to join SportbookPage.com"
+    @sent_on = Time.now
+    @content_type = "text/html"
+    
   end
 
 end

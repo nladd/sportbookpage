@@ -1,0 +1,20 @@
+
+<% form_remote_tag(:url => {:controller => 'users', :action => 'invite_friend'}, :html => { :multipart => true, :id => 'form' }) do %>
+
+  <div class="row" style="white-space: normal">
+    Enter the e-mail address of the fan you'd like to invite. Multiple address can be separated with a comma<br/>(e.g. Tom.Sawyer@hotmail.com, HuckFinnWins@aol.com, ...)
+  </div>
+  <div class="row">
+    <div class="cell_60">E-mail(s):</div>
+    <div class="cell_250"><input type="text" value="" name="emails" id="emails" size="45" /></div>
+  </div>
+  
+  <div class="row" style="white-space: normal">
+    Include a personal message: <span style="color: lightGray">(optional)</span><br/>
+    <%= text_area_tag('message', nil, { :size => '70x10', :value => '' }) %>
+  </div>
+
+
+  <%= submit_tag( "Send" ) %>
+
+<% end %>

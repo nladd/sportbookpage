@@ -167,7 +167,11 @@
            <a class="menu_row_a" href="/search">Search Fans</a>
          </div>
          <div class="menu_row">
-           <a class="menu_row_a" href="javascript:void(0);">Invite Fans</a>
+            <%= link_to_remote "Invite Fans",
+                      {:url => {:controller => "users", :action => "invite_friend"},
+                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " },
+                      {:class => "menu_row_a"}
+            %>
          </div>
       </div> 
    </li>
@@ -177,7 +181,10 @@
  
   <div id="message_banner" class="message_banner" style="display:none"></div>
   <div class="save_draggables">
-      <a href="javascript:void(0);">Invite New Fans</a>
+      <%= link_to_remote "Invite New Fans",
+                      {:url => {:controller => "users", :action => "invite_friend"},
+                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " } 
+      %>
       <br/>
       <%= link_to_remote "Save Draggables", 
          :url => { :controller => "user_preferences", :action => "save_drag_n_drop" }

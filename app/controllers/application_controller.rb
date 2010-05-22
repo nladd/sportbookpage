@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
       html = "<a href='/home'>Home</a>"
     else
       paths.length.times do |i|
-        html = html + "<a href='" + path_urls[i] + "'>" + paths[i] + "</a>";
+        html = html + "<a href='" + path_urls[i].to_s + "'>" + paths[i].to_s + "</a>";
      
         if( i + 1 < paths.length ) 
           html = html + " > ";
