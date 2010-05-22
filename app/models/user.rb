@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name, :message => "First name is a required field"
   validates_presence_of :last_name, :message => "Last name is a required field"
   validates_presence_of :sex, :message => "Sex is a required field"
+  validates_presence_of :question_1, :message => "You must supply a security question"
+  validates_presence_of :answer_1, :message => "You must supply an answer to your security question"
   validate :valid_password
   validate :valid_email
   validate :sportbucks_is_positive
@@ -45,10 +47,10 @@ class User < ActiveRecord::Base
     write_attribute(:email, e.downcase)
   end
   
-  #def answer_1=(ans_1)
-  #  write_attribute(:answer_1, ans_1.downcase)
-  #end
-  #
+  def answer_1=(ans_1)
+    write_attribute(:answer_1, ans_1.downcase)
+  end
+  
   #def answer_2=(ans_2)
   #  write_attribute(:answer_2, ans_2.downcase)
   #end

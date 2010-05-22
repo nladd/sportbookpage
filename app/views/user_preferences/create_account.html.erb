@@ -52,9 +52,9 @@
         <td></td><td><span class="error_text"><%= @user.errors[:password_confirmation] %></span></td>
       </tr>
       <% end %>
-<!--      
+     
       <tr>
-        <td>*Security Question 1:</td><td colspan='3'><%= text_field_tag( 'question_1', nil, :size => 60, :maxlength => 255, :value => "#{@user.question_1}" ) %></td>
+        <td>*Security Question:</td><td colspan='3'><%= text_field_tag( 'question_1', nil, :size => 60, :maxlength => 255, :value => "#{@user.question_1}" ) %></td>
       </tr>
       <% if @user.errors[:question_1] then %>
       <tr>
@@ -70,7 +70,7 @@
         <td></td><td><span class="error_text"><%= @user.errors[:answer_1] %></span></td>
       </tr>
       <% end %>
-      
+<!--       
       <tr>
         <td>*Security Question 2:</td><td colspan='3'><%= text_field_tag( 'question_2', nil, :size => 60, :maxlength => 255, :value => "#{@user.question_2}" ) %></td>
       </tr>

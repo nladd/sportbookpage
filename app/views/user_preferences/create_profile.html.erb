@@ -56,6 +56,26 @@
       <% end %>
       
       <tr>
+        <td>*Security Question:</td><td colspan='3'><%= text_field_tag( 'question_1', nil, :size => 50, :maxlength => 255, :value => "#{@user.question_1}" ) %></td>
+      </tr>
+      <% if @user.errors[:question_1] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:question_1] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr>
+        <td>*Answer:</td><td><%= text_field_tag( 'answer_1', nil, :size=> 15, :maxlength => 127, :value => "#{@user.answer_1}" ) %></td>
+      </tr>
+      <% if @user.errors[:answer_1] then %>
+      <tr>
+        <td></td><td><span class="error_text"><%= @user.errors[:answer_1] %></span></td>
+      </tr>
+      <% end %>
+      
+      <tr><td>&nbsp;</td></tr>
+      
+      <tr>
         <td>*Sex:</td><td><input type="radio" name="sex" value="m" /> Male <input type="radio" name="sex" value="f" /> Female</td>
       </tr>
       <% if @user.errors[:sex] then %>
