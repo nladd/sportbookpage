@@ -21,7 +21,10 @@ class LoginController < ApplicationController
 
   def logout
     
+    reset_session
+    flash[:notice] = "Logout successful!"
     
+    redirect_to :home
   
   end
 
