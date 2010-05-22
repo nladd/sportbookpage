@@ -30,10 +30,13 @@ z-index: 1
 
 /* Banner */
 .sportbookpage {
-position: absolute;
+position: relative;
+display: block;
+width: 100%;
 top: 40px;
-left: 15px;
+margin: auto;
 color: #FFCC00;
+text-align: center;
 font-style: italic;
 font-variant: small-caps;
 font-weight: 700;
@@ -42,36 +45,54 @@ font-size: 4.5em;
 
 /* Catch phrase - slogan - quote */
 .quote {
-position: relative;
 font-style: italic;
 font-weight: 600;
 font-size: .4em;
 }
 
+.box_frame {
+position: relative;
+display: block;
+margin: 0 auto;
+width: 950px;
+top: 50px;
+height: 400px;
+color: #cbb600;
+border-top: 4px green solid;
+}
 
-/* Welcome message */
-.message {
-position: absolute;
-top: 170px;
-left: 30px;
-width: 500px;
-color: yellow;
-font-variant: small-caps;
+.welcome_area {
+position: relative;
+display: inline;
+float: left;
+padding: 0px 10px 0px 10px;
+margin: 20px;
+text-align: justify;
+height: 350px;
+width: 400px;
+font-size: 15px;
 font-weight: bold;
-font-size: 1.125em;
+border: 5px solid #7B0606;    
 }
 
 
-.loginArea {
-position: absolute;
-left: 570px;
-top: 150px;
-height: 200px;
-width: 22em;
-color: yellow;
+.login_area {
+position: relative;
+display: inline;
+float: left;
+padding: 0px 10px 0px 10px;
+margin: 20px;
+height: 350px;
+width: 400px;
 font-size: 15px;
 font-weight: bold;
-border: medium solid red
+border: 5px solid #7B0606;
+}
+
+.emphasize {
+font-variant: small-caps;
+font-size: 1.2em;
+color: yellow;
 }
 
 .label {
@@ -150,12 +171,5 @@ right: 10%;
 top: 63%
 }
 
-.sign_up {
-position: absolute;
-left: 20%;
-top: 76%;
-font-size: 12px;
-display: block
-}
 
 

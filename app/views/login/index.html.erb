@@ -1,11 +1,14 @@
-<div class="sportbookpage">SportBookPage.com<br/><span class="quote">"Your sports. Your way."</span></div>
+<div class="sportbookpage">SportBookPage.com<br/><span class="quote">Customize your sports.</span></div>
 
-<div class="message">
-Welcome to sportbookpage.com. Already have a user name? Then go ahead and sign-in. New to sportbookpage.com? Click <a href="javascript:void(0);">here</a> to find out what sportbookpage.com is all about. When you're done checking that out, click the <a href="/register">Sign up!</a> link.
+<div class="box_frame">
+
+<div class="welcome_area">
+<p>SportbookPage.com is <span class="emphasize">revolutionizing the way you see sports.</span> We're the only place on the net where you can fully customize your sports experience.</p><p>You <span class="emphasize">tag the sport and teams you care about</span> and you get scores, schedules, headlines and more for just those teams. It's that simple.</p><p>Don't waste anymore more time following links and digging for the information you want. Get it all with one drag of the mouse. Register in less than <span class="emphasize">2 minutes with 3 easy steps</span> and you're on your way to customizing your sports.</p>
+<p style="margin: auto; width: 5.5em; text-align: center; font-size: 1.5em; background: #cbb600"><a href="/register">Sign Up!</a></p>
 </div>
 
 
-<div class="loginArea">
+<div class="login_area">
 
   <div class="label">Sign in</div>
 
@@ -18,34 +21,29 @@ Welcome to sportbookpage.com. Already have a user name? Then go ahead and sign-i
 
   <% form_tag do %>
     
-    <div class="username_label">
-			E-mail:
-		</div>
-		<div class="username_box">
-		<%= text_field_tag :email, nil, :class => "inputbox", :size => '20' %>
-        </div>
-        
-    	<div class="username_forgot">
-  			Forgot your email address?
-  		</div>
-  		
-        <div class="password_label">     
-	        Password:
-		</div>
-		<div class="password_box">
-		<%= password_field_tag :password, nil, :class => "inputbox", :size => '20' %>
-		</div>
-    	<div class="password_forgot">
-  			Forgot your password?
-  		</div>
-	    
-	    <%= submit_tag "Login", :class => "submit" %>
-        
-        <div class="sign_up">
-        	Not a member? <%= link_to 'Sign Up!', register_url %>
-		</div>
-   
-    <% end %>
+	<table style="position: relative; top: 70px" cellspacing="8" >
+	  <tr>
+		<td>E-mail:</td>
+		<td><%= text_field_tag :email, nil, :class => "inputbox", :size => '20' %></td>
+	  </tr>
+		
+	  <tr>
+		<td>Password:</td>
+		<td><%= password_field_tag :password, nil, :class => "inputbox", :size => '20' %></td>
+	  </tr>
+	
+	  <tr>
+		<td>&nbsp;</td>
+		<td>Forgot your password?</td>
+	  </tr>
+	  
+	  <tr><td>&nbsp;</td></tr>
+	  <tr style="text-align: right"><td>&nbsp;</td><td><%= submit_tag "Login" %></td></tr>
+	</table>
+	
+	
+  <% end %>
 
 </div>
 
+</div>

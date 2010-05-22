@@ -14,12 +14,16 @@
   <%= stylesheet_link_tag 'common/common' %>
 <![endif]>
 
-<%= stylesheet_link_tag 'login/login' %>
+<%= stylesheet_link_tag 'login/login', 'draggables/draggables', 'draggables/cells' %>
 
 </head>
-<body style="background: black"> 
+<body style="background: black">
+  
+  <!--<img src="/images/backgrounds/sbp_home_screenshot.png" alt="background" class="background" id="background"/>-->
    
   <%= yield  %>
+  
+  <%= javascript_tag "$('background').setOpacity(.2);" %>
 
 </body>
 </html>
