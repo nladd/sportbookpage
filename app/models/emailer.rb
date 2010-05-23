@@ -84,5 +84,25 @@ class Emailer < ActionMailer::Base
     @content_type = "text/html"
     
   end
+  
+  
+  #############################################################################
+  # Description:
+  #   Send an e-mail instructing a user their password has been reset
+  #
+  #############################################################################
+  def password_reset(recipient, password)
+    
+    @user = recipient
+    @password = password
+    
+    @recipients = recipient.email
+    @from = "support@sportbookpage.com"
+    @subject = "SportbookPage.com: Your password has been reset"
+    @sent_on = Time.now
+    @content_type = "text/html"
+    
+    
+  end
 
 end

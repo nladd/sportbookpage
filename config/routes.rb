@@ -48,6 +48,7 @@ ActionController::Routing::Routes.draw do |map|
   map.search '/search/', :controller => 'users', :action => 'friends_search'
   map.drop '/drop/', :controller => 'draggables', :action => 'route_action'
   
+  map.connect '/password', :controller => 'user_preferences', :action => 'reset_password'
   map.register '/register', :controller => 'user_preferences', :action => 'create_sports_and_teams'
   map.connect '/register', :controller => 'user_preferences', :action => 'create_sports_and_teams'
   map.connect '/register/2', :controller => 'user_preferences', :action => 'create_profile'
@@ -64,7 +65,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/fanatic/:name', :controller => 'users', :action => 'friend_home'
   map.connect '/player/:id', :controller => 'player', :action => 'index'
   map.connect '/team/:id', :controller => 'team', :action => 'index'
-  map.connect 'league/:league_id/conference/:id', :controller => 'conference', :action => 'index'
+  map.connect '/league/:league_id/conference/:id', :controller => 'conference', :action => 'index'
   map.connect '/league/:id', :controller => 'league', :action => 'index'
   
   # Default/fall-back value

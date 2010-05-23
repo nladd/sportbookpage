@@ -57,6 +57,96 @@ class UserPreferencesController < ApplicationController
   #  
   #end
 
+  #############################################################################
+  # Description:
+  #   Reset a user's password
+  #
+  #############################################################################
+  def reset_password
+
+    render :template => "login/reset_password"
+    
+  end
+  
+  
+  #############################################################################
+  # Description:
+  #   Get a user's security question
+  #
+  #############################################################################
+  def get_security_question
+    
+    user = nil
+    
+    if params[:email].blank?
+      return
+    else
+      user = User.find_by_email(params[:email].downcase)
+    end
+        
+    render(:update) { |page|
+      if !user.blank?
+        html = "Please answer your security question:<br/>#{user.question_1}"
+        page.show 'answer_prompt', 'submit_answer'
+        page.hide 'submit_email'
+        page.call "$('email').disable"
+      else
+        html = "We're sorry, but the e-mail address, #{params[:email]}, is not registered with SportbookPage.com. Please try again"
+      end
+      
+      page.replace_html('question', html)
+      page.show 'question'
+      
+    }
+    
+  end
+  
+  
+  #############################################################################
+  # Description
+  #   Verify the user answered his/her security question correctly
+  #
+  #############################################################################
+  def verify_security_answer
+    
+    verified = false
+    
+    email = params[:email].downcase
+      if !params[:answer].blank?
+        answer = params[:answer].downcase
+      else
+        answer = ""
+      end
+      
+      @user = User.find_by_email(email)
+      
+      if @user.answer_1 == answer
+        
+        #reset password and send email
+        password = ActiveSupport::SecureRandom.base64(6)
+        @user.password = password
+        @user.save
+        
+        Emailer.deliver_password_reset(@user, password)
+        
+        verified = true
+      end
+      
+      render(:update) {|page|
+        
+        if verified
+          page.replace_html 'answer_verified', "Your password has been reset. An e-mail was sent to #{email} with your new password. Follow in the instructions in the e-mail to login to SportbookPage.com with your new password."
+          page.replace_html 'submit_answer', "<a href='/login'>Go to Login Page</a>"
+        else
+          page.replace_html 'answer_verified', "The provided answer does not match our records. Please try again. If you continue to have problems, please contact our support desk at <a href='mailto:support@sportbookpage.com'>support@sportbookpage.com</a>"
+        end
+        
+        page.show 'answer_verified'
+        
+      }
+  end
+  
+
 
   #############################################################################
   # Description:
