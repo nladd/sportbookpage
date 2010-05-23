@@ -125,7 +125,7 @@ class UserPreferencesController < ApplicationController
         #reset password and send email
         password = ActiveSupport::SecureRandom.base64(6)
         @user.password = password
-        @user.save
+        @user.save(false)
         
         Emailer.deliver_password_reset(@user, password)
         
