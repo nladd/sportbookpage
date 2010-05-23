@@ -167,22 +167,30 @@ class UserPreferencesController < ApplicationController
       if (params[:old_password] != "")
 
         if( User.encrypted_field(params[:old_password], @user.salt) != @user.hashed_password )
+          logger.info "111111111"
           @user.errors.add(:old_password, "Old password was not valid")
           @show_password = true
         else
           if params[:password] == params[:password_confirmation] then
+            logger.info "222222222"
             match = true
-            save_successful = save_user
+            save_successful = save_user(true)
           else
+            logger.info "3333333"
             @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
             @show_password = true
           end
           
         end
       else
+        logger.info "44444444"
         match = true
         save_successful = save_user(false)
       end
+      
+      
+      logger.info "save_successful = #{save_successful}"
+      logger.info "match = #{match}"
       
       #store the user's account details from the previous form  
       if (save_successful && match) then
@@ -190,6 +198,7 @@ class UserPreferencesController < ApplicationController
         @show_password = false
         @user = User.find(session[:user_id])
       else
+        @show_password = true
         flash[:notice] = "Account Information Failed to Save"
       end      
       
@@ -255,7 +264,7 @@ class UserPreferencesController < ApplicationController
       
       if params[:password] == params[:password_confirmation] then
         match = true
-        save_successful = save_user
+        save_successful = save_user(true)
       else
         @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
       end
@@ -656,8 +665,8 @@ private
     @user.email = params[:email]
     @user.question_1 = params[:question_1]
     @user.answer_1 = params[:answer_1]
-    @user.question_2 = params[:question_2]
-    @user.answer_2 = params[:answer_2]
+    #@user.question_2 = params[:question_2]
+    #@user.answer_2 = params[:answer_2]
     if (save_password)
       @user.password = params[:password]
     else

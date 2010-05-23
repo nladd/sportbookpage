@@ -44,13 +44,17 @@
       <% end %>
       
       <% if (!@show_password) then %>
-      <tr>
-        <td/>
-        <td><a href="javascript:void(0);" onclick="$('old_password').show(); $('new_password').show(); $('confirm_password').show();">Change Password</a></td>
-      </tr>
+        <tr id="password_holder">
+          <td>*Password:</td>
+          <td>********</td>
+        </tr>
+        <tr id="change_password">
+          <td/>
+          <td><a href="javascript:void(0);" onclick="$('password_holder').hide(); $('change_password').hide(); $('old_password').show(); $('new_password').show(); $('confirm_password').show();">Change Password</a></td>
+        </tr>
       <% end %>
       
-      <tr id="old_password" class="old_password" style="display: none">
+      <tr id="old_password" class="old_password" style="display: <%= @show_password ? 'inherit' : 'none' %>">
         <td>*Old Password:</td><td><%= password_field_tag( 'old_password', nil, :size => 20, :maxlength => 20 ) %></td>
       </tr>
       <% logger.info "@user.errors[:old_password] = " + @user.errors[:old_password].to_s %>
@@ -60,17 +64,21 @@
       </tr>
       <% end %>
       
-      <tr id="new_password" class="new_password" style="display: none">
-        <td>*New Password:</td><td><%= password_field_tag( 'password', nil, :size => 20, :maxlength => 20 ) %></td><td colspan='2'><span style='font-size: 10px'>(must be at least 6 characters in length)</span></td>
+      <tr id="new_password" class="new_password" style="display: <%= @show_password ? 'inherit' : 'none' %>">
+        <td>*New Password:</td>
+        <td><%= password_field_tag( 'password', nil, :size => 20, :maxlength => 20 ) %></td>
+        <td colspan='2'><span style='font-size: 10px'>(must be at least 6 characters in length)</span></td>
       </tr>
       <% if @user.errors[:password] then %>
       <tr>
-        <td></td><td><span class="error_text"><%= @user.errors[:password] %></span></td>
+        <td></td>
+        <td><span class="error_text"><%= @user.errors[:password] %></span></td>
       </tr>
       <% end %>
       
-      <tr id="confirm_password" class="confirm_password" style="display: none">
-        <td>*Confirm New Password:</td><td><%= password_field_tag( 'password_confirmation', nil, :size => 20, :maxlength => 20 ) %></td>
+      <tr id="confirm_password" class="confirm_password" style="display: <%= @show_password ? 'inherit' : 'none' %>">
+        <td>*Confirm New Password:</td>
+        <td><%= password_field_tag( 'password_confirmation', nil, :size => 20, :maxlength => 20 ) %></td>
       </tr>
       <% if @user.errors[:password_confirmation] then %>
       <tr>
@@ -78,9 +86,9 @@
       </tr>
       <% end %>
 
-<!--      
       <tr>
-        <td>*Security Question 1:</td><td colspan='3'><%= text_field_tag( 'question_1', @user.question_1, :size => 60, :maxlength => 255 ) %></td>
+        <td>*Security Question:</td>
+        <td colspan='3'><%= text_field_tag( 'question_1', @user.question_1, :size => 40, :maxlength => 255 ) %></td>
       </tr>
       <% if @user.errors[:question_1] then %>
       <tr>
@@ -88,7 +96,11 @@
       </tr>
       <% end %>
       
-      <tr>
+      <tr id="show_answer">
+        <td></td>
+        <td><a href="javascript:void(0);" onclick="$('answer').show(); $('show_answer').hide();">Show Answer</a></td>
+      </tr>
+      <tr id="answer" style="display: none">
         <td>*Answer:</td><td><%= text_field_tag( 'answer_1', @user.answer_1, :size=> 15, :maxlength => 127 ) %></td>
       </tr>
       <% if @user.errors[:answer_1] then %>
@@ -96,7 +108,8 @@
         <td></td><td><span class="error_text"><%= @user.errors[:answer_1] %></span></td>
       </tr>
       <% end %>
-      
+
+<!--      
       <tr>
         <td>*Security Question 2:</td><td colspan='3'><%= text_field_tag( 'question_2', @user.question_2, :size => 60, :maxlength => 255 ) %></td>
       </tr>

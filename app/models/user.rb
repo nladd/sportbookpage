@@ -64,32 +64,6 @@ class User < ActiveRecord::Base
   
 private
 
-  #############################################################################
-  # Description:
-  #   Validates that all required fields are present. If a field does not exist,
-  #   an error is added to User.errors[]
-  #
-  #############################################################################
-  def validate_presence_of_attributes
-    if first_name.blank? 
-      errors.add(:first_name, "First name is a required field")
-    end
-    if last_name.blank? 
-      errors.add(:last_name, "Last name is a required field")
-    end
-    if question_1.blank? 
-      errors.add(:question_1, "Security question 1 is a required field")
-    end
-    if answer_1.blank? 
-      errors.add(:answer_1, "Answer 1 is a required field")
-    end
-    if question_2.blank? 
-      errors.add(:question_2, "Security question 2 is a required field")
-    end
-    if answer_2.blank? 
-      errors.add(:answer_2, "Answer 2 is a required field")
-    end
-  end
 
   #############################################################################
   # Description:
