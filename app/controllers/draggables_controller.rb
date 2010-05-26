@@ -524,6 +524,11 @@ class DraggablesController < ApplicationController
         @series[i] = Professional.get_playoff_series(@leagues[i].affiliation_id, @rounds[i])
         
         
+        if (@series[i].size == 1)
+            @conferences[i][1] = nil
+            @conferences[i] = @conferences[i].compact
+        end
+        
       end
       
       # compact the leagues and games to remove nil references

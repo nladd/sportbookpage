@@ -114,7 +114,7 @@ class Professional
                     :conditions => "sub_seasons.season_id = #{season.id} AND sub_seasons.sub_season_type = 'post-season' AND events.playoff_round = #{round}",
                     :group => "t1.participant_id",
                     :order => "min_time",
-                    :limit => (num_teams[0].num_teams).to_i/2
+                    :limit => (num_teams[0].num_teams.to_f/2.0).ceil
       )
 
       
@@ -167,12 +167,14 @@ class Professional
       
       end
       
-      
-      
+      if num_teams[0].num_teams.to_i == 1
+        series[c + 1] = nil
+        break
+      end
       
     end # close conferences loop
     
-    return series
+    return series.compact
     
   end
 
