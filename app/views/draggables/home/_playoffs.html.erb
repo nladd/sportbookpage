@@ -32,77 +32,82 @@
   
   <%
     @conferences[l].size.times do |c|
+        logger.info "series.size = #{@series[l][c].size} ************************************************"
   %>
     <div class="row" align="center">
-      <%= @conferences[l][c].full_name %> Conference
+      <span style="font-weight: bold; font-size: 1.1em"><%= @conferences[l][c].full_name + (@conferences[l].size == 1 ? "" : " Conference") %></span>
     </div>
   <%
       @series[l][c].size.times do |t|
   %>
   
-  <div class="playoff_series">
-    
-    <div id="matchup_<%= @series[l][c][t][0].t1_id + "_" + @series[l][c][t][0].t2_id %>" class="matchup">
-      <br/>
-      <%= @series[l][c][t][0].t1_abbr %><br/>
-      vs.<br/>
-      <%= @series[l][c][t][0].t2_abbr %><br/>
-      <br/>
-    </div>
-    
-    <div class="series_games">
-      <div class="row">
-        <div class="cell_40">&nbsp;</div>
-        <div class="cell_40" style="text-align: center"><%= @series[l][c][t][0].t1_abbr %></div>
-        <div class="cell_40" style="text-align: center"><%= @series[l][c][t][0].t2_abbr %></div>
-      </div>
+  <%= "<div class=\"row\" align=\"center\">" if @series[l][c].size == 1 %>
   
-  <%
-      t1_wins = 0
-      t2_wins = 0
-      @series[l][c][t].size.times do |g|
-  %>
-  
-      <div class="row">
-        <div class="cell_40">Gm <%= (g + 1) %></div>
-        <% if (@series[l][c][t][g].t1_outcome == "win")
-              t1_wins += 1
-        %>
-          <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[l][c][t][g].t1_score %></div>
-          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t2_score %></div>
-        <% elsif (@series[l][c][t][g].t2_outcome == "win")
-              t2_wins += 1
-        %>
-          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
-          <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[l][c][t][g].t2_score %></div>
-        <% elsif ((@series[l][c][t][g].event_status == 'mid-event') || (@series[l][c][t][g].event_status == 'period-end') || (@series[l][c][t][g].event_status == 'intermission')) %>
-          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
-          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t2_score %></div>
-        <% else %>
-          <div class="cell_80" style="text-align: center"><%= @series[l][c][t][g].start_date_time.strftime("%a, %m/%d %I:%M%P")  %></div>        
-        <% end %>
+    <div class="playoff_series" align="left">
+      
+      <div id="matchup_<%= @series[l][c][t][0].t1_id + "_" + @series[l][c][t][0].t2_id %>" class="matchup">
+        <br/>
+        <%= @series[l][c][t][0].t1_abbr %><br/>
+        vs.<br/>
+        <%= @series[l][c][t][0].t2_abbr %><br/>
+        <br/>
       </div>
       
-  <%
-      end # close @series[l][g], games, loop
-  %>
+      <div class="series_games">
+        <div class="row">
+          <div class="cell_40">&nbsp;</div>
+          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][0].t1_abbr %></div>
+          <div class="cell_40" style="text-align: center"><%= @series[l][c][t][0].t2_abbr %></div>
+        </div>
+    
+    <%
+        t1_wins = 0
+        t2_wins = 0
+        @series[l][c][t].size.times do |g|
+    %>
+    
+        <div class="row">
+          <div class="cell_40">Gm <%= (g + 1) %></div>
+          <% if (@series[l][c][t][g].t1_outcome == "win")
+                t1_wins += 1
+          %>
+            <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[l][c][t][g].t1_score %></div>
+            <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t2_score %></div>
+          <% elsif (@series[l][c][t][g].t2_outcome == "win")
+                t2_wins += 1
+          %>
+            <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
+            <div class="cell_40" style="text-align: center; font-weight: bold"><%= @series[l][c][t][g].t2_score %></div>
+          <% elsif ((@series[l][c][t][g].event_status == 'mid-event') || (@series[l][c][t][g].event_status == 'period-end') || (@series[l][c][t][g].event_status == 'intermission')) %>
+            <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t1_score %></div>
+            <div class="cell_40" style="text-align: center"><%= @series[l][c][t][g].t2_score %></div>
+          <% else %>
+            <div class="cell_80" style="text-align: center"><%= @series[l][c][t][g].start_date_time.strftime("%a, %m/%d %I:%M%P")  %></div>        
+          <% end %>
+        </div>
+        
+    <%
+        end # close @series[l][g], games, loop
+    %>
+    
+      </div> <!-- close series_games div -->
+    
+    <%
+      series_score = ""
+      if (t1_wins > t2_wins) 
+        series_score = "#{@series[l][c][t][0].t1_abbr} leads #{t1_wins} - #{t2_wins}"
+      elsif (t2_wins > t1_wins)
+        series_score = "#{@series[l][c][t][0].t2_abbr} leads #{t2_wins} - #{t1_wins}"
+      else
+        series_score = "Series tied #{t1_wins} - #{t2_wins}"
+      end
+    %>
+    
+    <%= javascript_tag "$('matchup_#{@series[l][c][t][0].t1_id}_#{@series[l][c][t][0].t2_id}').insert('<span style=\"font-size: .75em; font-weight: normal\">#{series_score}</span>');" %>
+    
+    </div> <!-- close playoff_series div -->
   
-    </div> <!-- close series_games div -->
-  
-  <%
-    series_score = ""
-    if (t1_wins > t2_wins) 
-      series_score = "#{@series[l][c][t][0].t1_abbr} leads #{t1_wins} - #{t2_wins}"
-    elsif (t2_wins > t1_wins)
-      series_score = "#{@series[l][c][t][0].t2_abbr} leads #{t2_wins} - #{t1_wins}"
-    else
-      series_score = "Series tied #{t1_wins} - #{t2_wins}"
-    end
-  %>
-  
-  <%= javascript_tag "$('matchup_#{@series[l][c][t][0].t1_id}_#{@series[l][c][t][0].t2_id}').insert('<span style=\"font-size: .75em; font-weight: normal\">#{series_score}</span>');" %>
-  
-  </div> <!-- close playoff_series div -->
+  <%= "</div>" if @series[l][c].size == 1 %>
   
 <%
       end # close @series[l][t], teams, loop

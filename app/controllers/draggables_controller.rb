@@ -525,6 +525,7 @@ class DraggablesController < ApplicationController
         
         
         if (@series[i].size == 1)
+            @conferences[i][0].full_name = "Finals"
             @conferences[i][1] = nil
             @conferences[i] = @conferences[i].compact
         end
