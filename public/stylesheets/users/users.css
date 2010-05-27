@@ -119,12 +119,37 @@ z-index: 25
 
 
 /*
+ * Style for the fan club
+ */
+.fan_club {
+position: absolute;
+top: 370px;
+left: 808px;
+width: 183px;
+height: 140px;
+overflow: hidden;
+font-size: .8em;
+border: 3px solid green
+}
+
+.search_link{
+position: absolute;
+right: 0;
+bottom: 0;
+padding: 2px;
+background: white;
+z-index: 1;
+}
+
+
+
+/*
  *Styles for the chalk board
  */
 
 .chalk_board_title {
 position: absolute;
-top: 370px;
+top: 520px;
 left: 807px;
 height: 15px;
 width: 183px;
@@ -142,7 +167,7 @@ border: 5px solid #C10707
 
 .chalk_board {
 position: absolute;
-top: 390px;
+top: 540px;
 left: 807px;
 width: 183px;
 height: 500px;
@@ -156,7 +181,7 @@ border: 5px solid #C10707
 .add_comment_link {
 position: absolute;
 text-align: center;
-top: 900px;
+top: 1050px;
 left: 807px;
 width: 193px;
 font-variant: small-caps;
@@ -167,7 +192,7 @@ background: #C10707
 .add_comment_text_box {
 position: absolute;
 padding: 2px 2px;
-top: 770px;
+top: 920px;
 left: 630px;
 width: 358px;
 z-index: 7;
