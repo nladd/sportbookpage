@@ -32,7 +32,6 @@
   
   <%
     @conferences[l].size.times do |c|
-        logger.info "series.size = #{@series[l][c].size} ************************************************"
   %>
     <div class="row" align="center">
       <span style="font-weight: bold; font-size: 1.1em"><%= @conferences[l][c].full_name + (@conferences[l].size == 1 ? "" : " Conference") %></span>

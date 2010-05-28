@@ -27,13 +27,16 @@
   @conferences.size.times do |c|
 %>
   <div class="row_title" align="center">
-    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient"><%= @conferences[c].full_name %> Conference</div>
+    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient"><%= @conferences[c].full_name + (@conferences.size == 1 ? "" : " Conference") %></div>
   </div>
+  
 <%
     @series[c].size.times do |t|
 %>
 
-<div class="playoff_series">
+<%= "<div class=\"row\" align=\"center\">" if @series[c].size == 1 %>
+
+<div class="playoff_series" align="left">
   
   <div id="matchup_<%= @series[c][t][0].t1_id + "_" + @series[c][t][0].t2_id %>" class="matchup">
     <br/>
@@ -93,6 +96,8 @@
 <%= javascript_tag "$('matchup_#{@series[c][t][0].t1_id}_#{@series[c][t][0].t2_id}').insert('<span style=\"font-size: .75em; font-weight: normal\">#{series_score}</span>');" %>
 
 </div> <!-- close playoff_series div -->
+
+<%= "</div>" if @series[c].size == 1 %> <!-- close row div if necessary -->
 
 <%
     end # close @series[t], teams, loop
