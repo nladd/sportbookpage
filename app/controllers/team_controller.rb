@@ -27,7 +27,7 @@ class TeamController < ApplicationController
     @drop_1 = "headlines"
     @drop_2 = "schedule"
     @drop_3 = "scoreboard"
-    @drop_4 = "lines"
+    @drop_4 = "roster"
 
     user_path = ["Home", @league.abbreviation, @team.full_name]
     user_path_urls = ["/home", "/league/#{@league.entity_id}", "/team/#{@team.entity_id}"]

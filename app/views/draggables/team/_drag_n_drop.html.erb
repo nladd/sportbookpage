@@ -44,3 +44,31 @@
  
   <li class='space_holder'></li> 
  
+<%
+    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+    parser = XML::Parser.file(path)
+    profile = parser.parse
+    
+    help_node = profile.find_first('//root/popupHelp')
+    
+    if help_node && help_node['show'] == 'yes' then
+%>    
+
+    <%=
+        javascript_tag "
+            Event.observe($('scoreboard'), 'mousemove', ShowHelp.bindAsEventListener($('scoreboard'), 'Drag and drop this icon onto one of the boxes below to see the latest scores for your tagged teams'));
+            Event.observe($('schedule'), 'mousemove', ShowHelp.bindAsEventListener($('schedule'), 'Drag and drop this icon onto one of the boxes below to see upcoming schedules for your tagged teams'));
+            Event.observe($('stats'), 'mousemove', ShowHelp.bindAsEventListener($('stats'), 'Drag and drop this icon onto one of the boxes below to see a team\'s stats'));
+            Event.observe($('headlines'), 'mousemove', ShowHelp.bindAsEventListener($('headlines'), 'Drag and drop this icon onto one of the boxes below to see the latest headlines for your tagged teams'));
+            Event.observe($('roster'), 'mousemove', ShowHelp.bindAsEventListener($('roster'), 'Drag and drop this icon onto one of the boxes below to see a team\'s roster'));
+            Event.observe($('leaders'), 'mousemove', ShowHelp.bindAsEventListener($('leaders'), 'Drag and drop this icon onto one of the boxes below to see a team\'s stat leaders'));
+            Event.observe($('profile'), 'mousemove', ShowHelp.bindAsEventListener($('profile'), 'Drag and drop this icon onto one of the boxes below to see your profile'));
+        "
+    %>
+    <%# if show_playoffs %>
+        <%# javascript_tag "Event.observe($('playoffs'), 'mousemove', ShowHelp.bindAsEventListener($('playoffs'), 'Drag and drop this icon onto one of the boxes below to see the playoff matchups for your tagged teams that are in post season play'));" %>
+    <%# end %>
+
+<%
+    end
+%>
