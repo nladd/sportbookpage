@@ -814,7 +814,7 @@ class Affiliation < ActiveRecord::Base
   #
   # Parameters:
   #   -affiliation_id - int - id of the affiliation/league to get the leaders for
-  #   -repository_type - string - name of the table to retrieve the leader stats for 
+  #   -table_name - string - name of the table to retrieve the leader stats for 
   #                               (e.g. "basketball_offensive_stats" or "baseball_pitching_stats")
   #   -order - string - SQL statement for the order to return results in. This should be the 
   #        table's column name for which you want the leaders. If the column is a number you need
@@ -827,7 +827,7 @@ class Affiliation < ActiveRecord::Base
   # Return:
   #   :select => "display_names.*, stat_repository.*, team_phases.team_id, person_phases.person_id"
   #############################################################################
-  def self.get_leaders(affiliation_id, order, time = TIME, limit = 50)
+  def self.get_leaders(affiliation_id, table_name, order, time = TIME, limit = 50)
   
     season_key = get_season_key(affiliation_id, time)
     time = time_to_datetime(time)
@@ -835,17 +835,17 @@ class Affiliation < ActiveRecord::Base
     
     return Affiliation.find_all_by_affiliation_type(
                           "league",
-                          :select => "display_names.*, basketball_offensive_stats.*, team_phases.team_id, person_phases.person_id",
+                          :select => "display_names.*, #{table_name}.*, team_phases.team_id, person_phases.person_id",
                           :joins => "
                             INNER JOIN teams 
                             INNER JOIN team_phases ON team_phases.team_id = teams.id AND team_phases.affiliation_id = #{affiliation_id}
                             INNER JOIN person_phases ON person_phases.membership_id = teams.id
                             INNER JOIN seasons ON seasons.league_id = #{affiliation_id} AND seasons.season_key = #{season_key}
-                            INNER JOIN stats AS off_stats ON off_stats.stat_holder_type = 'persons' AND off_stats.stat_holder_id = person_phases.person_id AND off_stats.stat_coverage_id = seasons.id AND off_stats.stat_repository_type = 'basketball_offensive_stats'
-                            INNER JOIN basketball_offensive_stats ON basketball_offensive_stats.id = off_stats.stat_repository_id
+                            INNER JOIN stats AS off_stats ON off_stats.stat_holder_type = 'persons' AND off_stats.stat_holder_id = person_phases.person_id AND off_stats.stat_coverage_id = seasons.id AND off_stats.stat_repository_type = '#{table_name}'
+                            INNER JOIN #{table_name} ON #{table_name}.id = off_stats.stat_repository_id
                             INNER JOIN display_names ON display_names.entity_id = person_phases.person_id AND display_names.entity_type = 'persons'",
                           :conditions => "affiliations.id = #{affiliation_id} AND affiliations.publisher_id = #{PUBLISHER_ID}",
-                          :order => "basketball_offensive_stats." + order,
+                          :order => "#{table_name}.#{order} DESC",
                           :limit => limit)
   
   end

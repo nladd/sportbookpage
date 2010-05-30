@@ -857,6 +857,8 @@ class DraggablesController < ApplicationController
         @stat_field = "points"
       elsif sport_name == 'american football'
         @stat_field = "touchdowns_total"
+      elsif sport_name == 'baseball'
+        @stat_field = "home_runs"
       end
         
     end
@@ -869,7 +871,7 @@ class DraggablesController < ApplicationController
     @stats_mappings = StatsMapping.find_all_by_sport_and_priority(sport_name, 1)
   
     if(@level == 'league')
-      @leaders = Affiliation.get_leaders(@league.affiliation_id, "points_scored_per_game")
+      @leaders = Affiliation.get_leaders(@league.affiliation_id, @stat.stats_table, @stat_field)
     
       @drop_title = "#{@league.abbreviation} Leaders"
     
