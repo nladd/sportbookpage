@@ -52,8 +52,13 @@
         end
 
       class_name = (@pro_teams[l][index].full_name).gsub(/[\s\.']/, '_')
+      
+      db_team = Team.find(@pro_teams[l][index].team_id)
 %>
-      <td><%= check_box_tag( abbr + '[]', @pro_teams[l][index].last_name + "," + (@pro_teams[l][index].team_id).to_s, false, :class => class_name ) + @pro_teams[l][index].full_name %></td>
+      <td>
+        <%= check_box_tag( abbr + '[]', @pro_teams[l][index].last_name + "," + (@pro_teams[l][index].team_id).to_s, false, :class => class_name ) + @pro_teams[l][index].full_name %><br/>
+        <span style="color: lightGray"><%= db_team.followers %> followers</span>
+      </td>
 <%
     end # close teams loop
 %>
@@ -135,10 +140,14 @@
                   <%    
                     num_teams.times do |i|
                       class_name = (@college_teams[l][index][i].full_name).gsub(/[\s\.']/, '_')
+                      db_team = Team.find(@college_teams[l][index][i].team_id)
                   %>      
                   <tr id="tr">
 
-                    <td id="td"><%= check_box_tag( abbr + '[]', @college_teams[l][index][i].full_name.to_s + "," + (@college_teams[l][index][i].team_id).to_s, false, :class => class_name + " " + c_abbr ) + @college_teams[l][index][i].full_name.to_s %></td>
+                    <td id="td">
+                        <%= check_box_tag( abbr + '[]', @college_teams[l][index][i].full_name.to_s + "," + (@college_teams[l][index][i].team_id).to_s, false, :class => class_name + " " + c_abbr ) + @college_teams[l][index][i].full_name.to_s %><br/>
+                        <span style="color: lightGray"><%= db_team.followers %> followers</span>
+                    </td>
                   </tr>
                   <%
                     end # close teams loop
