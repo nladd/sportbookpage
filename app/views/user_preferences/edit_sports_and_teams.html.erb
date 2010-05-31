@@ -103,7 +103,7 @@
 
             <%    
               num_conferences.times do |c|
-                c_abbr = @college_conferences[l][c].full_name.gsub(/[\s']/, "_")
+                
                 
                 
                 if (c == 0) then
@@ -122,6 +122,8 @@
                   else
                     index = ((c%3) * num_conferences)/3 + c/3 + 1
                   end
+
+                  c_abbr = @college_conferences[l][index].full_name.gsub(/[\s']/, "_") + @college_leagues[l].affiliation_id.to_s
 
                   num_teams = @college_teams[l][index].length  
               %>
@@ -144,8 +146,8 @@
 
                   <tr>
                     <td>
-                      <%= check_box_tag( "check_all_" + c_abbr,  "check_all", false, :onclick => "toggle_all_checkboxes('" + c_abbr + "'); return true;", :class => c_abbr ) %>
-                      <span id="check_all_<%= c_abbr %>_label">Check All</span><span id="uncheck_all_<%= c_abbr %>_label" style="display: none">Uncheck All</span>
+                      <%= check_box_tag( "check_all_sport_list_" + c_abbr,  "check_all", false, :onclick => "toggle_all_checkboxes('sport_list_" + c_abbr + "'); return true;", :class => c_abbr ) %>
+                      <span id="check_all_sport_list_<%= c_abbr %>_label">Check All</span><span id="uncheck_all_sport_list_<%= c_abbr %>_label" style="display: none">Uncheck All</span>
                     </td>
                   </tr>
                 </table>

@@ -192,22 +192,17 @@ class Affiliation < ActiveRecord::Base
   #
   # Return:
   #   :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, 
-  #               affiliations.affiliation_type, display_names.*_name, display_names.abbreviation"
+  #               affiliations.affiliation_type, display_names.*"
   #############################################################################
-  def self.get_divisions_by_conference(conference_id, order = nil, publisher_id = nil)
-    if order.blank?
-      order = "display_names.full_name ASC"
-    end
-    if publisher_id.blank?
-      publisher_id = PUBLISHER_ID
-    end
-    
+  def self.get_divisions_by_conference(conference_id,
+                                       order = "display_names.full_name ASC", publisher_id = PUBLISHER_ID)
+        
     return Affiliation.find_all_by_affiliation_type(
                         "division",
                         :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, affiliations.affiliation_type, display_names.*",
                         :joins => "INNER JOIN affiliation_phases ON affiliation_phases.affiliation_id = affiliations.id AND affiliation_phases.ancestor_affiliation_id = #{conference_id} 
                                    INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
-                        :conditions => "affiliations.publisher_id = " + publisher_id.to_s,
+                        :conditions => "affiliations.publisher_id = #{publisher_id}",
                         :order => order)
   
   end
@@ -231,8 +226,8 @@ class Affiliation < ActiveRecord::Base
                                 order = "display_names.full_name ASC", 
                                 publisher_id = PUBLISHER_ID)
 
-    # college football needs to be treated as a specail case
-    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+    # college football needs to be treated as a special case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
       affiliation_key = "l.ncaa.org.mfoot"
     end
     
@@ -240,9 +235,9 @@ class Affiliation < ActiveRecord::Base
                         "league",
                         :select => "teams.id AS team_id, teams.team_key, display_names.*",
                         :joins => "INNER JOIN teams
-                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = " + league_id.to_s + " 
+                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{league_id.to_s} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
-                        :conditions => "display_names.full_name NOT LIKE '%All-Stars' AND display_names.full_name <> 'To Be Announced' AND teams.team_key LIKE '" + affiliation_key + "%' AND  affiliations.publisher_id = " + publisher_id.to_s,
+                        :conditions => "display_names.full_name NOT LIKE '%All-Stars' AND display_names.full_name <> 'To Be Announced' AND teams.team_key LIKE '#{affiliation_key}%' AND  affiliations.publisher_id = #{publisher_id}",
                         :order => order)
                         
   end   
@@ -261,27 +256,24 @@ class Affiliation < ActiveRecord::Base
   #                     Note: This is an optional parameter that defaults to PUBLISHER_ID
   #
   # Return:
-  #   :select => "teams.id AS team_id, teams.team_key, display_names.*_name, display_names.abbreviation"
+  #   :select => "teams.id AS team_id, teams.team_key, display_names.*"
   #############################################################################
   def self.get_teams_by_conference(conference_id, 
                                    affiliation_key, 
-                                   order = nil, publisher_id = PUBLISHER_ID)
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
-
-    # college football needs to be treated as a specail case
-    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+                                   order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+ 
+    # college football needs to be treated as a special case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
       affiliation_key = "l.ncaa.org.mfoot"
     end
     
     return Affiliation.find_all_by_affiliation_type(
                         "conference",
-                        :select => "teams.id AS team_id, teams.team_key, display_names.*_name, display_names.abbreviation",
+                        :select => "teams.id AS team_id, teams.team_key, display_names.*",
                         :joins => "INNER JOIN teams
-                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = " + conference_id.to_s + " 
+                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{conference_id} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
-                        :conditions => "display_names.full_name NOT LIKE '%All-Stars' AND teams.team_key LIKE '" + affiliation_key + "%' AND  affiliations.publisher_id = " + publisher_id.to_s,
+                        :conditions => "display_names.full_name NOT LIKE '%All-Stars' AND teams.team_key LIKE '#{affiliation_key}%' AND  affiliations.publisher_id = #{publisher_id}",
                         :order => order)
                         
   end   
@@ -300,25 +292,23 @@ class Affiliation < ActiveRecord::Base
   #                     Note: This is an optional parameter that defaults to PUBLISHER_ID
   #
   # Return:
-  #   :select => "teams.id AS team_id, teams.team_key, display_names.*, display_names.abbreviation",
+  #   :select => "teams.id AS team_id, teams.team_key, display_names.*",
   #############################################################################
-  def self.get_teams_by_division(division_id, affiliation_key, order = nil, publisher_id = PUBLISHER_ID)
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
-
-    # college football needs to be treated as a specail case
-    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa")
+  def self.get_teams_by_division(division_id, affiliation_key,
+                                 order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+    
+    # college football needs to be treated as a special case
+    if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
       affiliation_key = "l.ncaa.org.mfoot"
     end
     
     return Affiliation.find_all_by_affiliation_type(
                         "division",
-                        :select => "teams.id AS team_id, teams.team_key, display_names.*, display_names.abbreviation",
+                        :select => "teams.id AS team_id, teams.team_key, display_names.*",
                         :joins => "INNER JOIN teams
-                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = " + division_id.to_s + " 
+                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{division_id} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
-                        :conditions => "teams.team_key LIKE '" + affiliation_key + "%' AND  affiliations.publisher_id = " + publisher_id.to_s,
+                        :conditions => "teams.team_key LIKE '#{affiliation_key}%' AND  affiliations.publisher_id = #{publisher_id}",
                         :order => order)
                         
   end                        
@@ -337,11 +327,7 @@ class Affiliation < ActiveRecord::Base
   #   :select => affiliations.id AS affiliation_id, affiliations.affiliation_key AS affiliation_key,
   #              affiliations.publisher_id, display_names.*
   ##############################################################################
-  def self.get_pro_leagues(order = nil, publisher_id = PUBLISHER_ID)
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
-
+  def self.get_pro_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
 
     return DisplayName.find_all_by_full_name(
               PROFESSIONAL_LEAGUES,
@@ -368,13 +354,8 @@ class Affiliation < ActiveRecord::Base
   #               affiliations.publisher_id, display_names.*",
   #
   #############################################################################
-  def self.get_college_leagues(order = nil, publisher_id = PUBLISHER_ID)
-  
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
-
-  
+  def self.get_college_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+   
     return DisplayName.find_all_by_full_name(
               COLLEGE_LEAGUES,
              :select => "affiliations.id AS affiliation_id,
@@ -403,11 +384,7 @@ class Affiliation < ActiveRecord::Base
   #               affiliations.publisher_id, display_names.*",
   #
   #############################################################################
-  def self.get_all_leagues(order = nil, publisher_id = PUBLISHER_ID)
-  
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
+  def self.get_all_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
 
     return DisplayName.find_all_by_full_name(
               ALL_LEAGUES,

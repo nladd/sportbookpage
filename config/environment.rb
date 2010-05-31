@@ -52,14 +52,24 @@ PROFESSIONAL_LEAGUES =
 
 
 COLLEGE_LEAGUES = ["NCAA Men's Basketball Division 1",
-				   "NCAA Men's Football Division 1A"]
+				   "NCAA Men's Football Division 1A",
+				   "NCAA Men's Football Division 1AA",
+				   "NCAA Men's Football Division 2",
+				   "NCAA Men's Football Division 3",
+				   "NCAA Men's Baseball",
+				   "NCAA Women's Basketball Division 1"]
 
 ALL_LEAGUES = ["National Basketball Association",
             "National Hockey League",
             "National Football League",
             "Major League Baseball",
 			"NCAA Men's Basketball Division 1",
-			"NCAA Men's Football Division 1A"]
+			"NCAA Men's Football Division 1A",
+			"NCAA Men's Football Division 1AA",
+			"NCAA Men's Football Division 2",
+			"NCAA Men's Football Division 3",
+			"NCAA Men's Baseball",
+			"NCAA Women's Basketball Division 1"]
 
 
 STANDINGS_SCOPE = {"National Basketball Association" => "all",
@@ -67,7 +77,12 @@ STANDINGS_SCOPE = {"National Basketball Association" => "all",
             "National Football League" => "all",
             "Major League Baseball" => "all",
             "NCAA Men's Basketball Division 1" => "league",
-            "NCAA Men's Football Division 1A" => "league"}
+            "NCAA Men's Football Division 1A" => "league",
+            "NCAA Men's Football Division 1AA" => "league",
+            "NCAA Men's Football Division 2" => "league",
+			"NCAA Men's Football Division 3" => "league",
+			"NCAA Men's Baseball" => "league",
+			"NCAA Women's Basketball Division 1" => "league"}
 
 
 

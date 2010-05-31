@@ -73,16 +73,16 @@
                 <% 
                   conferences = Affiliation.get_conferences_by_league(league.affiliation_id)
                   conferences.length.times do |i|
-                  
+
                   teams = Affiliation.get_teams_by_conference(conferences[i].affiliation_id, league.affiliation_key)
                   
-                  conf_id = (conferences[i].full_name).gsub(/[\s']/, "_")
+                  conf_id = (conferences[i].full_name).gsub(/[\s']/, "_") + league.affiliation_id.to_s
                   
                   if (i % 2) == 0
                 %>
                 <tr>  
                   <td>
-                    <a class="college_nested_div_a" class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i].affiliation_id %>" cellspacing="0" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i].full_name %></a>
+                    <a class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i].affiliation_id %>" cellspacing="0" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i].full_name %></a>
                     
                       <div class="college_teams" id="<%= conf_id %>" style="display: none" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();">
                       <table style="background: green; border-collapse: collapse;" cellspacing="0">
@@ -101,11 +101,11 @@
 
                   <%
                     if !(conferences[i+1].blank?) 
-                      conf_id = (conferences[i+1].full_name).gsub(/[\s']/, "_")
+                      conf_id = (conferences[i+1].full_name).gsub(/[\s']/, "_") + league.affiliation_id.to_s
                       teams = Affiliation.get_teams_by_conference(conferences[i+1].affiliation_id, league.affiliation_key)
                   %>
                   <td>
-                    <a class="college_nested_div_a" class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i+1].affiliation_id %>" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i+1].full_name %></a>
+                    <a class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i+1].affiliation_id %>" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i+1].full_name %></a>
                       <div class="college_teams" id="<%= conf_id %>" style="display: none" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();">
                       <table style="background: green; border-collapse: collapse;" cellspacing="0">
                         <% teams.each do |team| %>

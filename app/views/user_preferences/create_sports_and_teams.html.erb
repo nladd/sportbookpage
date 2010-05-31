@@ -93,7 +93,7 @@
 
             <%    
               num_conferences.times do |c|
-                c_abbr = @college_conferences[l][c].full_name.gsub(/[\s']/, "_")
+                c_abbr = @college_conferences[l][c].full_name.gsub(/[\s']/, "_") + @college_leagues[l].affiliation_id.to_s
                 
                 
                 if (c == 0) then
