@@ -1,5 +1,5 @@
 
-ALTER TABLE display_names ADD COLUMN url VARCHAR(100);
+ALTER TABLE display_names ADD COLUMN url VARCHAR(255);
 
 UPDATE display_names SET url='http://wwww.nba.com/hawks/' WHERE full_name LIKE 'Atlanta Hawks';
 UPDATE display_names SET url='http://wwww.nba.com/celtics/' WHERE full_name LIKE 'Boston Celtics';

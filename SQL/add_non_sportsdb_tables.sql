@@ -69,5 +69,8 @@ CREATE TABLE `stats_mappings` (
 ) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
 
 
-
+CREATE TABLE `position_stats_mappings` (
+  `position_id` int(11) default NULL,
+  `stats_mapping_id` int(11) default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
