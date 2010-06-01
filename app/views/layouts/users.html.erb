@@ -8,7 +8,7 @@
   
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tag "drop_down_menu" %>
-  <%= javascript_include_tag "curvycorners", "gradient", "gradientText.js" %>
+  <%= javascript_include_tag "curvycorners", "gradient", "gradientText.js", "crawler" %>
 
   
 <!--[if IE]>
@@ -47,8 +47,62 @@
   
     <div id="fade" class="fade"></div> <!-- close <fade> div -->
     
-    <!--<a href="/home">-->
+	<div class="marquee gradient 000000 ffffff vertical" id="ticker">
+	<%
+	  leagues = Affiliation.get_all_leagues()
+	  
+	  leagues.each do |league|
+		if !(Affiliation.is_in_season(league.affiliation_id))
+		  next
+		end
+		
+		scores = Array.new()
+		i = 1
+		while scores.size == 0
+		  scores = Affiliation.get_games_by_date_range(league.affiliation_id, TIME-(i*24*60*60), TIME)
+		  i += 1
+		end
+	%>
+	  <span style="font-size: 1.1em; font-weight: bold; color: red"> ***** <%= league.abbreviation %> <span><%= scores[0].start_date_time.strftime("%m/%d") %></span> ***** </span>
+	<%
+		
+		scores.each do |score|
+	%>
+	  <%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %>
+	<%
+		end
+		
+	  end
+	%>
+	
+  </div>
+  
+  <%= javascript_tag "
+		  marqueeInit({
+			uniqueid: 'ticker',
+			style: {
+				'position': 'relative',
+				'display': 'block',
+				'margin': 'auto',
+				'padding': '3px',
+				'width': '800px',
+				'height': '20px',
+				'color': 'black',
+				'font-weight': 'bold',
+				'font-size': '.9em'
+			},
+			inc: 4, //speed - pixel increment for each iteration of this marquee's movement
+			mouse: 'cursor driven', //mouseover behavior ('pause' 'cursor driven' or false)
+			moveatleast: 2,
+			neutral: 200,
+			savedirection: true
+		  });"
+  %>
+	
+	
+	    <!--<a href="/home">-->
     <div class="gradient 000000 ffffff vertical banner">
+	  
 	  <div class="logout"><%= link_to "Logout", {:controller => "login", :action => "logout"}, {:style => "color: #fff82e"} %></div>
       <!--<span class="gradient_ffffff_000000">-->SportbookPage.com<!--</span>-->
     </div>

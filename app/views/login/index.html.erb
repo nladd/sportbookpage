@@ -1,4 +1,64 @@
-<div class="sportbookpage">SportbookPage.com<br/><span class="quote">Customize your sports.</span></div>
+
+  
+
+<div class="sportbookpage">
+  
+  <div class="marquee" id="ticker">
+	<%
+	  leagues = Affiliation.get_all_leagues()
+	  
+	  leagues.each do |league|
+		if !(Affiliation.is_in_season(league.affiliation_id))
+		  next
+		end
+		
+		scores = Array.new()
+		i = 1
+		while scores.size == 0
+		  scores = Affiliation.get_games_by_date_range(league.affiliation_id, TIME-(i*24*60*60), TIME)
+		  i += 1
+		end
+	%>
+	  <span style="font-size: 1.1em; color: red"> ***** <%= league.abbreviation %> <span><%= scores[0].start_date_time.strftime("%m/%d") %></span> ***** </span>
+	<%
+		
+		scores.each do |score|
+	%>
+	  <%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %>
+	<%
+		end
+		
+	  end
+	%>
+	
+  </div>
+  
+  <%= javascript_tag "
+		  marqueeInit({
+			uniqueid: 'ticker',
+			style: {
+				'position': 'relative',
+				'display': 'block',
+				'margin': 'auto',
+				'padding': '3px',
+				'width': '800px',
+				'height': '20px',
+				'background': 'black',
+				'color': 'white',
+				'font-size': '.15em',
+				'border': '2px solid #CC3300',
+			},
+			inc: 4, //speed - pixel increment for each iteration of this marquee's movement
+			mouse: 'cursor driven', //mouseover behavior ('pause' 'cursor driven' or false)
+			moveatleast: 2,
+			neutral: 200,
+			savedirection: true
+		  });"
+  %>
+  
+  SportbookPage.com<br/>
+  <span class="quote">Customize your sports.</span>
+</div>
 
 <div class="box_frame">
 
@@ -50,7 +110,9 @@
   
   <div style="position: absolute; text-align: center">
   <span style="font-size: 1.25em">What's new?</span><br/>
-  -More college sports! We've added D1 Baseball, D2 and D3 Football, and Women's D1 Basketball
+  -More college sports! We've added D1 Baseball, D2 and D3 Football, and Women's D1 Basketball<br/>
+  -Team follower count! Now you can see how many users are following each teams on the sports and teams selection page<br/>
+  -Sports ticker. There's now a ticker across the top of the page bring you the latest scores and schedules
   </div>
   
   

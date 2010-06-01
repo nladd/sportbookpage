@@ -545,6 +545,58 @@ class Affiliation < ActiveRecord::Base
 
   end
   
+  def self.get_last_game_per_team(affiliation_id, order = nil)
+  
+    time = time_to_datetime(TIME)
+    
+
+    if order.blank?
+      order = "events.start_date_time ASC"
+    end
+  
+    games = AffiliationsEvent.find_all_by_affiliation_id(
+              affiliation_id, 
+              :select => "d1.abbreviation AS t1_abbr, 
+                          d1.entity_id AS t1_id,
+                          d1.first_name AS t1_first_name,
+                          d1.last_name AS t1_last_name,
+                          d1.full_name AS t1_full_name,
+                          d1.alias AS t1_alias,
+                          d1.url AS t1_url,
+                          d2.abbreviation AS t2_abbr, 
+                          d2.entity_id AS t2_id,
+                          d2.first_name AS t2_first_name,
+                          d2.last_name AS t2_last_name,
+                          d2.full_name AS t2_full_name,
+                          d2.alias AS t2_alias,
+                          d2.url AS t2_url,
+                          t1.alignment AS t1_alignment,
+                          t1.score AS t1_score,
+			              t1.event_outcome AS t1_outcome,
+			              t2.alignment AS t2_alignment,
+			              t2.score AS t2_score, 
+                          t2.event_outcome AS t2_outcome,
+                          events.id AS event_id,
+                          events.event_status,
+                          events.broadcast_listing,
+                          MAX(CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}')) as start_date_time",
+               :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
+                          INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams'
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
+                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
+                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+              :conditions => "events.start_date_time <= '#{time}'",
+              :group => "t1_id",
+              :order => order)
+
+    games.size.times do |i|
+      games[i].start_date_time = datetime_to_time(games[i].start_date_time)
+    end  
+
+    return games
+
+  end
+  
   
   ##############################################################################
   # Description:
