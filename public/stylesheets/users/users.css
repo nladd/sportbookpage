@@ -1,7 +1,7 @@
 
 div.drop_1_frame {
 position: absolute;
-top: 270px;
+top: 290px;
 left: 150px;
 width: 648px;
 height: 450px;
@@ -23,7 +23,7 @@ color: #131bb8;
 
 .drop_2_frame {
 position: absolute;
-top: 730px;
+top: 750px;
 left: 150px;
 width: 319px;
 height: 600px;
@@ -44,7 +44,7 @@ color: #131bb8;
 
 .drop_3_frame {
 position: absolute;
-top: 730px;
+top: 750px;
 left: 479px;
 width: 319px;
 height: 600px;
@@ -65,7 +65,7 @@ color: #131bb8;
 
 .drop_4_frame {
 position: absolute;
-top: 1340px;
+top: 1360px;
 left: 150px;
 width: 648px;
 height: 450px;
@@ -123,7 +123,7 @@ z-index: 25
  */
 .fan_club {
 position: absolute;
-top: 370px;
+top: 390px;
 left: 808px;
 width: 183px;
 height: 140px;
@@ -149,7 +149,7 @@ z-index: 1;
 
 .chalk_board_title {
 position: absolute;
-top: 520px;
+top: 540px;
 left: 807px;
 height: 15px;
 width: 183px;
@@ -167,7 +167,7 @@ border: 5px solid #C10707
 
 .chalk_board {
 position: absolute;
-top: 540px;
+top: 560px;
 left: 807px;
 width: 183px;
 height: 500px;
@@ -181,7 +181,7 @@ border: 5px solid #C10707
 .add_comment_link {
 position: absolute;
 text-align: center;
-top: 1050px;
+top: 1070px;
 left: 807px;
 width: 193px;
 font-variant: small-caps;
@@ -192,7 +192,7 @@ background: #C10707
 .add_comment_text_box {
 position: absolute;
 padding: 2px 2px;
-top: 920px;
+top: 940px;
 left: 630px;
 width: 358px;
 z-index: 7;

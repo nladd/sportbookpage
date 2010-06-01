@@ -2,7 +2,7 @@
 
 .drag_n_drop {
 position: absolute;
-top: 160px;
+top: 180px;
 left: 150px;
 width: 648px;
 height: 100px;
@@ -13,7 +13,7 @@ z-index: 12;
 
 .drag_n_drop_2 {
 position: absolute;
-top: 1800px;
+top: 1820px;
 left: 150px;
 width: 648px;
 height: 100px;
