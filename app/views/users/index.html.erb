@@ -1,13 +1,26 @@
 
 <div class="drag_n_drop" id="drag_n_drop"><%= render :partial => 'draggables/' + @drag_n_drop %></div>
     
-  <div class="drop_1_frame" id="drop_1_frame">
+  <div class="drop_1_frame" id="drop_1_frame" onmouseout="stopScroll()">
+    <!--<div class="scroll_top" id="scroll_top_1"></div>
+    <div class="scroll_bottom" id="scroll_bottom_1"></div>-->
     <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_1_title"></div>
     <div id="drop_1_side_bar" class="side_bar"></div>
     <div id="drop_1" class="drop_content">
       <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_1 + "&drop_id=drop_1&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
     </div>
-  </div> 
+  </div>
+  
+   <%=
+      javascript_tag "
+          //Event.observe($('scroll_top_1'), 'mouseover', scrollDropArea.bindAsEventListener($('scroll_top'), 'drop_1', -1));
+          //Event.observe($('scroll_top_1'), 'mousemove', scrollDropArea.bindAsEventListener($('scroll_top'), 'drop_1', -1));
+          //Event.observe($('scroll_bottom_1'), 'mouseover', scrollDropArea.bindAsEventListener($('scroll_bottom'), 'drop_1', 1));
+          //Event.observe($('scroll_bottom_1'), 'mousemove', scrollDropArea.bindAsEventListener($('scroll_bottom'), 'drop_1', 1));
+          Event.observe($('drop_1'), 'mouseover', scrollDropArea.bindAsEventListener($('drop_1'), 'drop_1'));
+          Event.observe($('drop_1'), 'mousemove', scrollDropArea.bindAsEventListener($('drop_1'), 'drop_1'));"
+      
+    %>
     
 <%= drop_receiving_element('drop_1_frame',
       :accept   => 'drop_item',

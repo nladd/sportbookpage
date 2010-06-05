@@ -17,6 +17,9 @@ var drop_4_timer = 0;
 /* Timer to close help messages when no longer needed */
 var help_timer = 0;
 
+/* Timer to stop scrolling a drop area */
+var scrollTimer = 0;
+
 /*
  * Uncheck all checkboxes in a form
  */
@@ -318,3 +321,55 @@ function ShowHelp(event) {
   help_timer = setTimeout(function(){$('popup_help').hide();}, 1000);
   
 }
+
+/******************************************************************************
+ * Scroll a drop area div
+ ******************************************************************************/
+function scrollDropArea(event) {
+  //clearTimeout(scrollTimer);
+  var parameters = $A(arguments);
+
+  var step = 0; //parameters[2];
+
+  var elem = $(parameters[1]);
+  var scrollDiv = $('drop_1_frame'); //Event.element(event);
+  
+  var offset = $(scrollDiv).cumulativeOffset();  //get the location of the div within the page
+  //var posX = Event.pointerX(event);   //get the X position of the mouse within the page
+  var posY = Event.pointerY(event);   //get the Y position of the mouse within the page
+  
+    
+  var scrollDivHeight = $(scrollDiv).getHeight();
+  var height = offset[1] + $(scrollDiv).getHeight() - posY;
+  
+  //if (step == -1) {
+  //  step = step * 6 * ((height)/scrollDivHeight);
+  //} else {
+  //  step = step * 6 * ((scrollDivHeight-height)/scrollDivHeight);
+  //}
+
+  if ((posY - offset[1]) < scrollDivHeight/4 ) {
+    step = -3;
+  } else if ((posY - offset[1]) > (scrollDivHeight * .75)) {
+    step = 3;
+  }
+  
+  
+  //alert("posY = " + posY + " offset = " + offset[1] + "posY - offset = " + (posY - offset[1]) + " step = " + step);
+  
+  scroll($(elem).identify(), step);
+  
+}
+
+function scroll(id, step) {
+  clearTimeout(scrollTimer);
+  $(id).scrollTop += step;
+  scrollTimer = setTimeout("scroll('" + id + "', " + step + ")", 20); // scrolls every 20 milliseconds
+}
+
+function stopScroll() {
+  clearTimeout(scrollTimer);
+}
+
+
+

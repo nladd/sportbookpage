@@ -1,5 +1,5 @@
 
-div.drop_1_frame {
+.drop_1_frame {
 position: absolute;
 top: 290px;
 left: 150px;
@@ -12,7 +12,7 @@ font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
 border: 3px solid #315ad0;
 }
 
-div.drop_1_frame.hover {
+.drop_1_frame.hover {
 border: 3px dashed #315ad0;
 }
 
@@ -34,7 +34,7 @@ border: 3px solid #315ad0;
 font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
 }
 
-div.drop_2_frame.hover {
+.drop_2_frame.hover {
 border: 3px dashed #315ad0;
 }
 
@@ -55,7 +55,7 @@ border: 3px solid #315ad0;
 font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
 }
 
-div.drop_3_frame.hover {
+.drop_3_frame.hover {
 border: 3px dashed #315ad0;
 }
 
@@ -76,12 +76,30 @@ border: 3px solid #315ad0;
 font-family: "Palatino Linotype", "Book Antiqua3", Palatino6, serif;
 }
 
-div.drop_4_frame.hover {
+.drop_4_frame.hover {
 border: medium dashed #315ad0;
 }
 
 .drop_4_frame a:visited {
 color: #131bb8;
+}
+
+.scroll_top {
+position: absolute;
+top: 0;
+left:0;
+width: 100%;
+height: 35%;
+z-index: 10;
+}
+
+.scroll_bottom {
+position: absolute;
+bottom: 0;
+left:0;
+width: 100%;
+height: 35%;
+z-index: 10;
 }
 
 .drop_title {
@@ -99,7 +117,7 @@ text-align: center;
 position: relative;
 display: block;
 height: 435px;
-overflow: auto;
+overflow: hidden
 }
 
 .tall_drop_content {

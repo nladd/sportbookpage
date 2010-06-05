@@ -55,11 +55,16 @@ class UsersController < ApplicationController
   #############################################################################
   def friend_home
 
-    if (session[:visiting_id].blank?)
+    if ((session[:visiting_id].blank?))
       @user = User.find(params['friend_id'].to_i)
       session[:visiting_id] = @user.id
     else
-      @user = User.find(session[:visiting_id])
+      if (params['friend_id'].to_i != session[:visiting_id])
+        @user = User.find(params['friend_id'].to_i)
+        session[:visiting_id] = @user.id
+      else
+        @user = User.find(session[:visiting_id])
+      end
     end
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")

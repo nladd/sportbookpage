@@ -47,56 +47,7 @@
   
     <div id="fade" class="fade"></div> <!-- close <fade> div -->
     
-	<div class="marquee gradient 000000 ffffff vertical" id="ticker">
-	<%
-	  leagues = Affiliation.get_all_leagues()
-	  
-	  leagues.each do |league|
-		if !(Affiliation.is_in_season(league.affiliation_id))
-		  next
-		end
-		
-		scores = Array.new()
-		i = 1
-		while scores.size == 0
-		  scores = Affiliation.get_games_by_date_range(league.affiliation_id, TIME-(i*24*60*60), TIME)
-		  i += 1
-		end
-	%>
-	  <span style="font-size: 1.1em; font-weight: bold; color: red"> ***** <%= league.abbreviation %> <span><%= scores[0].start_date_time.strftime("%m/%d") %></span> ***** </span>
-	<%
-		
-		scores.each do |score|
-	%>
-	  <%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %>
-	<%
-		end
-		
-	  end
-	%>
-	
-  </div>
-  
-  <%= javascript_tag "
-		  marqueeInit({
-			uniqueid: 'ticker',
-			style: {
-				'position': 'relative',
-				'display': 'block',
-				'margin': 'auto',
-				'width': '800px',
-				'height': '20px',
-				'color': 'black',
-				'font-weight': 'bold',
-				'font-size': '.9em'
-			},
-			inc: 4, //speed - pixel increment for each iteration of this marquee's movement
-			mouse: 'cursor driven', //mouseover behavior ('pause' 'cursor driven' or false)
-			moveatleast: 2,
-			neutral: 200,
-			savedirection: true
-		  });"
-  %>
+	<%= render :partial => "layouts/ticker" %>
 	
 	
 	    <!--<a href="/home">-->
