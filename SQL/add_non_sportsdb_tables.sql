@@ -11,15 +11,16 @@ CREATE TABLE `sessions` (
   KEY `index_sessions_on_updated_at` (`updated_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 
+
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hashed_password` varchar(255) DEFAULT NULL,
   `salt` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
   `middle_name` varchar(25) DEFAULT NULL,
   `question_1` varchar(255) DEFAULT NULL,
   `answer_1` varchar(127) DEFAULT NULL,
@@ -28,12 +29,15 @@ CREATE TABLE `users` (
   `sportbucks` int(11) DEFAULT '10000',
   `birthday` varchar(10) DEFAULT NULL,
   `hometown` varchar(255) DEFAULT NULL,
+  `sex` char(1) DEFAULT NULL,
+  `reg_comp` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `first_name` (`first_name`),
   KEY `hometown` (`hometown`),
   KEY `last_name` (`last_name`),
   KEY `middle_name` (`middle_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+
 
 CREATE TABLE `challenges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -74,3 +78,4 @@ CREATE TABLE `position_stats_mappings` (
   `stats_mapping_id` int(11) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
