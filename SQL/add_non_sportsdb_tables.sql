@@ -79,3 +79,4 @@ CREATE TABLE `position_stats_mappings` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
+ALTER TABLE events ADD COLUMN playoff_round INT;

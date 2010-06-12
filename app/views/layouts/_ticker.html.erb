@@ -10,21 +10,28 @@
       
       scores = Array.new()
       i = 1
-      while scores.size == 0
+      while scores.size == 0 && i < 31
         scores = Affiliation.get_games_by_date_range(league.affiliation_id, TIME-(i*24*60*60), TIME)
         i += 1
       end
       
       games = Array.new()
       i = 1
-      while games.size == 0
+      while games.size == 0 && i < 31
         games = Affiliation.get_games_by_date_range(league.affiliation_id, TIME, TIME+(i*24*60*60))
         i += 1
       end
+      
+      
   %>
-    <span style="font-size: 1.1em; font-weight: bold; color: red"> ***** <%= league.abbreviation %> <span><%= scores[0].start_date_time.strftime("%m/%d") %></span> ***** </span>
+        <span style="font-size: 1.1em; font-weight: bold; color: red"> ***** <%= league.abbreviation %> ***** </span>
   <%
       
+      if scores.size != 0 then
+  %>
+        <span style="font-size: 1.1em; font-weight: bold; color: red"><%= scores[0].start_date_time.strftime("%m/%d") %></span>
+  <%
+      end
       scores.each do |score|
         style = ""
         if (Team.team_is_in_profile(league.affiliation_id, score.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, score.t2_id, @user.id))
@@ -32,22 +39,24 @@
           
         end
   %>
-    <span style="<%= style %>"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %></span>
+        <span style="<%= style %>"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %></span>
   <%
       end
   %>
   
   <%
+      if games.size != 0 then
       
-      games.each do |game|
-        style = ""
-        if (Team.team_is_in_profile(league.affiliation_id, game.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, game.t2_id, @user.id))
-          style = "color: blue"
-          
-        end
+        games.each do |game|
+          style = ""
+          if (Team.team_is_in_profile(league.affiliation_id, game.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, game.t2_id, @user.id))
+            style = "color: blue"
+            
+          end
   %>
-    <span style="<%= style %>"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%d/%m %I:%M%P')} -- " %></span>
+        <span style="<%= style %>"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%d/%m %I:%M%P')} -- " %></span>
   <%
+        end
       end
       
     end

@@ -806,13 +806,21 @@ private
       
       #before nulling out a user's selected teams (they'll be added again later) decrement the team followers count
       xml_sports = profile.find('//root/sports/sport')
-        xml_sports.each do |sport| 
-          sport.each_element do |xml_team|
-            team = Team.find(xml_team['id'])
-            team.followers = team.followers - 1
-            team.save
-          end
+      xml_sports.each do |sport| 
+        sport.each_element do |xml_team|
+          team = Team.find(xml_team['id'])
+          team.followers = team.followers - 1
+          team.save
         end
+      end
+      xml_college_sports = profile.find('//root/sports/collegeSports/sport')
+      xml_college_sports.each do |sport| 
+        sport.each_element do |xml_team|
+          team = Team.find(xml_team['id'])
+          team.followers = team.followers - 1
+          team.save
+        end
+      end
       
       sports_node.content = ""
     else
@@ -875,6 +883,11 @@ private
             sport_node << team_node = XML::Node.new('team')
             team_node << team_name_id_pair[0]
             team_node["id"] = team_name_id_pair[1]
+            
+            #increment the team followers count
+            db_team = Team.find(team_node["id"])
+            db_team.followers = db_team.followers + 1
+            db_team.save
           end
         end
         
