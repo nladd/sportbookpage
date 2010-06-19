@@ -36,7 +36,7 @@ BEGIN
     
     DECLARE done INT DEFAULT 0;
     DECLARE p_id INT;
-    DECLARE cur1 CURSOR FOR SELECT positions.id FROM positions INNER JOIN affiliations AS a ON a.id = positions.affiliation_id INNER JOIN display_names AS dn ON dn.entity_id = a.id AND dn.entity_type = "affiliations" AND dn.full_name = "Basketball";
+    DECLARE cur1 CURSOR FOR SELECT positions.id FROM positions INNER JOIN affiliations AS a ON a.id = positions.affiliation_id INNER JOIN display_names AS dn ON dn.entity_id = a.id AND dn.entity_type = "affiliations" AND dn.full_name = "American Football";
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
     
     OPEN cur1;

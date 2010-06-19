@@ -21,7 +21,7 @@ class StatsMapping < ActiveRecord::Base
     return StatsMapping.find_all_by_stats_type(
                     stats_type,
                     :select => "DISTINCT(stats_table)",
-                    :conditions => "sport = '#{sport}' #{conditions}")
+                    :conditions => "sport = '#{sport}'")
   
   end
 
@@ -42,7 +42,7 @@ class StatsMapping < ActiveRecord::Base
   
     return StatsMapping.find_all_by_stats_type(
                 stats_type,
-                :conditions => "sport = '#{sport}' #{conditions}",
+                :conditions => "sport = '#{sport}'",
                 :order => "stats_name ASC")
   
   end

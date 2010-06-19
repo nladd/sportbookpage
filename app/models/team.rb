@@ -392,10 +392,12 @@ class Team < ActiveRecord::Base
     
     stats_tables.each do |table|
       
-      #stats_fields = StatsMapping.find_all_by_stats_table_and_stats_type(
-      #                                table.stats_table, stat.stats_type)
+      stats_fields = StatsMapping.find_all_by_stats_table_and_stats_type(
+                                      table.stats_table, stat.stats_type)
 
-      select_statement += ", #{table.stats_table}.*"
+      stats_fields.each do |field|
+        select_statement += ", #{table.stats_table}.#{field.stats_field}"
+      end
       
       join_statement += " INNER JOIN stats AS stats_#{table.stats_table} ON stats_#{table.stats_table}.stat_holder_type = 'persons' AND stats_#{table.stats_table}.stat_holder_id = person_phases.person_id AND stats_#{table.stats_table}.stat_coverage_id = sub_seasons.id AND stats_#{table.stats_table}.stat_repository_type = '#{table.stats_table}' AND stats_#{table.stats_table}.stat_membership_id = teams.id AND stats_#{table.stats_table}.stat_membership_type = 'teams'
               INNER JOIN #{table.stats_table} ON #{table.stats_table}.id = stats_#{table.stats_table}.stat_repository_id"
@@ -425,8 +427,6 @@ class Team < ActiveRecord::Base
               :order => "#{stat.stats_table}.#{stats_field} + 0 DESC",
               :limit => limit)
 
-    
-    return leaders
   
   end
 

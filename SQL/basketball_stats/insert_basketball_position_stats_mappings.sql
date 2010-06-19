@@ -22,9 +22,7 @@ BEGIN
         END IF;
     
         INSERT INTO position_stats_mappings (position_id, stats_mapping_id) VALUES (param, stat);
-    
-    
-    
+
     END LOOP;
     
     CLOSE cur2;
@@ -48,7 +46,7 @@ BEGIN
         END IF;
     
         CALL nested_loop(p_id);
-        INSERT INTO position_stats_mappings (position_id, stats_mapping_id) VALUES (1, 2);
+        
     END LOOP;
 
     CLOSE cur1;
