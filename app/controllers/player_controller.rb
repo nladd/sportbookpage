@@ -7,7 +7,7 @@ class PlayerController < ApplicationController
   def index
   
     @player = Person.get_player(params[:id])
-    session[:player_id] = @player.person_id
+    session[:person_id] = @player.person_id
   
     @team = Team.get_team(session[:team_id])
     session[:team_id] = @team.entity_id

@@ -885,7 +885,7 @@ class DraggablesController < ApplicationController
   
   
     template = choose_template
-    @partial_path = '/draggables/' + @level + '/' + template + 'leaders'
+    @partial_path = '/draggables/' + @level + '/leaders'
   
     render(:update) { |page| 
                 page.replace_html(@drop_id + "_title", @drop_title)
@@ -906,9 +906,28 @@ class DraggablesController < ApplicationController
   def load_player_card
     @user = User.find(session[:user_id])
     
-    @player = Person.get_card(session[:player_id])
+    @team = Team.get_team(session[:team_id])
+    @league = Affiliation.get_league(session[:league_id])
+    @sport = Affiliation.get_sport_by_league_id(@league.affiliation_id)
+    @sport_name = (@sport.full_name).downcase
+    
+    @stats_types = StatsMapping.get_stats_types(@sport_name)
+    
+    @stats = Array.new(@stats_types.size)
+    @fields = Array.new(@stats_types.size)
+
+    @stats_types.size.times do |i|
+      
+      @fields[i] = StatsMapping.find_all_by_stats_type(@stats_types[i].stats_type)
+      
+      @stats[i] = Person.get_season_stats(session[:person_id], @stats_types[i].stats_type)
+      
+    end  
 
     
+    @player = Person.get_card(session[:person_id])
+
+
     template = choose_template    
     @partial_path = '/draggables/' + @level + '/' + template + 'player_card'
   

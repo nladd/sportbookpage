@@ -1,3 +1,6 @@
+
+require 'model_helpers'
+
 class Person < ActiveRecord::Base
   
   set_table_name "persons"
@@ -40,6 +43,8 @@ class Person < ActiveRecord::Base
   #
   # Params:
   #   -person_id - int - id of the player to get information for
+  #   -time - Time - date of the season to get stats for
+  #   -
   #
   # Return:
   #   :select => "display_names.*, display_names.full_name AS f_name, 
@@ -54,38 +59,29 @@ class Person < ActiveRecord::Base
     league = Team.get_league(team.team_id)
     sport = Affiliation.get_sport_by_league_id(league.affiliation_id)
     sport_name = (sport.full_name).downcase
-    
         
-    stats_tables = StatsMapping.get_stats_tables("position", sport_name)
-    stats_fields = StatsMapping.get_stats_fields("position", sport_name)
-    
-    select = ""
-    joins = ""
-    
-    stats_tables.each do |table|
-
-      select += ", #{table.stats_table}.*"
-      
-      joins += " INNER JOIN stats AS stats_#{table.stats_table} ON stats_#{table.stats_table}.stat_holder_type = 'persons' AND stats_#{table.stats_table}.stat_holder_id = person_phases.person_id AND stats_#{table.stats_table}.stat_coverage_id = seasons.id AND stats_#{table.stats_table}.stat_repository_type = '#{table.stats_table}' 
-              INNER JOIN #{table.stats_table} ON #{table.stats_table}.id = stats_#{table.stats_table}.stat_repository_id"
-    
-    end
-
-logger.info "SELECT = " + select
-logger.info "JOINS = " + joins
-
-
+    season_key = get_season_key(league.id, time)
     time = time_to_datetime(time) 
-
+    
   
     return PersonPhase.find_by_person_id(
                 person_id,
-                :select => "display_names.*, display_names.full_name AS f_name, (CONCAT(display_names.first_name, ' ', display_names.last_name)) AS full_name, person_phases.*, persons.*, persons.id AS person_id, positions.abbreviation AS position #{select}",
-                :joins => "INNER JOIN persons ON persons.id = person_phases.person_id 
+                :select => "display_names.*,
+                            display_names.full_name AS f_name,
+                            (CONCAT(display_names.first_name, ' ', display_names.last_name)) AS full_name,
+                            teams.id AS team_id,
+                            team_name.first_name AS team_first_name,
+                            team_name.last_name AS team_last_name,
+                            team_name.full_name AS team_full_name,
+                            team_name.abbreviation AS team_abbr,
+                            person_phases.*, persons.*, persons.id AS person_id,
+                            positions.abbreviation AS position",
+                :joins => "INNER JOIN persons ON persons.id = person_phases.person_id
+                          INNER JOIN teams ON teams.id = person_phases.membership_id
                           INNER JOIN positions ON positions.id = person_phases.regular_position_id  
                           INNER JOIN display_names ON display_names.entity_id = persons.id AND entity_type = 'persons'
-                          INNER JOIN seasons ON seasons.league_id = #{league.affiliation_id} AND seasons.start_date_time < '#{time}' AND seasons.end_date_time > '#{time}'
-                          #{joins}",
+                          INNER JOIN display_names AS team_name ON team_name.entity_id = teams.id AND team_name.entity_type = 'teams'
+                          INNER JOIN seasons ON seasons.league_id = #{league.affiliation_id} AND seasons.season_key = #{season_key}",
                 :conditions => "persons.publisher_id = #{publisher_id}")
   
   end
@@ -145,20 +141,51 @@ logger.info "JOINS = " + joins
   #
   # Params:
   #   -person_id - the id of the person to get stats for
-  #   -sub_season_id - the id of the sub_season to get stats for
-  #   -repository_type - the type/name of the table of stats to get
+  #   -stats_type - the type of the stats
   #
   # Return:
   # -Stat[] - 
   ##############################################################################
-  def self.get_season_stats(person_id, sub_season_id, repository_type)
+  def self.get_season_stats(person_id, stats_type, time = TIME, publisher_id = PUBLISHER_ID)
   
-    return Stat.find_by_stat_holder_id_and_stat_repository_type_and_stat_coverage_id(
-            person_id, repository_type, sub_season_id,
-            :select => "display_names.*_name, #{repository_type}.*",
-            :joins => "INNER JOIN #{repository_type} ON (#{repository_type}.id = stats.stat_repository_id) 
-                       INNER JOIN display_names  ON (display_names.entity_id = #{person_id} AND display_names.entity_type = 'persons')",
-            :conditions => "stats.stat_coverage_type = 'sub_seasons'")
+    team = Person.get_team(person_id)
+    league = Team.get_league(team.team_id)
+    sport = Affiliation.get_sport_by_league_id(league.affiliation_id)
+    sport_name = (sport.full_name).downcase
+        
+    stats_tables = StatsMapping.get_stats_tables(stats_type, sport_name)
+    stats_fields = StatsMapping.get_stats_fields(stats_type, sport_name)
+    
+    select = ""
+    joins = ""
+    
+    stats_tables.each do |table|
+        
+      stats_fields = StatsMapping.find_all_by_stats_table_and_stats_type(
+                                      table.stats_table, stats_type)
+
+      stats_fields.each do |field|
+        select += ", #{table.stats_table}.#{field.stats_field}"
+      end
+      
+      joins += " INNER JOIN stats AS stats_#{table.stats_table} ON stats_#{table.stats_table}.stat_holder_type = 'persons' AND stats_#{table.stats_table}.stat_holder_id = person_phases.person_id AND stats_#{table.stats_table}.stat_coverage_id = seasons.id AND stats_#{table.stats_table}.stat_repository_type = '#{table.stats_table}' 
+              INNER JOIN #{table.stats_table} ON #{table.stats_table}.id = stats_#{table.stats_table}.stat_repository_id"
+    
+    end
+
+    season_key = get_season_key(league.id, time)
+    time = time_to_datetime(time) 
+    
+  
+    return PersonPhase.find_by_person_id(
+                person_id,
+                :select => "display_names.*, display_names.full_name AS f_name, (CONCAT(display_names.first_name, ' ', display_names.last_name)) AS full_name, person_phases.*, persons.*, persons.id AS person_id, positions.abbreviation AS position #{select}",
+                :joins => "INNER JOIN persons ON persons.id = person_phases.person_id 
+                          INNER JOIN positions ON positions.id = person_phases.regular_position_id  
+                          INNER JOIN display_names ON display_names.entity_id = persons.id AND entity_type = 'persons'
+                          INNER JOIN seasons ON seasons.league_id = #{league.affiliation_id} AND seasons.season_key = #{season_key}
+                          #{joins}",
+                :conditions => "persons.publisher_id = #{publisher_id}")
   end
   
 end

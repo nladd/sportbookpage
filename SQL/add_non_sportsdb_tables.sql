@@ -73,10 +73,12 @@ CREATE TABLE `stats_mappings` (
 ) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE `position_stats_mappings` (
-  `position_id` int(11) default NULL,
-  `stats_mapping_id` int(11) default NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#CREATE TABLE `position_stats_mappings` (
+#  `position_id` int(11) default NULL,
+#  `stats_mapping_id` int(11) default NULL
+#) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
 ALTER TABLE events ADD COLUMN playoff_round INT;
+ALTER TABLE basketball_rebounding_stats ADD COLUMN rebounds_offensive_per_game INT;
+ALTER TABLE basketball_rebounding_stats ADD COLUMN rebounds_defensive_per_game INT;
