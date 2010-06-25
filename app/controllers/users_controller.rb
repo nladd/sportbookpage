@@ -173,11 +173,11 @@ class UsersController < ApplicationController
       end
 
       if (@add_result == "Added") then
-        friends_node << new_friend_node = XML::Node.new('friend');
-        new_friend_node['id'] = (@add_friend.id).to_s;
-        new_friend_node << @add_friend.first_name + " " + @add_friend.last_name;
+        friends_node << new_friend_node = XML::Node.new('friend')
+        new_friend_node['id'] = (@add_friend.id).to_s
+        new_friend_node << @add_friend.first_name + " " + @add_friend.last_name
       
-        profile.save(path);
+        profile.save(path)
       end
     
     end
@@ -203,6 +203,10 @@ class UsersController < ApplicationController
       
       @emails.each do |email|
         Emailer.deliver_join_invitation(@user, email, message)
+        invitation = Invitation.new
+        invitation.invitee_email = email
+        invitation.inviter_id = @user.id
+        invitation.save
       end
       
       partial = "users/partials/invitation_sent"
@@ -212,6 +216,7 @@ class UsersController < ApplicationController
     
     render(:update) { |page| page.replace_html('light_form', :partial => partial) }
   end
+  
   
   #############################################################################
   # Description:

@@ -275,6 +275,7 @@ class UserPreferencesController < ApplicationController
       #validation should have already been performed so this call is safe
       #@user.save
       write_profile(@user)
+      check_invitations(@user)
       file = params[:photo]
       if !file.blank? then 
         save_profile_photo(file)
@@ -672,9 +673,54 @@ private
     else
       @user.password = @user.hashed_password
     end
-  
+      
     return @user.save
-  end 
+  end
+  
+  
+  #############################################################################
+  # Link an invitee and inviter to each other's fan clubs
+  #
+  #############################################################################
+  def check_invitations(invitee)
+       
+    # check outstanding invitations for this new user
+    invitations = Invitation.find_all_by_invitee_email_and_has_joined(invitee.email, false)
+    invitations.each do |invite|
+      
+      invite.has_joined = true
+      invite.save
+      
+      inviter = User.find(invite.inviter_id)
+     
+      path = RAILS_ROOT + "/public/users/#{invitee.id}/#{invitee.id}.profile"
+      parser = XML::Parser.file(path)
+      profile = parser.parse
+      friends_node = (profile.find('//root/friends')).first
+      friends = friends_node.children
+  
+      friends_node << new_friend_node = XML::Node.new('friend')
+      new_friend_node['id'] = (inviter.id).to_s
+      new_friend_node << inviter.first_name + " " + inviter.last_name
+      
+      profile.save(path)
+      
+      path = RAILS_ROOT + "/public/users/#{inviter.id}/#{inviter.id}.profile"
+      parser = XML::Parser.file(path)
+      profile = parser.parse
+      friends_node = (profile.find('//root/friends')).first
+      friends = friends_node.children
+  
+      friends_node << new_friend_node = XML::Node.new('friend')
+      new_friend_node['id'] = (invitee.id).to_s
+      new_friend_node << invitee.first_name + " " + invitee.last_name
+      
+      profile.save(path)
+    
+    end
+    
+    
+  end
   
   #############################################################################
   # Description:

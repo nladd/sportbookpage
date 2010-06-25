@@ -9,7 +9,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+);
 
 
 CREATE TABLE `users` (
@@ -36,7 +36,7 @@ CREATE TABLE `users` (
   KEY `hometown` (`hometown`),
   KEY `last_name` (`last_name`),
   KEY `middle_name` (`middle_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+);
 
 
 CREATE TABLE `challenges` (
@@ -54,7 +54,7 @@ CREATE TABLE `challenges` (
   `favorite_id` int(11) DEFAULT NULL,
   `underdog_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+);
 
 
 CREATE TABLE `stats_mappings` (
@@ -70,13 +70,26 @@ CREATE TABLE `stats_mappings` (
   `counter_field` varchar(100) DEFAULT NULL,
   `priority` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
+);
+
+
+CREATE TABLE `invitations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_sent` DATETIME DEFAULT NOW(),
+  `invitee_email` varchar(255) DEFAULT NULL,
+  `inviter_id` int(11) DEFAULT NULL,
+  `has_joined` boolean DEFAULT false,
+  PRIMARY KEY (`id`)
+);
+
 
 
 #CREATE TABLE `position_stats_mappings` (
 #  `position_id` int(11) default NULL,
 #  `stats_mapping_id` int(11) default NULL
-#) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#);
+
+
 
 ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
 ALTER TABLE events ADD COLUMN playoff_round INT;
