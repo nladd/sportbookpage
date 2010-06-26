@@ -85,6 +85,24 @@ class Emailer < ActionMailer::Base
     
   end
   
+  #############################################################################
+  # Description:
+  #   Send an e-mail reminder to a user that was invited to join sportbookpage.com
+  #   but hasn't yet
+  #
+  #############################################################################
+  def invitation_reminder(invitation)
+    
+    @user = User.find(invitation.inviter_id)
+    
+    @recipients = invitation.invitee_email
+    @from = "no-reply@sportbookpage.com"
+    @subject = "SportbookPage.com: You haven't accepted " + @user.first_name + "'s invitation to join SportbookPage.com"
+    @sent_on = Time.now
+    @content_type = "text/html"
+    
+  end
+  
   
   #############################################################################
   # Description:

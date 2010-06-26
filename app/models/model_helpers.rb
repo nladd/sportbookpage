@@ -11,13 +11,11 @@
   #
   #############################################################################
   def time_to_datetime(time)
-    # Add error checking for non-time type
     
+    # Add error checking for non-time type
     if !(time.is_a?(Time)) then
       return
     end
-    
-    
     
     return time.strftime("%Y-%m-%d %H:%M:%S")
   end
@@ -35,8 +33,7 @@
   #
   #############################################################################
   def datetime_to_time(datetime)
-    # Add error checking for non-time type
-   
+    # Add error checking for non-string type
     if !(datetime.is_a?(String)) then
       return
     end
