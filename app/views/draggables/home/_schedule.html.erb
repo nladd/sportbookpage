@@ -1,21 +1,30 @@
 
+
+<div class="head">
+  <h1 name="section-title"><%= @drop_title %></h1>
+  <h2><a href="*" name="all-tagged-teams">All</a>&nbsp;/&nbsp;
+  <a href="*" name="select-tagged-team">Tagged</a>&nbsp;/&nbsp;
+  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expand_collapse_target('<%= @drop_id %>');">Expand</a></h2>
+</div>
+
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="scroll-up" class="up"></a></div>
+
 <%
   @leagues.size.times do |@i|  
 %>
-  <div class="row_title" align="center">
-    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
-      <span><%= @leagues[@i].abbreviation %> Schedule</span>
-    </div>
-  </div>
+
+  <ul id="<%= @drop_id %>_content">
+    <li class="subhead"><%= @leagues[@i].abbreviation %> Schedule</li>
+
+    <li>
+      <span class="clps05col clps">Date<br/>Time</span>
+      <span class="clps05col clps">Home</span>
+      <span class="clps05col clps">Away</span>
+      <span class="clps05col clps">&nbsp;</span>
+      <span class="clps05col clps">TV</span>
+      <div class="clear"></div>
+    </li>
   
-  <div class="row" style="font-weight: bold">
-    <div class="cell_100">Home</div>
-    <div class="cell_20">vs</div>
-    <div class="cell_100">Away</div>
-    <div class="cell_90">Date</div>
-    <div class="cell_90">Time</div>
-    <div class="cell_100">TV</div>
-  </div>
 <%
     @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
     @size = @games[@i].size
@@ -28,46 +37,39 @@
       
       @j += 1
 %>
-  
-    <%= render :partial => "draggables/partials/more_less" %>
-
-<%    
-      if ( (@j % 2) == 0) then
-        html_class = "even_row"
-      else
-        html_class = "odd_row"
-      end
-%>
-  <div class="<%= html_class %>">
-    <div class="cell_100"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></div>
-    <div class="cell_20">vs</div>
-    <div class="cell_100"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></div>
-    <div class="cell_90"><%= game.start_date_time.strftime("%a, %m/%d") %></div>
-    <div class="cell_90"><%= game.start_date_time.strftime("%I:%M%P") %></div>
-    <div class="cell_120" style="font-size: .75em"><%= game.broadcast_listing.to_s %></div>
     
-    <% if game.event_status == "pre-event" %>
-      <div class="cell_60"><%= link_to_remote "Preview",
+    <li>
+      <span class="clps05col clps"><%= game.start_date_time.strftime("%a, %m/%d") %><br/><%= game.start_date_time.strftime("%I:%M%P") %></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
+      <% if game.event_status == "pre-event" %>
+        <span class="clps05col clps">
+          <%= link_to_remote "Preview",
            :url => {:controller => "article", :action => "event_preview"},
            :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
-      </div>
-    <% end %>
-  </div>
+        </span>
+      <% else %>
+        <span class="clps05col clps">&nbsp;</span>
+      <% end %>
+      <span class="clps05col clps"><%= game.broadcast_listing.to_s %></span>
+      <div class="clear"></div>
+    </li>
 
 <%
     end # close games loop
     
-    if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
 %>
-     <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>" class="row">
-        <div class="cell_60" style="font-size: .75em; float: left; text-align: right">
-          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
-         </div>
-      </div>
-<% end %>
-    </div> <!-- close last <hide_#> -->
+  </ul>
 <%
   end #close leagues loop
 %>
 
-<div class="row">&nbsp;</div>
+
+<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();"><a href="*" name="scroll-dwn" class="dwn"></a></div>
+
+<%=
+  javascript_tag "
+      Event.observe($('#{@drop_id}_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', -5));
+      Event.observe($('#{@drop_id}_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', 5));"
+  
+%>

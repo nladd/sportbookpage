@@ -65,3 +65,29 @@ function CloseAllMenus(id)
 //close menu if user clicks outside menu
 document.onclick = CloseAllMenus('sports');
 
+
+
+/*******************************************************************************
+ * Functions for the left side menu
+ ******************************************************************************/
+
+function expand_collapse_menu(id) {
+    
+  $("plus_minus_" + id).toggleClassName('expanded');
+  $("plus_minus_" + id).toggleClassName('collapsed');
+  
+  Effect.toggle($(id), 'slide', {duration: .5});
+  
+}
+
+function make_selected(id) {
+  
+  var selected = $('column-left').getElementsByClassName('selected');
+  
+  for (var element in selected) {
+    element.removeClassName('selected');
+  }
+  
+  $(id).addClassName('selected');
+  
+}

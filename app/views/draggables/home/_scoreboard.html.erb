@@ -1,4 +1,12 @@
 
+<div class="head">
+  <h1 name="section-title"><%= @drop_title %></h1>
+  <h2><a href="*" name="all-tagged-teams">All</a>&nbsp;/&nbsp;
+  <a href="*" name="select-tagged-team">Tagged</a>&nbsp;/&nbsp;
+  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expand_collapse_target('<%= @drop_id %>');">Expand</a></h2>
+</div>
+
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="scroll-up" class="up"></a></div>
   
 
 <%

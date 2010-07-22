@@ -1,25 +1,58 @@
 
+  <div id="header">
+    <a href="#" class="expanded"></a>
+    <h1>Chalkboard</h1>
+    <h2><a href="#" name="edit-chalkboard">Edit</a></h2>
+  </div>
+          
+  <div class="scroll-up"><a href="*" name="fanclub-scroll-up"></a></div>
+          
 <%
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".chalkboard"
-    parser = XML::Parser.file(path)
-    profile = parser.parse
-    comments = profile.find('//root/comment')
-    (comments.length - 1).downto(0) do |i|
-      comment = comments[i] %>
-      <table>
-        <tr><td>
-        <span style='color: green'>At <%=h CGI.unescape(comment.find('time').first.content) %>
-          <%=h CGI.unescape(comment.find('date').first.content) %><br/>
-          <%=h CGI.unescape(comment.find('from').first.content) %> wrote:<br/>
-        </span>
-        </td></tr>
-        <tr><td>
-          <% text = CGI.unescape(comment.find('text').first.content) %>
-      <%= text.gsub(/\n/, '<br/>') %>
-        </td></tr>
-        <tr><tr>  
-      </table>
-<%  end %>
+  path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard"
+  parser = XML::Parser.file(path)
+  profile = parser.parse
+  comments = profile.find('//root/comment')
+  (comments.length - 1).downto(0) do |i|
+    comment = comments[i]
+%>
+          
+  <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
+    <!--<a href="*" name="headshot"><img src="#" class="headshot" /></a>-->
+    At <%=h CGI.unescape(comment.find('time').first.content) %>
+    <%=h CGI.unescape(comment.find('date').first.content) %><br/>
+    <%=h CGI.unescape(comment.find('from').first.content) %> wrote:<br/>
+    <a href="#" name="comments"><% text = CGI.unescape(comment.find('text').first.content) %><%= text.gsub(/\n/, '<br/>') %></a>
+    <div class="clear"></div>
+  </li>
+  
+<% end %>
+  
+  <div class="scroll-down"><a href="*" name="fanclub-scroll-down"></a></div>
 
 
-     
+
+
+<!--
+<div class="add_comment_link">
+  <a href="javascript:void(0);" style ="color: white" onclick ="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';">Add comment</a>
+</div>
+
+
+<div class="add_comment_text_box" id="add_comment" style="display: none">
+  <%= text_area_tag('comment', nil, {:size => '48x5', :value => '', :id => "user_comment"}) %>
+  <table style="width: 100%"><tr><td style="width: 50%;">
+  
+ <%= link_to_remote "Chalk It", 
+    {:url =>  { :controller => "users", :action => "submit_comment" },
+    :with => "'comment=' + encodeURIComponent($('user_comment').value)" },
+    { :style => "bottom: 5px; display: inline; float: left", 
+      :onclick => "Effect.toggle('add_comment', 'appear', {duration: .6}); " } %>
+
+  </td><td style="width: 50%">
+  <a href="javascript:void(0);" onclick="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';" style="float: right; bottom: 5px; display: inline">Cancel</a>
+
+  </td></tr></table>
+</div>
+-->
+
+

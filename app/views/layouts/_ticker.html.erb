@@ -24,12 +24,13 @@
       
       
   %>
-        <span style="font-size: 1.1em; font-weight: bold; color: red"> ***** <%= league.abbreviation %> ***** </span>
+        
+        <span style="color:#4696bb; border:none; font-weight:bold;"><%= league.abbreviation %></span>
   <%
       
       if scores.size != 0 then
   %>
-        <span style="font-size: 1.1em; font-weight: bold; color: red"><%= scores[0].start_date_time.strftime("%m/%d") %></span>
+        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= scores[0].start_date_time.strftime("%m/%d") %></span>
   <%
       end
       scores.each do |score|
@@ -39,7 +40,7 @@
           
         end
   %>
-        <span style="<%= style %>"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score} -- " %></span>
+        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score}" %></span>
   <%
       end
   %>
@@ -54,29 +55,28 @@
             
           end
   %>
-        <span style="<%= style %>"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%d/%m %I:%M%P')} -- " %></span>
+        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%d/%m %I:%M%P')}" %></span>
   <%
         end
       end
-      
-    end
   %>
   
+  <%
+    end #close leagues loop
+  %>
+    
 </div>
   
 <%= javascript_tag "
         marqueeInit({
           uniqueid: 'ticker',
-          style: {
-              'position': 'relative',
-              'display': 'block',
-              'margin': 'auto',
-              'width': '800px',
-              'height': '20px',
-              'color': 'black',
-              'background': 'white',
-              'font-weight': 'bold',
-              'font-size': '.9em'
+          style: {              
+              'height': '30px',
+              'border-bottom': '#CCCCCC thin solid',
+              'border-left': '#CCCCCC thin solid',
+              'border-right': '#CCCCCC thin solid',
+              'background': 'url(/images/css/ticker-bg.jpg) no-repeat top center',
+              'font-size': '.7em'              
           },
           inc: 4, //speed - pixel increment for each iteration of this marquee's movement
           mouse: 'cursor driven', //mouseover behavior ('pause' 'cursor driven' or false)

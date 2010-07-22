@@ -7,20 +7,11 @@
   <title>sportbookpage.com - Home</title>
   
   <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag "drop_down_menu" %>
-  <%= javascript_include_tag "curvycorners", "gradient", "gradientText.js", "crawler" %>
+  <%= javascript_include_tag "drop_down_menu", "crawler" %>
 
   
-<!--[if IE]>
-  <%= stylesheet_link_tag 'common/ie_common', 'common/ie_menus' %>
-<![endif]-->
-<![if !(IE) ]>
-  <%= stylesheet_link_tag 'common/common', 'common/menus' %>
-<![endif]>
-
-  <%= stylesheet_link_tag 'users/users' %>
-  <%= stylesheet_link_tag 'draggables/draggables', 'draggables/cell' %>
-
+  <%= stylesheet_link_tag 'common/main' %>
+  
 
   <%= javascript_tag "Ajax.Responders.register({
     onCreate: function(){ document.body.style.cursor = 'progress'},
@@ -29,83 +20,178 @@
   %>
   
 </head>
-<body>
-  <!--<img src="/images/backgrounds/runner.jpg" alt="background" class="background"/>-->
+<body onload="MM_preloadImages('/images/css/btn-bg-grass-ovr.jpg','/images/css/btn-bg-clay-ovr.jpg','/images/css/btn-bg-ice-ovr.jpg','/images/css/btn-bg-wood-ovr.jpg','/images/css/btn-bg-asphalt-ovr.jpg','/images/css/btn-bg-mat-ovr.jpg')">
 
-  <!-- Lightbox tags -->
-  <div id="light" class="light" style="display: none">
-    <a id="close_lightbox" class="close_lightbox" href = "javascript:void(0)" 
-        onclick = "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); return false; $('selections').hide();">
-      Close
-    </a>
-    <div id='light_form' class='light_form'></div>
-  </div>
-  <div id="lightbox_fade" class="lightbox_fade" style="display: none"></div>
-
-
-  <div class="content" id="body_content">
+<!-- Lightbox tags -->
+<div id="light" class="light" style="display: none">
+  <a id="close_lightbox" class="close_lightbox" href = "javascript:void(0)" 
+      onclick = "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); return false; $('selections').hide();">
+    Close
+  </a>
+  <div id='light_form' class='light_form'></div>
+</div>
+<div id="lightbox_fade" class="lightbox_fade" style="display: none"></div>
   
-    <div id="fade" class="fade"></div> <!-- close <fade> div -->
-    
-	<%= render :partial => "layouts/ticker" %>
-	
-	
-	    <!--<a href="/home">-->
-    <div class="gradient 000000 ffffff vertical banner">
-	  
-	  <div class="logout"><%= link_to "Logout", {:controller => "login", :action => "logout"}, {:style => "color: #fff82e"} %></div>
-      <!--<span class="gradient_ffffff_000000">-->SportbookPage.com<!--</span>-->
-    </div>
-    <!--</a>-->
-   
-    <%= render :partial => 'layouts/menus' %>
-         
-    <div class="advertisement_1">Advertisement 1</div>
-
-	<div class="fan_club" id="fan_club">
-	  <%= render :partial => "layouts/fan_club" %>
-	  <div class="search_link"><a href="/search">Search for Friends</a></div>
-	</div>
-     
-    <div class="chalk_board_title">ChalkBoard</div> 
-    <div class="chalk_board" id="chalk_board"><%= render :partial => 'users/partials/chalk_board' %></div>
-    <div class="add_comment_link">
-      <a href="javascript:void(0);" style ="color: white" onclick ="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';">Add comment</a>
-    </div>
-
-    
-    <div class="add_comment_text_box" id="add_comment" style="display: none">
-      <%= text_area_tag('comment', nil, {:size => '48x5', :value => '', :id => "user_comment"}) %>
-      <table style="width: 100%"><tr><td style="width: 50%;">
+  <div id="content">
+    <div id="header">
+  
       
-     <%= link_to_remote "Chalk It", 
-        {:url =>  { :controller => "users", :action => "submit_comment" },
-        :with => "'comment=' + encodeURIComponent($('user_comment').value)" },
-        { :style => "bottom: 5px; display: inline; float: left", 
-          :onclick => "Effect.toggle('add_comment', 'appear', {duration: .6}); " } %>
-
-      </td><td style="width: 50%">
-      <a href="javascript:void(0);" onclick="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';" style="float: right; bottom: 5px; display: inline">Cancel</a>
-
-      </td></tr></table>
-    </div>
-
-    <div id="yield" class="yield">
-      <%= yield %>
-    </div>
-    
-    <br style="clear: both"/>
-
-
-	</div> <!-- close <div> content -->
-
+      <%= render :partial => "layouts/ticker" %>
+      
 	
-	<div id="popup_help" class="popup_help" style="display: none">Help message</div>
+      <div id="hero">
+       	<div id="logo"></div>
+	<!-- Background switchers -->
+        <ul>
+	  <li><a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Grass','','/images/css/btn-bg-grass-ovr.jpg',1)"><img src="/images/css/btn-bg-grass.jpg" alt="Grass Button" name="Grass" width="25" height="25" border="0" id="Grass" /></a>                </li>
+	  <li>
+	  <a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Clay','','/images/css/btn-bg-clay-ovr.jpg',1)"><img src="/images/css/btn-bg-clay.jpg" alt="Clay Button" name="Clay" width="25" height="25" border="0" id="Clay" /></a>                </li>
+	  <li>
+	  <a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Ice','','/images/css/btn-bg-ice-ovr.jpg',1)"><img src="/images/css/btn-bg-ice.jpg" alt="Ice Button" name="Ice" width="25" height="25" border="0" id="Ice" /></a>                </li>
+	  <li>
+	  <a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Wood','','/images/css/btn-bg-wood-ovr.jpg',1)"><img src="/images/css/btn-bg-wood.jpg" alt="Wood Button" name="Wood" width="25" height="25" border="0" id="Wood" /></a>                </li>
+	  <li>
+	  <a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Asphalt','','/images/css/btn-bg-asphalt-ovr.jpg',1)"><img src="/images/css/btn-bg-asphalt.jpg" alt="Asphalt Button" name="Asphalt" width="25" height="25" border="0" id="Asphalt" /></a>                </li>
+	  <li>
+	  <a href="*" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Mat','','/images/css/btn-bg-mat-ovr.jpg',1)"><img src="/images/css/btn-bg-mat.jpg" alt="Mat Button" name="Mat" width="25" height="25" border="0" id="Mat" /></a>
+	  </li>
+	  <div class="clear"></div>
+	</ul>
+      </div>
+      <!-- Leaderboard Ad -->
+      <div id="ad-leaderboard"><img src="/images/css/advertisement-leaderboard.jpg" class="center" alt="Advertiser's Name" name="advertisement-leaderboard"/></div>
+      <div class="clear"></div>    
+    </div><!-- End Header -->
+    
+    <div id="columns">
+      <!-- Left Column -->	
+      <div id="column-left" class="floatleft">
+	<!-- System Message -->         
+        <div id="system-message" class="hidden">
+          <img src="/images/css/advertisement-system.jpg" alt="SystemMessage" name="system-message" />
+	</div>
+	
+	<!-- User info -->
+	<div id="user-info">
+	  <a href="*" name="headshot"><img src="/images/css/headshot-none-47x47.jpg" alt="headshot" class="headshot" /></a>
+	  <h1><a href="*" name="edit">First Name Last Name</a></h1>
+	  <h1 class="clear">
+	    <a href="*" name="help">Hotstreak</a>:
+	    <span class="win">128</span>/<span class="loss">220</span><span class="winpct">(.37)</span>
+          </h1>
+	  <div class="clear"></div>
+	</div>
+	  
+	<!-- My Tagged Teams -->        
+	<div id="header">
+	  <h1>My Tagged Teams</h1>
+          <h2><a href="/edit/sports_and_teams" name="tagged-teams-edit" title="Edit My Teams">Edit</a></h2>
+        </div>
+   
+	<ul>
+	  <%
+	    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+	    parser = XML::Parser.file(path)
+	    profile = parser.parse
+	    sports = profile.find('//root/sports/sport')
+	    sports.each do |sport| 
+	      sport_attr = sport.attributes['sport']
+	  %>
+	  <span>
+	    <div id="header">
+	      <a id="plus_minus_my_<%= sport_attr %>"  href="javascript:void(0);" class="collapsed" onclick="expand_collapse_menu('my_<%= sport_attr %>');"></a>
+	      <h1><%= sport['sport_name'] %></h1>
+	    </div>
+	    
+	    <div id="my_<%= sport_attr %>" style="display: none" >
+	      <div>
+	      <li class="even"><a href="/league/<%= sport['id'] %>" name="all-teams">League</a></li>
+	      <%
+		odd_even = 0
+		sport.each_element do |team|
+		  odd_even += 1
+	      %>
+	      <li id="team_<%= team['id'] %>" class="<%= (odd_even % 2) == 0 ? "even" : "odd" %>">
+		<a href="/team/<%= team['id'] %>" name="team-name" onclick="make_selected('team_<%= team['id'] %>')"><%= team.content %></a>
+	      </li>
+	      <% end %>
+	      </div>
+	    </div>
+	  </span>
+	  <% end %>
+	</ul>
+      
+	<!-- left column floating advertisement -->
+	<div id="ad-left-column">
+	  <img src="/images/css/advertisement-leftcolumn.jpg" alt="Advertiser" />
+	</div>
+	
+	<div class="clear"></div>       
+      
+      </div><!-- End Left Column -->
+    
+    
+    <%= yield %>
+    
+    <!-- Right Column -->
+    <div id="column-right">
+      <div id="ad-right"><img src="/images/css/advertisement-rightcolumn.jpg" alt="Advertiser" name="ad-right"/></div>
+      <!-- Fanclub -->
+      <ul>
+	<span name="Fanclub">
+	  <%= render :partial => "layouts/fan_club" %>
+	</span>
+      </ul>
 
+      <!-- Chalkboard -->
+      <ul>
+	<span name="Chalkboard">
+	  <%= render :partial => 'users/partials/chalk_board' %>
+	</span>
+      </ul>
+            
+    </div><!-- End right column -->
+    
+    <div class="clear"></div>
+    
+  </div><!-- End Body Columns -->
+     
+  <!-- Navigation low -->  
+  <div id="nav-low">
+    <ul>
+      <li class="noborder"><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <li><a href="*" name="sport01">Sport</a></li>
+      <div class="clear"></div>
+    </ul>
+  </div>
+  
+</div> <!-- End main page content -->
 
-  <%= javascript_tag "$('fade').setOpacity(.85);" %>
-  <%= javascript_tag "createGradient($('body_content'));" %>
-
+<!-- footer -->
+<div id="footer">
+  <ul>
+    <li class="social"><img src="/images/css/footer-links-twitter.jpg" name="twitter" alt="Follow us on Twitter" /></li>
+    <li class="social"><img src="/images/css/footer-links-facebook.jpg" name="facebook" alt="Follow us on Facebook" /></li>
+    <li class="social"><img src="/images/css/footer-links-homepage.jpg" name="homepage" alt="Make us your homepage" /></li>
+    
+    <li class="floatleft">&copy; SportBookPage.com</li>
+    <li class="floatleft"><a href="mailto:*" name="contact-info">info@sportbookpage.com</a></li>
+    <li class="floatleft">Further info if desired</li>
+   
+    <div class="clear"></div>    
+  </ul>
+</div>
+    
 </body>
 </html>
 
