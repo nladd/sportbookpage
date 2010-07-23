@@ -360,6 +360,7 @@ class DraggablesController < ApplicationController
     end
     
     @partial_path = '/draggables/' + @level + '/' + choose_template + 'schedule'
+
   
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)

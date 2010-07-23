@@ -1245,7 +1245,6 @@ padding:0;
 height:auto;
 float:left;
 margin:0 5px 0 0;
-
 display:inline;
 }
 
@@ -1303,7 +1302,7 @@ height:auto;
 display:block;
 background:none;
 border-bottom:#CCCCCC thin solid;
-padding:8px 4px 4px 4px;
+padding:5px 4px 4px 4px;
 font-size:.7em;
 line-height:1em;
 }

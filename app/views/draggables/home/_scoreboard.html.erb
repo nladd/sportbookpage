@@ -12,19 +12,19 @@
 <%
   @leagues.size.times do |@i|
 %>
-  <div class="row_title" align="center">
-    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
-      <span><%= @leagues[@i].abbreviation %> Scoreboard</span>
-    </div>
-  </div>
-  
-  <div class="row" style="font-size: .8em; font-weight: bold">
-    <div class="cell_70">Date</div>
-    <div class="cell_110">Home</div>
-    <div class="cell_60">&nbsp;</div>
-    <div class="cell_110">Away</div>
-    <div class="cell_60">&nbsp;</div>
-  </div>
+
+  <ul id="<%= @drop_id %>_content">
+    <li class="subhead"><%= @leagues[@i].abbreviation %> Scoreboard</li>
+
+    <li>
+      <span class="clps05col clps">Date</span>
+      <span class="clps05col clps">Home</span>
+      <span class="clps05col clps">&nbsp;</span>
+      <span class="clps05col clps">Away</span>
+      <span class="clps05col clps">&nbsp;</span>
+      <div class="clear"></div>
+    </li>
+
   
   <%
     @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")

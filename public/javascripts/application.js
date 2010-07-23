@@ -374,6 +374,8 @@ function stopScroll() {
 
 
 function expand_collapse_target(target) {
+  //counter for our for loops
+  var c = 0;
   
   //target is expanded, shrink it
   if ($(target).hasClassName('expanded')) {
@@ -383,20 +385,27 @@ function expand_collapse_target(target) {
     });
     
     var cells = $(target).select('span.expn');
-    
-    for (var c = 0; c < cells.length; c++) {
+    var size = 0;
+
+    //shrink each cell
+    for (c = 0; c < cells.length; c++) {
+      //if a cell is hidden it'll have a width of 0, so in that case just use the last known width
+      if ($(cells[c]).getWidth() != 0) {
+        size = (($(cells[c]).getWidth() - 7) / 2);
+      }
+      
       new Effect.Morph(cells[c], {
-        style: 'width:' + (($(cells[c]).getWidth() -7) / 2) + 'px;',
+        style: 'width:' + size + 'px;',
         duration: 1.0
       });
       
-      $(cells[c]).removeClassName('expn');
-      $(cells[c]).addClassName('clps');
+      $(cells[c]).toggleClassName('clps');
+      $(cells[c]).toggleClassName('expn');
     }
-    
+
     $(target + 'ToggleText').innerHTML = 'Expand';
   }
-  
+    
   //target is shrunk, expand it
   if ($(target).hasClassName('collapsed')) {
     new Effect.Morph(target, {
@@ -406,14 +415,18 @@ function expand_collapse_target(target) {
     
     var cells = $(target).select('span.clps');
   
-    for (var c = 0; c < cells.length; c++) {
+    for (c = 0; c < cells.length; c++) {
+      //if a cell is hidden it'll have a width of 0, so in that case just use the last known width
+      if ($(cells[c]).getWidth() != 0) {
+        size = (($(cells[c]).getWidth() * 2) + 7);
+      }
       new Effect.Morph(cells[c], {
-        style: 'width:' + (($(cells[c]).getWidth() * 2) + 7) + 'px;',
+        style: 'width:' + size + 'px;',
         duration: 1.0
       });
       
-      $(cells[c]).removeClassName('clps');
-      $(cells[c]).addClassName('expn');
+      $(cells[c]).toggleClassName('clps');
+      $(cells[c]).toggleClassName('expn');
     }
     
     $(target + 'ToggleText').innerHTML = 'Collapse';
@@ -421,7 +434,7 @@ function expand_collapse_target(target) {
   
   
   setTimeout(function(){$(target).toggleClassName('expanded'); $(target).toggleClassName('collapsed');}, 1000);
-  
+    
   return false;
 }
 

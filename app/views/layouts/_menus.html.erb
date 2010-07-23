@@ -1,250 +1,74 @@
-<div class="top_menu">   
-   <ul id="top_menu_item" class="top_menu_item">
+<ul>
+   <%
+     path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+     parser = XML::Parser.file(path)
+     profile = parser.parse
+     sports = profile.find('//root/sports/sport')
+     sports.each do |sport| 
+       sport_attr = sport.attributes['sport']
+   %>
+   <span>
+     <div id="header">
+       <a id="plus_minus_my_<%= sport_attr %>"  href="javascript:void(0);" class="collapsed" onclick="expand_collapse_menu('my_<%= sport_attr %>');"></a>
+       <h1><%= sport['sport_name'] %></h1>
+     </div>
+     
+     <div id="my_<%= sport_attr %>" style="display: none" >
+       <div>
+       <li class="even"><a href="/league/<%= sport['id'] %>" name="all-teams">League</a></li>
+       <%
+         odd_even = 0
+         sport.each_element do |team|
+           odd_even += 1
+       %>
+       <li id="team_<%= team['id'] %>" class="<%= (odd_even % 2) == 0 ? "even" : "odd" %>">
+         <a href="/team/<%= team['id'] %>" name="team-name" onclick="make_selected('team_<%= team['id'] %>')"><%= team.content %></a>
+       </li>
+       <% end %>
+       </div>
+     </div>
+   </span>
+   <% end # close sports loop
    
-    <li class="float_left">
-      <a class="tm_a" href="/home">Home</a>
-    </li>
-    
-    
-    
-    <li class="float_left">
-      <a class="tm_a" href="#" onmouseover="$('sports').show();" onmouseout="StartParentTimer('sports');">Pro</a>
-        
-      <div class="parent_div" id="sports" style="display: none" onmouseover="StopParentTimer();" onmouseout="StartParentTimer('sports');">
-         
-          <%
-            leagues = Affiliation.get_pro_leagues()
-          
-            leagues.each  {|league|
-              abbr = league.abbreviation
-          %>
-
-          <div class="menu_row">
-              <a class="menu_row_a" href="/league/<%= league.affiliation_id %>" onmouseover="ShowNestedMenu('<%= abbr %>');" onmouseout="StartTimer('<%= abbr %>');"><%= abbr %></a>
-          
-
-            <div class="nested_div" id="<%= abbr %>" style="display: none" onmouseover="StopParentTimer(); StopTimer();" onmouseout="StartTimer('<%= abbr %>')">
-              <table style="background: #5970B2; border-collapse: collapse;" cellspacing="0">
-                <% 
-                  teams = Affiliation.get_teams_by_league(league.affiliation_id, league.affiliation_key, "display_names.last_name ASC")
-                  teams.length.times do |i|
-                
-                  if (i % 2) == 0
-                %>
-                <tr>  
-                  <td><a class="nested_div_a" href="/team/<%= teams[i].team_id %>"><%= teams[i].last_name %></a></td>
-                  <% if !(teams[i+1].blank?) %>
-                  <td><a class="nested_div_a" href="/team/<%= teams[i+1].team_id %>"><%= teams[i+1].last_name %></a></td>
-                </tr>
-                  <% end %>
-                <% end #close if
-                 end #close teams loop
-                %>
-              </table>
-          </div>  <!-- close nested_div -->
-
-        </div> <!-- close menu_row -->
-
-          <% } %> <!-- close leagues loop -->
-
-      </div>  <!-- close parent_div -->
-    </li>
-    
-    
-    
-    <li class="float_left">
-      <a class="tm_a" href="#" onmouseover="$('college').show();" onmouseout="StartParentTimer('college');">College</a>
-        
-      <div class="college_parent_div" id="college" style="display: none" onmouseover="StopParentTimer();" onmouseout="StartParentTimer('college');">
-         
-          <%
-            leagues = Affiliation.get_college_leagues()
-          
-            leagues.each  {|league|
-              abbr = (league.abbreviation).gsub(/[\s']/, "_")
-          %>
-
-          <div class="menu_row">
-              <a class="menu_row_a" href="/league/<%= league.affiliation_id %>" onmouseover="ShowNestedMenu('<%= abbr %>');" onmouseout="StartTimer('<%= abbr %>');"><%= league.abbreviation %></a>
-          
-
-            <div class="nested_div" id="<%= abbr %>" style="display: none" onmouseover="StopParentTimer(); StopTimer();" onmouseout="StartTimer('<%= abbr %>')">
-              <table style="background: #5970B2; border-collapse: collapse;" cellspacing="0">
-                <% 
-                  conferences = Affiliation.get_conferences_by_league(league.affiliation_id)
-                  conferences.length.times do |i|
-
-                  teams = Affiliation.get_teams_by_conference(conferences[i].affiliation_id, league.affiliation_key)
-                  
-                  conf_id = (conferences[i].full_name).gsub(/[\s']/, "_") + league.affiliation_id.to_s
-                  
-                  if (i % 2) == 0
-                %>
-                <tr>  
-                  <td>
-                    <a class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i].affiliation_id %>" cellspacing="0" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i].full_name %></a>
-                    
-                      <div class="college_teams" id="<%= conf_id %>" style="display: none" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();">
-                      <table style="background: green; border-collapse: collapse;" cellspacing="0">
-                        <% teams.each do |team| %>
-                        <tr>
-                          <td>
-                            <a href="/team/<%= team.team_id %>" class="college_team" >
-                              <%= team.full_name %>
-                            </a>
-                          </td>
-                        </tr>
-                        <% end %>
-                      </table>
-                      </div>
-                  </td>
-
-                  <%
-                    if !(conferences[i+1].blank?) 
-                      conf_id = (conferences[i+1].full_name).gsub(/[\s']/, "_") + league.affiliation_id.to_s
-                      teams = Affiliation.get_teams_by_conference(conferences[i+1].affiliation_id, league.affiliation_key)
-                  %>
-                  <td>
-                    <a class="college_nested_div_a" href="/league/<%= league.affiliation_id %>/conference/<%= conferences[i+1].affiliation_id %>" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();"><%= conferences[i+1].full_name %></a>
-                      <div class="college_teams" id="<%= conf_id %>" style="display: none" onmouseover="$('<%= conf_id %>').show();" onmouseout="$('<%= conf_id %>').hide();">
-                      <table style="background: green; border-collapse: collapse;" cellspacing="0">
-                        <% teams.each do |team| %>
-                        <tr>
-                          <td>
-                            <a href="/team/<%= team.team_id %>" class="college_team" >
-                              <%= team.full_name %>
-                            </a>
-                          </td>
-                        </tr>
-                        <% end %>
-                      </table>
-                      </div>
-                  </td>
-                </tr>
-                  <% end %>
-                <% end #close if
-                 end #close conferences loop
-                %>
-              </table>
-          </div>  <!-- close nested_div -->
-
-        </div> <!-- close menu_row -->
-
-          <% } %> <!-- close leagues loop -->
-
-      </div>  <!-- close college_parent_div -->
-    </li>
-    
-    
-    
-     <li class="float_right">
-      <a class="tm_a" href="javascript:void(0);" onmouseover="$('settings').show();" onmouseout="StartParentTimer('settings')">Settings</a>
-        <div class="parent_div" id="settings" style="display: none" onmouseover="StopParentTimer()" onmouseout="StartParentTimer('settings')">
-            <div class="menu_row">
-              <a class="menu_row_a" href="/edit/account">Edit Account</a>
-            </div>
-            <div class="menu_row">
-              <a class="menu_row_a" href="/edit/profile">Edit Profile</a>
-            </div>
-            <!--<div class="menu_row">
-              <a class="menu_row_a" href="/edit/sports_and_teams">Change Tagged Teams</a>
-            </div>-->
-            <!-- <div class="menu_row">
-              <%= link_to_remote "Save Draggables", 
-                  { :url => { :controller => "user_preferences", :action => "save_drag_n_drop" } },
-                  { :class => "menu_row_a",
-                    :onclick => "$('settings').hide();" }
-              %>
-            </div> -->
-
-        </div> 
-     </li>
- 
-   <li class="float_right">
-      <a class="tm_a" href="javascript:void(0);" onmouseover="$('fans').show();" onmouseout="StartParentTimer('fans')">Fans</a>
-      <div class="parent_div" id="fans" style="display: none" onmouseover="StopParentTimer()" onmouseout="StartParentTimer('fans')">
-         <div class="menu_row">
-           <a class="menu_row_a" href="/search">Search Fans</a>
-         </div>
-         <div class="menu_row">
-            <%= link_to_remote "Invite Fans",
-                      {:url => {:controller => "users", :action => "invite_friend"},
-                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " },
-                      {:class => "menu_row_a"}
-            %>
-         </div>
-      </div> 
-   </li>
- 
-    </ul>
-  </div>
- 
-  <div id="message_banner" class="message_banner" style="display:none"></div>
-  <div class="save_draggables">
-      <%= link_to_remote "Invite New Fans",
-                      {:url => {:controller => "users", :action => "invite_friend"},
-                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " } 
-      %>
-      <br/>
-      <%= link_to_remote "Save Draggables", 
-         :url => { :controller => "user_preferences", :action => "save_drag_n_drop" }
-     %>
-  </div>
-  <div id="user_path" class="user_path"></div>
- 
- 
-  <div class="left_menu">
-    <ul id="left_menu_item">
-      <li class="my_sports"><a style="background: #053616; width: auto" href="/edit/sports_and_teams">Change<br/>Tagged Teams</a></li>
-      <%
-        path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-        parser = XML::Parser.file(path)
-        profile = parser.parse
-        sports = profile.find('//root/sports/sport')
-        sports.each do |sport| 
-          sport_attr = sport.attributes['sport']
-      %>     
-      <li><a href="javascript:void(0);" onclick="Effect.toggle('my_<%= sport_attr %>', 'slide', {duration: .5}); return true;"><%= sport['sport_name'] %></a>
-        <div id="my_<%= sport_attr %>" style="display: none">
-          <div>
-          <a href="/league/<%= sport['id'] %>">All League</a>
-            <% sport.each_element {|team| %>
-          <a href="/team/<%= team['id'] %>"><%= team.content %></a>
-            <% } %>
-          </div>
-        </div>
-        
-      </li>
-      <% end %>
-            
-      <%
-        sports = profile.find('//root/sports/collegeSports/sport')
-        if !(sports.blank?) 
-      %>
-          <li class="college_sports">NCAA</li>
-      <%
-        end
-        
-        sports.each do |sport| 
-          sport_attr = sport.attributes['sport']
-      %>     
-      <li><a href="javascript:void(0);" onclick="Effect.toggle('my_<%= sport_attr %>', 'slide', {duration: .5}); return true;"><%= sport['sport_name'] %></a>
-        <div id="my_<%= sport_attr %>" style="display: none">
-          <div>
-          <a href="/league/<%= sport['id'] %>">All League</a>
-            <% sport.each_element {|team| %>
-          <a href="/team/<%= team['id'] %>"><%= team.content %></a>
-            <% } %>
-          </div>
-        </div>
-        
-      </li>
-      <% end %>
+   %>
    
-           
-      <li style="margin-top: 10px">
-        <div class="advertisement_2">Advertisement 2</div>
-      </li>
+   <span>
+     <div id="header">
+       <a href="javascript:void(0);"></a>
+       <h1>NCAA</h1>
+     </div>
+   </span>
+   
+   <%
+      sports = profile.find('//root/sports/collegeSports/sport')
+      sports.each do |sport| 
+       sport_attr = sport.attributes['sport']
+   %>
+      <span>
+         
+         <div id="header">
+           <a id="plus_minus_my_<%= sport_attr %>"  href="javascript:void(0);" class="collapsed" onclick="expand_collapse_menu('my_<%= sport_attr %>');"></a>
+           <h1><%= sport['sport_name'] %></h1>
+         </div>
+         
+         <div id="my_<%= sport_attr %>" style="display: none" >
+           <div>
+           <li class="even"><a href="/league/<%= sport['id'] %>" name="all-teams">League</a></li>
+           <%
+             odd_even = 0
+             sport.each_element do |team|
+               odd_even += 1
+           %>
+           <li id="team_<%= team['id'] %>" class="<%= (odd_even % 2) == 0 ? "even" : "odd" %>">
+             <a href="/team/<%= team['id'] %>" name="team-name" onclick="make_selected('team_<%= team['id'] %>')"><%= team.content %></a>
+           </li>
+           <% end %>
+           </div>
+         </div>
+      </span>
+   <%
+      end # close sport loop
+   %>     
       
-    </ul>
-  </div>
+
+</ul>
