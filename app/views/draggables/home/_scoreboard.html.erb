@@ -17,11 +17,11 @@
     <li class="subhead"><%= @leagues[@i].abbreviation %> Scoreboard</li>
 
     <li>
-      <span class="clps05col clps">Date</span>
-      <span class="clps05col clps">Home</span>
-      <span class="clps05col clps">&nbsp;</span>
-      <span class="clps05col clps">Away</span>
-      <span class="clps05col clps">&nbsp;</span>
+      <span class="clps06col clps">Date</span>
+      <span class="clps06col clps">Home</span>
+      <span class="clps08col clps">&nbsp;</span>
+      <span class="clps06col clps">Away</span>
+      <span class="clps08col clps">&nbsp;</span>
       <div class="clear"></div>
     </li>
 
@@ -38,57 +38,54 @@
 
   <%= render :partial => "draggables/partials/more_less" %>
 
-  <%
-      if ( (@j % 2) == 0) then
-        html_class = "even_row"
-      else
-        html_class = "odd_row"
-      end
-  %>
+    <li>
+      <span class="clps06col clps"><%= game.start_date_time.strftime("%m/%d") %></span>
+      <span class="clps06col clps" style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
+      <span class="clps08col clps" style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>"><%= game.t1_score %></span>
+      <span class="clps06col clps" style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
+      <span class="clps08col clps" style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>"><%= game.t2_score %></span>
+      <% if game.event_status == "post-event" %>
+        <span class="clps06col clps">Final <%= link_to_remote "Recap",
+             :url => {:controller => "article", :action => "event_recap"},
+             :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+        </span>
+      <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
+        sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)
+        state = Event.get_event_state(game.event_id, sport.full_name)
+    
+      %>
+        <span class="clps06col clps">
+          <%= state %>
+        </span>
+      <% end %>
+      <div class="clear"></div>
+    </li>
 
-    <div class="<%= html_class %>">
-      <div class="cell_70"><%= game.start_date_time.strftime("%m/%d/%y") %></div>
-  
-      <span style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>">
-        <div class="cell_110"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></div>
-        <div class="cell_60"><%= game.t1_score %></div>
-      </span>
-      <span style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>">
-        <div class="cell_110"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></div>
-        <div class="cell_60"><%= game.t2_score %></div>
-      </span>
-  
-  <% if game.event_status == "post-event" %>
-      <div class="cell_110">Final <%= link_to_remote "Recap",
-           :url => {:controller => "article", :action => "event_recap"},
-           :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
-      </div>
-  <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
-      sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)
-      state = Event.get_event_state(game.event_id, sport.full_name)
-  
-  %>
-      <div class="cell_60">
-        <%= state %>
-      </div>
-  <% end %>
-
-    </div> <!-- close <row> -->
 <%    
     end # close games loop
     if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
 %>
-     <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>" class="row">
-        <div class="cell_60" style="font-size: .75em; float: left; text-align: right">
+    <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
+     <li style="height: 20px">
+        <span class="clps05col">
           <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
-         </div>
-      </div>
+        </span>
+      </li>
+    </div>
 <% end %>
     </div> <!-- close last <hide_#> -->
+  </ul>
 <%
   end   # close leagues loop
 %>
 
-<div class="row">&nbsp;</div>
+<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();"><a href="*" name="scroll-dwn" class="dwn"></a></div>
+
+<%=
+  javascript_tag "
+      Event.observe($('#{@drop_id}_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', -5));
+      Event.observe($('#{@drop_id}_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', 5));"
+  
+%>
 
 

@@ -4,10 +4,12 @@
   <h1 name="section-title"><%= @drop_title %></h1>
   <h2><a href="*" name="all-tagged-teams">All</a>&nbsp;/&nbsp;
   <a href="*" name="select-tagged-team">Tagged</a>&nbsp;/&nbsp;
-  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expand_collapse_target('<%= @drop_id %>');">Expand</a></h2>
+  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expandCollapseTarget('<%= @drop_id %>');">Expand</a></h2>
 </div>
 
-<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="scroll-up" class="up"></a></div>
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-up" class="up" onclick="jumpToTop('<%= @drop_id %>_content')" title="Click to jump to top"></a>
+</div>
 
 <%
   @leagues.size.times do |@i|  
@@ -35,48 +37,8 @@
       @j += 1
 %>
     
-    
-    
-    
-    <%
-      if ( @j == 0 ) then
-%>
-        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
-<%    
-      elsif (@j % 12) == 0
-%>
-        </div> <!-- close <hide_#> -->
-        <div id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
-          <li style="height: 20px">
-            
-            <% if @j != 12 then %>
-            <span class="clps05col">
-              <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
-            </span>
-            <% end %>
-
-            <span class="clps05col">
-              <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
-            </span>
-            
-          </li>
-        </div>
-        
-        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none">
-<%
-      end
-%>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <%= render :partial => "draggables/partials/more_less" %>
+  
     <li>
       <span class="clps05col clps"><%= game.start_date_time.strftime("%a, %m/%d") %><br/><%= game.start_date_time.strftime("%I:%M%P") %></span>
       <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
@@ -113,7 +75,9 @@
 %>
 
 
-<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();"><a href="*" name="scroll-dwn" class="dwn"></a></div>
+<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-dwn" class="dwn" onclick="jumpToBottom('<%= @drop_id %>_content')" title="Click to jump to bottom"></a>
+</div>
 
 <%=
   javascript_tag "

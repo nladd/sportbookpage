@@ -1,6 +1,6 @@
 
   <div id="header">
-    <a href="#" class="expanded"></a>
+    <a id="plus_minus_fanclub" href="javascript:void(0);" class="expanded" onclick="$('plus_minus_fanclub').toggleClassName('expanded'); $('plus_minus_fanclub').toggleClassName('collapsed'); $('fanclub_content').toggle();"></a>
     <h1>Fanclub</h1>
   </div>
   
@@ -10,8 +10,8 @@
     <div class="clear"></div>
   </div>
   
-  <div class="scroll-up"><a href="*" name="fanclub-scroll-up"></a></div>
-  
+  <div id="fanclub_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-up"></a></div>
+  <ul id="fanclub_content">
 <%
   xml_path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
   parser = XML::Parser.file(xml_path)
@@ -34,20 +34,25 @@
     end
     cgi_name = CGI.escape(friend.content)
 %>
-        
-  <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
-    
-    <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
-      <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
-      <a href="javascript:void(0)" name="headshot" onclick="$('form_<%= friend_id %>').submit();"><img src="<%= img_path %>" class="headshot" /></a>
-      <a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();"><%= friend.content %></a><%= status %>
-    </form>
-    
-    <div class="clear"></div>
-  </li>
+  <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
+    <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
+    <a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();">
+      <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
+        <img src="<%= img_path %>" class="headshot" />
+        <p><%= friend.content %><br/><%= status %></p>
+        <div class="clear"></div>
+      </li>
+    </a>
+  </form>
+  
      
 <% end %>
-     
-  <div class="scroll-down"><a href="*" name="fanclub-scroll-down"></a></div>
+  </ul>
+  <div id="fanclub_scroll-down" class="scroll-down" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-down"></a></div>
 
-
+<%=
+  javascript_tag "
+      Event.observe($('fanclub_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('fanclub_content'), 'fanclub_content', -5));
+      Event.observe($('fanclub_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('fanclub_content'), 'fanclub_content', 5));"
+  
+%>

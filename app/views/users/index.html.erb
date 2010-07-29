@@ -62,8 +62,8 @@
             %>
                 
             <!-- target 02 -->
-            <span id="target02" class="collapsed" name="target02">                    
-              <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_2}&drop_id=target02&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+            <span id="target02" class="collapsed" name="target02">
+              <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_2}&drop_id=target02&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
             </span>
             
             <%= drop_receiving_element('target02',

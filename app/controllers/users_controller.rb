@@ -237,7 +237,7 @@ class UsersController < ApplicationController
       
       write_comment_xml(@author, @user.id)
       
-      render(:update) { |page| page.replace_html('chalk_board', :partial => 'users/partials/chalk_board') }
+      render(:update) { |page| page.replace_html('chalkboard', :partial => 'users/partials/chalk_board') }
  
     end
     
@@ -295,6 +295,7 @@ private
 
     new_comment << from_node = XML::Node.new('from')
     from_node << submitter.first_name + " " + submitter.last_name
+    from_node['id'] = submitter.id
     new_comment << time_node = XML::Node.new('time')
     time_node << hour.to_s + ":" + minute + ( time.hour < 12 ? "am" : "pm" )
     new_comment << date_node = XML::Node.new('date')

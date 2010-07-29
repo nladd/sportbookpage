@@ -1,12 +1,25 @@
 
   <div id="header">
-    <a href="#" class="expanded"></a>
+    <a id="plus_minus_chalkboard" href="javascript:void(0);" class="expanded" onclick="$('plus_minus_chalkboard ').toggleClassName('expanded'); $('plus_minus_chalkboard').toggleClassName('collapsed'); $('chalkboard_content').toggle();"></a>
     <h1>Chalkboard</h1>
-    <h2><a href="#" name="edit-chalkboard">Edit</a></h2>
+    <% if !session[:visiting_id].blank? %>
+    <h2><a href="#" name="edit-chalkboard" onclick="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';">Comment</a></h2>
+    <% end %>
   </div>
+  
+  <div class="add_comment_text_box" id="add_comment" style="display:none">
+    <%= text_area_tag('comment', nil, {:style => 'width: 175px;height: 50px;', :value => '', :id => "user_comment"}) %>
+    
+   <h2><%= link_to_remote "Chalk It", 
+      {:url =>  { :controller => "users", :action => "submit_comment" },
+      :with => "'comment=' + encodeURIComponent($('user_comment').value)" },
+      { :onclick => "Effect.toggle('add_comment', 'appear', {duration: .6}); " } %></h2>
+  </div>
+  <div class="clear"></div>
           
-  <div class="scroll-up"><a href="*" name="fanclub-scroll-up"></a></div>
+  <div id="chalkboard_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-up"></a></div>
           
+  <ul id="chalkboard_content">
 <%
   path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard"
   parser = XML::Parser.file(path)
@@ -14,21 +27,30 @@
   comments = profile.find('//root/comment')
   (comments.length - 1).downto(0) do |i|
     comment = comments[i]
+    img_path = "/users/#{comment.find('from').first['id']}/#{comment.find('from').first['id']}_thumbnail.png"
+    text = CGI.unescape(comment.find('text').first.content)
 %>
           
   <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
-    <!--<a href="*" name="headshot"><img src="#" class="headshot" /></a>-->
-    At <%=h CGI.unescape(comment.find('time').first.content) %>
-    <%=h CGI.unescape(comment.find('date').first.content) %><br/>
-    <%=h CGI.unescape(comment.find('from').first.content) %> wrote:<br/>
-    <a href="#" name="comments"><% text = CGI.unescape(comment.find('text').first.content) %><%= text.gsub(/\n/, '<br/>') %></a>
+    <a href="javascript:void(0);" name="headshot"><img src="<%= img_path %>" class="headshot" /></a>
+    <p><%= text.gsub(/\n/, '<br/>') %></p>
+    <em>Posted by <a href="*" name="friend"><%= CGI.unescape(comment.find('from').first.content) %></a> on <%= CGI.unescape(comment.find('date').first.content) + " " + CGI.unescape(comment.find('time').first.content) %>.
+    <br/><a href="*" name="reply">Reply</a> | <a href="*" name="edit">Delete</a></em>
     <div class="clear"></div>
   </li>
   
 <% end %>
   
-  <div class="scroll-down"><a href="*" name="fanclub-scroll-down"></a></div>
+  <div id="chalkboard_scroll-down" class="scroll-down" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-down"></a></div>
 
+  </ul>
+
+<%=
+  javascript_tag "
+      Event.observe($('chalkboard_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('chalkboard_content'), 'chalkboard_content', -5));
+      Event.observe($('chalkboard_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('chalkboard_content'), 'chalkboard_content', 5));"
+  
+%>
 
 
 

@@ -125,7 +125,7 @@ class Event < ActiveRecord::Base
                     :select => "event_states.*",
                     :joins => "INNER JOIN baseball_event_states AS event_states ON event_states.event_id = events.id AND event_states.context = 'event-play'")
       
-      ret = "I" + state.inning_value.to_s + " " + state.inning_half.to_s + " " + state.strikes.to_s + "-" + state.balls.to_s + "-" + state.outs.to_s
+      ret = "I" + state.inning_value.to_s + " " + state.inning_half.to_s
       
     elsif (sport == 'basketball')
       state = Event.find(

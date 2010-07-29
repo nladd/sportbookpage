@@ -454,11 +454,7 @@ class DraggablesController < ApplicationController
     @partial_path = "draggables/" + @level + "/" + choose_template + "scoreboard" 
 
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", @drop_title)
-                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.call('createGradient', @drop_id + "_frame")
-                page.call("drawCurvyCorners")
     }
 
   end

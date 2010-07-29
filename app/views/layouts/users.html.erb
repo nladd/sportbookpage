@@ -7,7 +7,7 @@
   <title>sportbookpage.com - Home</title>
   
   <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag "drop_down_menu", "crawler" %>
+  <%= javascript_include_tag "drop_down_menu", "crawler", "targetFunctions" %>
 
   
   <%= stylesheet_link_tag 'common/main' %>
@@ -74,7 +74,7 @@
 	<!-- User info -->
 	<div id="user-info">
 	  <a href="*" name="headshot"><img src="/images/css/headshot-none-47x47.jpg" alt="headshot" class="headshot" /></a>
-	  <h1><a href="*" name="edit">First Name Last Name</a></h1>
+	  <h1><a href="*" name="edit"><%= @user.first_name + " " + @user.last_name %></a></h1>
 	  <h1 class="clear">
 	    <a href="*" name="help">Hotstreak</a>:
 	    <span class="win">128</span>/<span class="loss">220</span><span class="winpct">(.37)</span>
@@ -105,19 +105,17 @@
     <!-- Right Column -->
     <div id="column-right">
       <div id="ad-right"><img src="/images/css/advertisement-rightcolumn.jpg" alt="Advertiser" name="ad-right"/></div>
+      
       <!-- Fanclub -->
-      <ul>
-	<span name="Fanclub">
-	  <%= render :partial => "layouts/fan_club" %>
-	</span>
-      </ul>
+      <div class="fanclub">
+	<%= render :partial => "layouts/fan_club" %>
+      </div>
+      
 
       <!-- Chalkboard -->
-      <ul>
-	<span name="Chalkboard">
-	  <%= render :partial => 'users/partials/chalk_board' %>
-	</span>
-      </ul>
+      <div id="chalkboard" class="chalkboard">
+	<%= render :partial => 'users/partials/chalk_board' %>
+      </div>
             
     </div><!-- End right column -->
     

@@ -1,4 +1,4 @@
- <%
+<%
       if ( @j == 0 ) then
 %>
         <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
@@ -22,7 +22,8 @@
           </li>
         </div>
         
-        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none">
+        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
 <%
       end
 %>
+    
