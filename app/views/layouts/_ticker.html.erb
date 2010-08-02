@@ -34,11 +34,11 @@
   <%
       end
       scores.each do |score|
-        style = ""
-        if (Team.team_is_in_profile(league.affiliation_id, score.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, score.t2_id, @user.id))
-          style = "color: blue"
-          
-        end
+        #uncomment this to have the user's tagged teams highlighted in the ticker
+        #style = ""
+        #if (Team.team_is_in_profile(league.affiliation_id, score.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, score.t2_id, @user.id))
+        #  style = "color: blue"
+        #end
   %>
         <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score}" %></span>
   <%
@@ -49,11 +49,11 @@
       if games.size != 0 then
       
         games.each do |game|
-          style = ""
-          if (Team.team_is_in_profile(league.affiliation_id, game.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, game.t2_id, @user.id))
-            style = "color: blue"
-            
-          end
+          #uncomment this to have the user's tagged teams highlighted in the ticker
+          #style = ""
+          #if (Team.team_is_in_profile(league.affiliation_id, game.t1_id, @user.id) || Team.team_is_in_profile(league.affiliation_id, game.t2_id, @user.id))
+          #  style = "color: blue"
+          #end
   %>
         <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%m/%d %I:%M%P')}" %></span>
   <%

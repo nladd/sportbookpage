@@ -16,46 +16,9 @@ require 'digest/sha1'
 
 class UserPreferencesController < ApplicationController
  
-  layout :choose_layout
-  skip_before_filter :authorize, :all
+  layout "users"
+  skip_before_filter :authorize, :only => [:reset_password, :get_security_question, :verify_security_answer, :signup]
 
-  #############################################################################
-  # Description:
-  #     Save a new user's account details entered on the previous form. The user
-  #     may not proceed unless all required details were filled out. If a new user
-  #     is successfully created, the user is directed to the profile info page
-  #
-  #############################################################################
-  #def create_account
-  #      
-  #  save_successful = false
-  #  match = false
-  #  
-  #  @user = User.find(session[:user_id])
-  #  @user.errors.clear
-  #  
-  #  if request.post? then
-  #    if params[:password] == params[:password_confirmation] then
-  #      match = true
-  #      save_successful = save_user
-  #    else
-  #      @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
-  #    end
-  #  end
-  #  
-  #  #store the user's account details from the previous form  
-  #  if (save_successful && match) then
-  #    session[:user_id] = @user.id
-  #    session[:user] = nil
-  #    redirect_to home_url
-  #  else
-  #    session[:user] = @user
-  #    respond_to do |format|
-  #      format.html # create_account.html.erb
-  #    end
-  #  end
-  #  
-  #end
 
   #############################################################################
   # Description:
@@ -63,9 +26,7 @@ class UserPreferencesController < ApplicationController
   #
   #############################################################################
   def reset_password
-
     render :template => "login/reset_password"
-    
   end
   
   
@@ -145,308 +106,155 @@ class UserPreferencesController < ApplicationController
         
       }
   end
+ 
   
-
-
   #############################################################################
   # Description:
-  #   Render the page for a user to edit their account information
+  #   Sign up a new user
   #
   #############################################################################
-  def edit_account
-  
-    @user = User.find(session[:user_id])
-  
-    @show_password = false
-    save_successful = false
-    match = false
-
-    @user.errors.clear
+  def signup
     
-    if request.post? then
-      if (params[:old_password] != "")
-
-        if( User.encrypted_field(params[:old_password], @user.salt) != @user.hashed_password )
-          logger.info "111111111"
-          @user.errors.add(:old_password, "Old password was not valid")
-          @show_password = true
-        else
-          if params[:password] == params[:password_confirmation] then
-            logger.info "222222222"
-            match = true
-            save_successful = save_user(true)
-          else
-            logger.info "3333333"
-            @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
-            @show_password = true
-          end
-          
-        end
-      else
-        logger.info "44444444"
-        match = true
-        save_successful = save_user(false)
-      end
-      
-      
-      logger.info "save_successful = #{save_successful}"
-      logger.info "match = #{match}"
-      
-      #store the user's account details from the previous form  
-      if (save_successful && match) then
-        flash[:notice] = "Account Information Saved!"
-        @show_password = false
-        @user = User.find(session[:user_id])
-      else
-        @show_password = true
-        flash[:notice] = "Account Information Failed to Save"
-      end      
-      
-    end
-
-
-    # define the user path within the site
-    user_path = ["Home", "Account Settings", "Edit Account"] 
-    user_path_urls = ["/home", "javascript:void(0);", "/edit/account"] 
-    @path_html = build_path(user_path, user_path_urls)
-    
-    respond_to do |format|
-      format.html
-    end
-  end
-
-  #############################################################################
-  # Description:
-  #   Save a user's profile information entered on the previous form. The user
-  #   may not proceed unless all required fields were filled out. If the profile 
-  #   creation is successful, the user is directed to the sports and teams pages
-  #
-  #############################################################################
-  def create_profile
-    
-    begin    
-      @user = User.find(session[:user_id])
-    rescue 
-      logger.error "Couldn't find user with id: " + session[:user_id].to_s
-      return
+    #if the session[:user_id] variable doesn't exist, then this is a user's first attempt to register,
+    # so create a new user. If it does exist, then this user already tried to register and failed validation
+    #so delete the previous User object that was created on the failed registreation
+    if (!session[:user].blank?)
+      session[:user].delete
     end
     
-    @user.errors.clear
-    save_successful = false #boolean indicator if the @user object was able to be persisted
-    match = false   #boolean indicator if the password was correctly confirmed
-    valid = false   #boolean indicator if hometown and sex were provided and birthdate is of age
-
-    if request.post? then
+    @user = User.new
     
-      if params[:sex] != nil then
-        @user.sex = params[:sex]
-      else
-        @user.errors.add(:sex, "Sex is a required field")
-        valid = false
-      end
+    #will be set to true if a user's profile saves successfully without validation errors
+    @saved = false
   
-      date = params[:date]
-      #don't let newborn babies register
-      if ((date[:year]).to_i >= (Time.now.year - 4))
-        @user.errors.add(:birthday, "Children that are " + (Time.now.year- (date[:year]).to_i).to_s + " years old are not allowed to register")
-      else
-        @user.birthday = date[:month] + "/" + date[:day] + "/" + date[:year]
-        valid = true
-      end  
+    #if this is a post request, then the user wants to create a profile
+    if request.post?
       
-      profile = params[:profile]  
-      if profile["hometown"] != "" then
-        @user.hometown = profile["hometown"]
-      else
-        @user.errors.add(:hometown, "Hometown is a required field")
-        valid = false
-      end
-      
+      #clear any errors so they don't show up as false positives
+      @user.errors.clear
+
       if params[:password] == params[:password_confirmation] then
-        match = true
-        save_successful = save_user(true)
+        @saved = save_user(true)
       else
+        @saved = false
+        #save the user anyway to show validation errors
+        save_user(false)
         @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
       end
 
     end
     
-    if valid && save_successful && match then
-      #validation should have already been performed so this call is safe
-      #@user.save
+    if @saved
+      #create the user directories and setup the basic files
+      create_directories_and_files(@user)
+      # copy over the default profile images
+      `cp -f #{RAILS_ROOT}/public/images/default_profile_image.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}.png`
+      `cp -f #{RAILS_ROOT}/public/images/default_profile_image_thumbnail.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}_thumbnail.png`
+      #write the user's new profile
       write_profile(@user)
-      check_invitations(@user)
-      file = params[:photo]
-      if !file.blank? then 
-        save_profile_photo(file)
-      else
-        `cp #{RAILS_ROOT}/public/images/default_profile_image.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}.png`
-        `cp #{RAILS_ROOT}/public/images/default_profile_image_thumbnail.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}_thumbnail.png`
-        
-      end
-      session[:user] = nil
+      flash[:notice] = "Profile settings saved!"
+      
       session[:user_id] = @user.id
-      redirect_to home_url
+      session[:user] = nil
+      redirect_to :action => "preferences"
     else
       session[:user] = @user
-      respond_to do |format|
-        format.html # profile_info.html.erb
-      end
+      flash[:notice] = "Registration errors!"
+      redirect_to :login
     end
     
   end
   
+  
   #############################################################################
   # Description:
-  #   Render the page for a user to edit their profile information
+  #   Render the page for a user to edit their account preferences
   #
   #############################################################################
-  def edit_profile
-    session[:user] = nil
-
-    begin    
-      @user = User.find(session[:user_id])
-    rescue 
-      #TODO: Proper error handling
-      logger.error "Couldn't find user with id: " + session[:user_id].to_s
-      return
-    end
-     
-    @user.errors.clear
-    valid = false
-
-    if request.post? then
+  def preferences
+    
+    @user = User.find(session[:user_id])
       
-      profile = params[:profile]  
-      if profile["hometown"] != "" then
-        @user.hometown = profile["hometown"]
-        valid = true
+    #will be set to false if a user's profile fails to save successfully due to validation errors
+    @saved = true
+  
+    #if this is a post request, then the user wants to save their profile
+    #if it's not a post request the user just wants to view their profile
+    if request.post?
+      write_sports_and_teams(@user)
+      
+      #clear any errors so they don't show up as false positives
+      @user.errors.clear
+ 
+      #if a password hasn't been entered don't save the password
+      if (params[:password] == "********")
+        @saved = save_user(false)
       else
-        @user.errors.add(:hometown, "Hometown is a required field")
-      end
-
-      if valid then
-        #validation should have already been performed so this call is safe
-        @user.save(false)
-        write_profile(@user)
-        file = params[:photo]
-        if file != nil then 
-          save_profile_photo(file)
+        #if a password was entered verify that is matches the password confirmation
+        if params[:password] == params[:password_confirmation] then
+          @saved = save_user(true)
+        else
+          @saved = false
+          @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+          #save the user anyway so validation errors will show
+          save_user(false)
         end
-        
-        session[:user_id] = @user.id
-        flash[:notice] = "Profile information saved!"
+      end
+      
+      if @saved
+        write_profile(@user)
+        if params[:photo] != nil then
+          save_profile_photo(params[:photo])
+        end
+
+        flash[:notice] = "Profile settings saved!"
       else
-        flash[:notice] = "Profile Information Failed to Save"
+        flash[:notice] = "Unable to save profile"
       end  
 
     end    
     
-     # load the current profile settings as the default value to display
-    @currentValues = Hash.new
-             
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-    parser = XML::Parser.file(path)
-    profile = parser.parse
-    
-    PROFILE_KEYS.each do |key|
-      node = profile.find('//root/' + key)
+    # load the current profile settings as the default value to display
+    #@currentValues = Hash.new
+    #        
+    #path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+    #parser = XML::Parser.file(path)
+    #profile = parser.parse
+    #
+    #PROFILE_KEYS.each do |key|
+    #  node = profile.find('//root/' + key)
+    #  
+    #  if !(node.blank?)
+    #    @currentValues[key] = CGI.unescape(node[0].content)
+    #    if (node[0]['show'] == 'yes')
+    #      @currentValues['show_' + key] = true
+    #    else
+    #      @currentValues['show_' + key] = false
+    #    end
+    #    
+    #  end
       
-      if !(node.blank?)
-        @currentValues[key] = CGI.unescape(node[0].content)
-        if (node[0]['show'] == 'yes')
-          @currentValues['show_' + key] = true
-        else
-          @currentValues['show_' + key] = false
-        end
+    #end
         
-      end
-      
-    end
-    
-    # define the user path within the site
-    user_path = ["Home", "Account Settings", "Edit Profile"] 
-    user_path_urls = ["/home", "javascript:void(0);", "/edit/profile"] 
-    @path_html = build_path(user_path, user_path_urls)
-    
-    respond_to do |format|
-      format.html # profile_info.html.erb
-    end
-    
-  end
-    
-  
-  #############################################################################
-  # Description:
-  #   Save a user's sports and teams selections
-  #
-  #############################################################################
-  def create_sports_and_teams
-    
-    @user = User.new
-    
-    if request.post? then
-      @user.save_without_validation!
-      create_directories_and_files(@user)
-      write_sports_and_teams(@user)
-      session[:user] = @user
-      session[:user_id] = @user.id
-      redirect_to :action => "create_profile"
-    else
-      @pro_leagues = Affiliation.get_pro_leagues()
-     
-      @pro_teams = Array.new(@pro_leagues.size)
-      @pro_leagues.size.times do |i|
-        @pro_teams[i] = Affiliation.get_teams_by_league(@pro_leagues[i].affiliation_id, @pro_leagues[i].affiliation_key)
-      end
-      
-      @college_leagues = Affiliation.get_college_leagues()
-       
-      @college_conferences = Array.new(@college_leagues.size)
-      @college_teams = Array.new(@college_leagues.size)
-      
-      @college_conferences.size.times do |i|
-        @college_conferences[i] = Affiliation.get_conferences_by_league(@college_leagues[i].affiliation_id)
-        
-        @college_teams[i] = Array.new(@college_conferences[i].size)
-        
-        @college_conferences[i].size.times do |j|
-          
-          @college_teams[i][j] = Affiliation.get_teams_by_conference(@college_conferences[i][j].affiliation_id, @college_leagues[i].affiliation_key)
-        
-        end
-        
-      end
-      
-      
-      respond_to do |format|
-        format.html
-      end
-    end
-    
-  end
-  
-  #############################################################################
-  # Description:
-  #   Render the page for a user to edit their sports and teams selection.
-  #
-  #############################################################################
-  def edit_sports_and_teams
-  
-    @user = User.find(session[:user_id])
-  
-    if request.post?
-      write_sports_and_teams(@user)
-      
-      flash[:notice] = "Sports and teams selections saved!"
-      
-    end
-    
+    #get the professional leagues covered
     @pro_leagues = Affiliation.get_pro_leagues()
-     
+    
+    #allocate new arrays to store the divisions and teams for each league
+    @pro_divisions = Array.new(@pro_leagues.size)
     @pro_teams = Array.new(@pro_leagues.size)
+    
     @pro_leagues.size.times do |i|
-      @pro_teams[i] = Affiliation.get_teams_by_league(@pro_leagues[i].affiliation_id, @pro_leagues[i].affiliation_key)
+      #for each league, get the divisions of that league
+      @pro_divisions[i] = Affiliation.get_divisions_by_league(@pro_leagues[i].affiliation_id)
+      
+      #allocate an array to store the teams of a division
+      @pro_teams[i] = Array.new(@pro_divisions[i].size)
+      
+      @pro_divisions[i].size.times do |d|
+        #for each division in a league, get the teams of that division
+        @pro_teams[i][d] = Affiliation.get_teams_by_division(@pro_divisions[i][d].affiliation_id, @pro_leagues[i].affiliation_key)
+      end
+      
     end
     
     
@@ -469,17 +277,14 @@ class UserPreferencesController < ApplicationController
     end
     
     
-    
     # define the user path within the site
-    user_path = ["Home", "Account Settings", "Edit Sports and Teams"] 
-    user_path_urls = ["/home", "javascript:void(0);", "/edit/sports_and_teams"] 
-    @path_html = build_path(user_path, user_path_urls)
+    #user_path = ["Home", "Account Settings", "Edit Sports and Teams"] 
+    #user_path_urls = ["/home", "javascript:void(0);", "/edit/sports_and_teams"] 
+    #@path_html = build_path(user_path, user_path_urls)
 
- 
     respond_to do |format|
       format.html #edit_sports_and_teams.html.erb
     end
-
     
   end
   
@@ -492,37 +297,15 @@ class UserPreferencesController < ApplicationController
   def delete_photo
     @user = User.find(session[:user_id])
   
-    `cp #{RAILS_ROOT}/public/images/default_profile_image.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}.png`
-    `cp #{RAILS_ROOT}/public/images/default_profile_image_thumbnail.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}_thumbnail.png`
+    `cp -f #{RAILS_ROOT}/public/images/default_profile_image.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}.png`
+    `cp -f #{RAILS_ROOT}/public/images/default_profile_image_thumbnail.png #{RAILS_ROOT}/public/users/#{@user.id}/#{@user.id}_thumbnail.png`
     
-    # load the current profile settings as the default value to display
-    @currentValues = Hash.new
-             
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-    parser = XML::Parser.file(path)
-    profile = parser.parse
+    logger.info "<img src=\"/users/#{@user.id}/#{@user.id}.png\" alt=\"headshot\" name=\"headshot-none\" class=\"headshot\" />"
     
-    PROFILE_KEYS.each do |key|
-      node = profile.find('//root/' + key)
-      
-      if !(node.blank?)
-        @currentValues[key] = CGI.unescape(node[0].content)
-        if (node[0]['show'] == 'yes')
-          @currentValues['show_' + key] = true
-        else
-          @currentValues['show_' + key] = false
-        end
-        
-      end
-      
-    end
-    
-     # define the user path within the site
-    user_path = ["Home", "Account Settings", "Edit Profile"] 
-    user_path_urls = ["/home", "javascript:void(0);", "/edit/profile"] 
-    @path_html = build_path(user_path, user_path_urls)
-    
-    render(:update) {|page| page.replace_html('photo_cell', "No photo<br/>uploaded" ) }
+    render(:update) {|page|
+      page.replace_html('photo_area', "<img src=\"/users/#{@user.id}/#{@user.id}.png\" alt=\"headshot\" name=\"headshot-none\" class=\"headshot\" />" )
+      page.replace_html('left-column-photo', "<img src=\"/users/#{@user.id}/#{@user.id}_thumbnail.png\" alt=\"headshot\" name=\"headshot-none\" class=\"headshot\" />" )
+    }
   end
 
 
@@ -666,8 +449,13 @@ private
     @user.email = params[:email]
     @user.question_1 = params[:question_1]
     @user.answer_1 = params[:answer_1]
+    @user.hometown = params[:hometown]
+    @user.state = params[:state][:state]
     #@user.question_2 = params[:question_2]
     #@user.answer_2 = params[:answer_2]
+    date = params[:date]
+    @user.birthday = date[:month] + "/" + date[:day] + "/" + date[:year]
+    @user.sex = params[:sex]
     if (save_password)
       @user.password = params[:password]
     else
@@ -774,8 +562,8 @@ private
     dest_photo_t = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + "_thumbnail.png"
 
     # call imagemagick 'convert' utility
-    `convert #{@real_file.path} -resize x120 #{dest_photo}&`
-    `convert #{@real_file.path} -resize x50 #{dest_photo_t}&`
+    `convert #{@real_file.path} -resize 95X95 #{dest_photo}&`
+    `convert #{@real_file.path} -resize 47x47 #{dest_photo_t}&`
     
     FileUtils.chmod 0644, dest_photo
     FileUtils.chmod 0644, dest_photo_t
@@ -798,35 +586,39 @@ private
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
     root = profile.root
-    
-    profile_hash = params[:profile]
-    keys = profile_hash.keys
-    
+        
     show = params[:show]
     
-    #write the xml for a user's profile 
-    keys.each do |key| 
+    #for each node is a user's profile, if it doesn't exist, create it
+    # then rewrite it's contents
     
-      # get the node if it previously exists
-      node = profile.find('//root/' + key).first
+    # get the birthday node if it exists
+    node = profile.find('//root/birthday').first
+    # the node didn't exist so create the node, then write the value
+    root << node = XML::Node.new("birthday") if node.blank?
+    #write the value
+    node.content = CGI.escape(@user.birthday)
+    # determine if the user has elected to the item in their profile
+    show.blank? ? node['show'] = 'yes' : node['show'] = show["birthday"]
     
-      if node.blank?
-        # the node didn't exist so create the node, then write the value
-        root << node = XML::Node.new(key)
-      end
-      
-      node.content = CGI.escape(profile_hash[key])
-      
-      # determine if the user has elected to the item in their profile
-      if(show[key])
-        logger.info "show[" + key + "] = " + show[key]
-        node['show'] = 'yes'
-      else
-        node['show'] = 'no'
-      end
-      
-    end
+    # get the hometown node if it exists
+    node = profile.find('//root/hometown').first
+    # the node didn't exist so create the node, then write the value
+    root << node = XML::Node.new("hometown") if node.blank?
+    #write the value
+    node.content = CGI.escape(@user.hometown + ", " + @user.state)
+    # determine if the user has elected to the item in their profile
+    show.blank? ? node['show'] = 'yes' : node['show'] = show["hometown"]
     
+    # get the sex node if it exists
+    node = profile.find('//root/sex').first
+    # the node didn't exist so create the node, then write the value
+    root << node = XML::Node.new("sex") if node.blank?
+    #write the value
+    node.content = CGI.escape(@user.sex == "m" ? "Male" : "Female")
+    # determine if the user has elected to the item in their profile
+    show.blank? ? node['show'] = 'yes' : node['show'] = show["sex"]
+          
     profile.save(profile_path)
   end
   

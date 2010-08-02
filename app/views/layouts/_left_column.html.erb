@@ -1,0 +1,31 @@
+
+<!-- System Message -->         
+    <div id="system-message" class="hidden">
+      <img src="/images/css/advertisement-system.jpg" alt="SystemMessage" name="system-message" />
+	</div>
+	
+	<!-- User info -->
+	<div id="user-info">
+	  <a href="#" name="headshot" id="left-column-photo"><img src="/users/<%= @user.id %>/<%= @user.id %>_thumbnail.png" alt="headshot" class="headshot" /></a>
+	  <h1><a href="*" name="edit"><%= @user.first_name + " " + @user.last_name %></a></h1>
+	  <h1 class="clear">
+	    <a href="*" name="help">Hotstreak</a>:
+	    <span class="win">128</span>/<span class="loss">220</span><span class="winpct">(.37)</span>
+          </h1>
+	  <div class="clear"></div>
+	</div>
+	  
+	<!-- My Tagged Teams -->        
+	<div id="header">
+	  <h1>My Tagged Teams</h1>
+          <h2><a href="/edit/sports_and_teams" name="tagged-teams-edit" title="Edit My Teams">Edit</a></h2>
+        </div>
+   
+	<%= render :partial => "layouts/menus" %>
+      
+	<!-- left column floating advertisement -->
+	<div id="ad-left-column">
+	  <img src="/images/css/advertisement-leftcolumn.jpg" alt="Advertiser" />
+	</div>
+	
+	<div class="clear"></div>      

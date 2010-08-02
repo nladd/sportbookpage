@@ -1,41 +1,43 @@
 
+<%= render :partial => "draggables/partials/header" %>
+
+  <ul id="<%= @drop_id %>_content">
+
 <%
   @leagues.size.times do |i|
 %>
-
-<div id="<%= @drop_id %>_headlines_<%= i.to_s %>" class="<%= 'tall_' if ( @drop_id == 'drop_2' || @drop_id == 'drop_3' ) %>headlines">
-
-  <div class="row_title" align="center">
-    <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient">
-      <%= @leagues[i].full_name %>
-    </div>
-  </div>
   
+   <li class="subhead"><%= @leagues[i].abbreviation %> Top Stories</li>
+   
 <%
     @articles[i].size.times do |a|
 %>
 
-
-    <%= link_to_remote @titles[i][a],
+    <li>
+      <h1>
+        <%= link_to_remote @titles[i][a],
            :url => {:controller => "article", :action => "article"},
            :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[i][a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
-    %>
-    <br/>
-    <%= @dates[i][a].strftime("%x %I:%M%p") %>
-    <br/>
-    <%= @abstracts[i][a] %>
-  
-    <br/>
-    <br/>
+        %>
+      </h1>
+      <p><!--<%= @dates[i][a].strftime("%x %I:%M%p") %>--><%= @abstracts[i][a] %></p>
+      <em>
+        <%= link_to_remote "Read more",
+           :url => {:controller => "article", :action => "article"},
+           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[i][a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+        %>
+      </em>
+    </li>
   
 <%
-    end  #close articles loop 
-%>
-</div>
-<%
+    end  #close articles loop
+    
   end  #close leagues loop
 %>
 
+  </ul>
+
+<!--
 <div class="row">
 <%
     @leagues.size.times do |i|
@@ -46,5 +48,8 @@
 <%  end %>
 </div>
 
-<%= javascript_tag "start_slideshow(#{@leagues.size}, '#{@drop_id}');" %>
+<%# javascript_tag "start_slideshow(#{@leagues.size}, '#{@drop_id}');" %>
 
+-->
+
+<%= render :partial => "draggables/partials/footer" %>

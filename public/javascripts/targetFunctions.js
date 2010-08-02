@@ -125,6 +125,65 @@ function expandCollapseHiddenCells(dropId, moreLessId) {
 
 
 /******************************************************************************
+ * Expand and collapse cells that are originally hidden, but has since become visible.
+ *
+*******************************************************************************/
+function expandCollapseCells(dropId) {
+  
+  var newWidth = 0;  //the newWidth of the expanded/collapsed content
+  var c = 0;  //counter
+  
+  //target is shrunk, so shrink all expanded hidden cells
+  if ($(dropId).hasClassName('collapsed')) {
+    
+    var cells = $(dropId).select('span.expn');
+    
+    //shrink each cell
+    for (c = 0; c < cells.length; c++) {
+      
+      if ($(cells[c]).getWidth() != 0) {
+        newWidth = (($(cells[c]).getWidth() - 7) / 2);
+      }
+      
+      new Effect.Morph(cells[c], {
+        style: 'width:' + newWidth + 'px;',
+        duration: 1.0
+      });
+      
+      $(cells[c]).addClassName('clps');
+      $(cells[c]).removeClassName('expn');
+    }
+
+    $(dropId + 'ToggleText').innerHTML = 'Expand';
+  }
+    
+  //target is expanded so expand all shrunk cells
+  if ($(dropId).hasClassName('expanded')) {
+
+    var cells = $(dropId).select('span.clps');
+  
+    for (c = 0; c < cells.length; c++) {
+      
+      if ($(cells[c]).getWidth() != 0) {
+        newWidth = (($(cells[c]).getWidth() * 2) + 7);
+      }
+      
+      new Effect.Morph(cells[c], {
+        style: 'width:' + newWidth + 'px;',
+        duration: 1.0
+      });
+      
+      $(cells[c]).removeClassName('clps');
+      $(cells[c]).addClassName('expn');
+    }
+    
+    $(dropId + 'ToggleText').innerHTML = 'Collapse';
+  }
+  
+}
+
+
+/******************************************************************************
  * Scroll a target on mouse hover over the scroll images
  ******************************************************************************/
 function scrollDropArea(event) {
@@ -180,7 +239,7 @@ function jumpToTop(id) {
 }
 
 function jumpToBottom(id) {
-    $(id).scrollTop = $(id).getHeight();
+    $(id).scrollTop = 100000;
 }
 
 /******************************************************************************

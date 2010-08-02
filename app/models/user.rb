@@ -2,13 +2,14 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  validates_uniqueness_of :email, :message => "Specified e-mail address is already registered with sportbookpage.com"
-
+  validates_uniqueness_of :email, :message => "E-mail address is already registered"
   validates_presence_of :first_name, :message => "First name is a required field"
   validates_presence_of :last_name, :message => "Last name is a required field"
   validates_presence_of :sex, :message => "Sex is a required field"
   validates_presence_of :question_1, :message => "You must supply a security question"
   validates_presence_of :answer_1, :message => "You must supply an answer to your security question"
+  validates_presence_of :hometown, :message => "Hometown is a required field."
+  validates_presence_of :state, :message => "State is a required field."
   validate :valid_password
   validate :valid_email
   validate :sportbucks_is_positive
@@ -75,7 +76,7 @@ private
   def valid_password
     if(@password != self.hashed_password)
       if (@password.blank? || @password.length < 6 || @password.length > 20)
-        errors.add(:password, "You're password must be between 6 and 20 characters long.")
+        errors.add(:password, "Your password must be between 6 and 20 characters long.")
       end
     end
   end

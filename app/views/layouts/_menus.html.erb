@@ -14,7 +14,6 @@
      </div>
      
      <div id="my_<%= sport_attr %>" style="display: none" >
-       <div>
        <li class="even"><a href="/league/<%= sport['id'] %>" name="all-teams">League</a></li>
        <%
          odd_even = 0
@@ -25,21 +24,11 @@
          <a href="/team/<%= team['id'] %>" name="team-name" onclick="make_selected('team_<%= team['id'] %>')"><%= team.content %></a>
        </li>
        <% end %>
-       </div>
      </div>
    </span>
    <% end # close sports loop
    
-   %>
-   
-   <span>
-     <div id="header">
-       <a href="javascript:void(0);"></a>
-       <h1>NCAA</h1>
-     </div>
-   </span>
-   
-   <%
+      #now loop through the user's college sports
       sports = profile.find('//root/sports/collegeSports/sport')
       sports.each do |sport| 
        sport_attr = sport.attributes['sport']

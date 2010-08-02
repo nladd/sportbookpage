@@ -7,14 +7,10 @@
   <title>sportbookpage.com - Registration</title>
   
   <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag "curvycorners", "gradient", "gradientText" %>
-  
+  <%= javascript_include_tag "drop_down_menu", "crawler", "targetFunctions" %>
 
-<![if !(IE) ]>
-  <%= stylesheet_link_tag 'common/common' %>
-<![endif]>
   
-  <%= stylesheet_link_tag 'user_preferences/user_preferences' %>
+  <%= stylesheet_link_tag 'common/main' %>
   
   <%= javascript_tag "Ajax.Responders.register({
     onCreate: function(){ document.body.style.cursor = 'progress'},

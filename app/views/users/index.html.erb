@@ -1,213 +1,114 @@
 
-  <!-- center column -->
-  <div id="column-center" class="floatleft">
-    <div id="top-nav">
-      <ul>
-        <li class="home"><a href="/home" name="home"></a></li>
-        <li class="main">
-          <%= link_to_remote "Invite Fans",
-                      {:url => {:controller => "users", :action => "invite_friend"},
-                      :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " },
-                      {:name => "invite-friends"}
-            %>
-        </li>
-        <li class="main"><a href="/edit/sports_and_teams" name="change-teams">Change Teams</a></li>
-        <li class="main">
-          <%= link_to_remote "Save Layout", 
-                      {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
-                      {:name => "save-layout"}
+  <div id="top-nav">
+    <ul>
+      <li class="home"><a href="/home" name="home"></a></li>
+      <li class="main">
+        <%= link_to_remote "Invite Fans",
+                    {:url => {:controller => "users", :action => "invite_friend"},
+                    :complete => "Effect.toggle('pop-up', 'appear', {duration: .5})" },
+                    {:name => "invite-friends"}
           %>
-        </li>
-        <li class="main"><a href="*" name="settings">Settings</a></li>
-        <li class="main"><%= link_to "Logout", {:controller => "login", :action => "logout"}, {:name => "logout"} %></li>
-        <li class="help"><a href="logged-in-general.html" name="help"></a></li>
-      </ul>
-      
-      <div class="clear"></div>
-      
-    </div>
-      <div id="draggables">
-        <div id="header">
-          <ul>
-            <li class="help"><a href="*" name="draggables-help"></a></li>
-            <li class="head">My Draggables <em name="system-message" style="margin:0 0 0 15px;">System Alert</em></li>
-            <li class="save"><a href="*" name="draggables-save" title="Save My Draggables">Save Draggables</a></li>
-          </ul>
+      </li>
+      <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
+      <li class="main">
+        <%= link_to_remote "Save Layout", 
+                    {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
+                    {:name => "save-layout"}
+        %>
+      </li>
+      <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
+      <li class="main"><a href="/logout">Logout</a></li>
+      <li class="help"><a href="logged-in-general.html" name="help"></a></li>
+    </ul>
     
-          <div class="clear"></div>
-        </div>
-        
-        <%= render :partial => 'draggables/' + @drag_n_drop %>
-        
-        
-            
-            
-        <!-- Targets -->            
-        <div id="target-holder">
-        
-            <!-- target 01 -->
-            <span id="target01" class="collapsed" name="target01">
-                <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_1}&drop_id=target01&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-            </span>
-            
-            <%= drop_receiving_element('target01',
-                  :accept   => 'drop_item',
-                  :hoverclass => "hover",
-                  :onDrop => "function(dragged, droppable){
-                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target01&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                    new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                    return false;
-                 }"
-               )
-            %>
-                
-            <!-- target 02 -->
-            <span id="target02" class="collapsed" name="target02">
-              <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_2}&drop_id=target02&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-            </span>
-            
-            <%= drop_receiving_element('target02',
-                  :accept   => 'drop_item',
-                  :hoverclass => "hover",
-                  :onDrop => "function(dragged, droppable){
-                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target02&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                    new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                    return false;
-                 }"
-               )
-            %>
-            
-            <!-- target 03 -->
-            <span id="target03" class="collapsed" name="target03">                     
-              <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_3}&drop_id=target03&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-            </span>
-      
-            <%= drop_receiving_element('target03',
-                  :accept   => 'drop_item',
-                  :hoverclass => "hover",
-                  :onDrop => "function(dragged, droppable){
-                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target03&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                    new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                    return false;
-                 }"
-               )
-            %>
-            
-       <!-- target 04 -->
-      <span id="target04" class="collapsed" name="target04">                
-        <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_4}&drop_id=target04&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-      </span>
-                
-      <%= drop_receiving_element('target04',
-            :accept   => 'drop_item',
-            :hoverclass => "hover",
-            :onDrop => "function(dragged, droppable){
-              new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target04&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-              new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-              return false;
-           }"
-         )
-      %>
-
-                
-                                
-        <div class="clear"></div>
-        </div>
-            <div class="clear"></div>    
-    </div><!-- End Targets -->
-
-    <%# sortable_element('target-holder', :tag => 'span', :only => ["expanded", "collapsed"], :overlap => 'horizontal', :constraint => false) %>
-
-   <div class="clear"></div>
-  </div><!-- End Center Column -->
-
-
-
-<!--    
-  <div class="drop_1_frame" id="drop_1_frame" onmouseout="stopScroll()">
-    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_1_title"></div>
-    <div id="drop_1_side_bar" class="side_bar"></div>
-    <div id="drop_1" class="drop_content">
-      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_1 + "&drop_id=drop_1&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-    </div>
+    <div class="clear"></div>
   </div>
--->  
-   <%#
-      javascript_tag "
-          //Event.observe($('scroll_top_1'), 'mouseover', scrollDropArea.bindAsEventListener($('scroll_top'), 'drop_1', -1));
-          //Event.observe($('scroll_top_1'), 'mousemove', scrollDropArea.bindAsEventListener($('scroll_top'), 'drop_1', -1));
-          //Event.observe($('scroll_bottom_1'), 'mouseover', scrollDropArea.bindAsEventListener($('scroll_bottom'), 'drop_1', 1));
-          //Event.observe($('scroll_bottom_1'), 'mousemove', scrollDropArea.bindAsEventListener($('scroll_bottom'), 'drop_1', 1));
-          Event.observe($('drop_1'), 'mouseover', scrollDropArea.bindAsEventListener($('drop_1'), 'drop_1'));
-          Event.observe($('drop_1'), 'mousemove', scrollDropArea.bindAsEventListener($('drop_1'), 'drop_1'));"
+  
+  <div id="draggables">
+    <div id="header">
+      <ul>
+        <li class="help"><a href="*" name="draggables-help"></a></li>
+        <li class="head">My Draggables <em name="system-message" style="margin:0 0 0 15px;">System Alert</em></li>
+        <li class="save"><a href="*" name="draggables-save" title="Save My Draggables">Save Draggables</a></li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+    
+    <!-- container for pop-up box to invite friends -->
+    <div id="pop-up" style="position:fixed; display: none"></div>
+    
+    <%= render :partial => 'draggables/' + @drag_n_drop %>
+          
+  <!-- Targets -->            
+  <div id="target-holder">
       
+    <!-- target 01 -->
+    <span id="target01" class="collapsed" name="target01">
+        <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_1}&drop_id=target01&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </span>
+          
+    <%= drop_receiving_element('target01',
+          :accept   => 'drop_item',
+          :hoverclass => "hover",
+          :onDrop => "function(dragged, droppable){
+            new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target01&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+            new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+            return false;
+         }"
+       )
+    %>
+              
+    <!-- target 02 -->
+    <span id="target02" class="collapsed" name="target02">
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_2}&drop_id=target02&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </span>
+    
+    <%= drop_receiving_element('target02',
+          :accept   => 'drop_item',
+          :hoverclass => "hover",
+          :onDrop => "function(dragged, droppable){
+            new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target02&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+            new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+            return false;
+         }"
+       )
     %>
     
-<%# drop_receiving_element('drop_1_frame',
-      :accept   => 'drop_item',
-      :hoverclass => "hover",
-      :onDrop => "function(dragged, droppable){
-                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_1&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                   return false;
-                 }"
-       )
-       %>
-<!--
-  <div class="drop_2_frame" id="drop_2_frame">
-    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_2_title"></div>
-    <div id="drop_2_side_bar" class="side_bar"></div>
-    <div id="drop_2" class="tall_drop_content">
-      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_2 + "&drop_id=drop_2&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-    </div>
-  </div>
--->  
-<%# drop_receiving_element('drop_2_frame',
-      :accept   => 'drop_item',
-      :hoverclass => "hover",
-      :onDrop => "function(dragged, droppable){
-                    new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_2&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                   return false;
-                   }"
-      )
-      %>
-<!--
-  <div class="drop_3_frame" id="drop_3_frame">
-    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_3_title"></div>
-    <div id="drop_3_side_bar" class="side_bar"></div>
-    <div id="drop_3" class="tall_drop_content">
-      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_3 + "&drop_id=drop_3&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-     </div>
-  </div>
--->
+    <!-- target 03 -->
+    <span id="target03" class="collapsed" name="target03">                     
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_3}&drop_id=target03&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </span>
 
-<%# drop_receiving_element('drop_3_frame',
-      :accept   => 'drop_item',
-      :hoverclass => "hover",
-      :onDrop => "function(dragged, droppable){
-                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_3&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                   return false;
-                   }"
-      )
-      %>
-<!--
-  <div class="drop_4_frame" id="drop_4_frame">
-    <div class="<%= DROP_TITLE_GRADIENT %> drop_title" id="drop_4_title"></div>
-    <div id="drop_4_side_bar" class="side_bar"></div>
-    <div id="drop_4" class="drop_content">
-      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=" + @drop_4 + "&drop_id=drop_4&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
-    </div>
-  </div>
--->  
-<%# drop_receiving_element('drop_4_frame',
-      :accept   => 'drop_item',
-      :hoverclass => "hover",
-      :onDrop => "function(dragged, droppable){
-                   new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=drop_4&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
-                   new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
-                   return false;
-                   }"
-      )
-      %>
+    <%= drop_receiving_element('target03',
+          :accept   => 'drop_item',
+          :hoverclass => "hover",
+          :onDrop => "function(dragged, droppable){
+            new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target03&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+            new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+            return false;
+         }"
+       )
+    %>
+          
+    <!-- target 04 -->
+    <span id="target04" class="collapsed" name="target04">                
+      <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_4}&drop_id=target04&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+    </span>
+              
+    <%= drop_receiving_element('target04',
+          :accept   => 'drop_item',
+          :hoverclass => "hover",
+          :onDrop => "function(dragged, droppable){
+            new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target04&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
+            new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
+            return false;
+         }"
+       )
+    %>
+                 
+    <div class="clear"></div>
+  </div><!-- End Targets -->
+
+
+  <div class="clear"></div>
+  </div><!-- End Draggables -->

@@ -1,19 +1,12 @@
 
-<div class="head">
-  <h1 name="section-title"><%= @drop_title %></h1>
-  <h2><a href="*" name="all-tagged-teams">All</a>&nbsp;/&nbsp;
-  <a href="*" name="select-tagged-team">Tagged</a>&nbsp;/&nbsp;
-  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expand_collapse_target('<%= @drop_id %>');">Expand</a></h2>
-</div>
+<%= render :partial => "draggables/partials/header" %>
 
-<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="scroll-up" class="up"></a></div>
-  
+  <ul id="<%= @drop_id %>_content">
 
 <%
   @leagues.size.times do |@i|
 %>
 
-  <ul id="<%= @drop_id %>_content">
     <li class="subhead"><%= @leagues[@i].abbreviation %> Scoreboard</li>
 
     <li>
@@ -40,12 +33,12 @@
 
     <li>
       <span class="clps06col clps"><%= game.start_date_time.strftime("%m/%d") %></span>
-      <span class="clps06col clps" style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
-      <span class="clps08col clps" style="<%= 'font-weight: bold' if game.t1_outcome == 'win' %>"><%= game.t1_score %></span>
-      <span class="clps06col clps" style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
-      <span class="clps08col clps" style="<%= 'font-weight: bold' if game.t2_outcome == 'win' %>"><%= game.t2_score %></span>
+      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t1_outcome.eql?("win") %>"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
+      <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t1_outcome.eql?("win") %>"><%= game.t1_score %></span>
+      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
+      <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><%= game.t2_score %></span>
       <% if game.event_status == "post-event" %>
-        <span class="clps06col clps">Final <%= link_to_remote "Recap",
+        <span class="clps06col clps"><%= link_to_remote "Recap",
              :url => {:controller => "article", :action => "event_recap"},
              :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
         </span>
@@ -74,18 +67,11 @@
     </div>
 <% end %>
     </div> <!-- close last <hide_#> -->
-  </ul>
 <%
   end   # close leagues loop
 %>
 
-<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();"><a href="*" name="scroll-dwn" class="dwn"></a></div>
+  </ul>
 
-<%=
-  javascript_tag "
-      Event.observe($('#{@drop_id}_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', -5));
-      Event.observe($('#{@drop_id}_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', 5));"
-  
-%>
-
+<%= render :partial => "draggables/partials/footer" %>
 

@@ -21,8 +21,9 @@ class ArticleController < ApplicationController
     
     @title = "No Title"
     @abstract = ""
+    @date = ""
     
-    document = DocumentContent.find_by_document_id(document_id)
+    document = Document.get_document(document_id)
     if (document.blank?) then
       @content = "Article not found. Please check back later"
     else
@@ -38,12 +39,11 @@ class ArticleController < ApplicationController
       end
       
       @content = article_xml.find_first('//sports-content/article/nitf/body/body.content').inner_xml
+      @date = document.date_time
     end
     
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", "")
-                page.replace_html (@drop_id, :partial => 'article')
-                page.replace_html("#{@drop_id}_side_bar", "")
+                page.replace_html(@drop_id, :partial => 'article')
     }
       
   end
@@ -85,13 +85,12 @@ class ArticleController < ApplicationController
         notes.remove!
       end    
       @content = article_xml.find_first('//sports-content/article/nitf/body/body.content').inner_xml
+      @date = datetime_to_time(preview.date_time)
     end
 
 
-    render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", "")                
-                page.replace_html (@drop_id, :partial => 'article')
-                page.replace_html("#{@drop_id}_side_bar", "")
+    render(:update) {|page|               
+                page.replace_html(@drop_id, :partial => 'article')
     }
       
   end
@@ -134,14 +133,13 @@ class ArticleController < ApplicationController
         notes.remove!
       end    
       @content = article_xml.find_first('//sports-content/article/nitf/body/body.content').inner_xml
+      @date = datetime_to_time(recap.date_time)
     end
     
 
     
     render(:update) {|page|
-                page.replace_html(@drop_id + "_title", "")
-                page.replace_html (@drop_id, :partial => 'article')
-                page.replace_html("#{@drop_id}_side_bar", "")
+                page.replace_html(@drop_id, :partial => 'article')
     }
       
   end

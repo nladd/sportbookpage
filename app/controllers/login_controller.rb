@@ -4,6 +4,14 @@ class LoginController < ApplicationController
 
    def index
   
+    # the session[:user] variable will be populated by the user_preferences.signup() method
+    # if new user registration failed
+    if session[:user].blank?
+      @user = User.new
+    else
+      @user = session[:user]
+    end
+  
     if request.post?
 
       user = User.authenticate(params[:email], params[:password])

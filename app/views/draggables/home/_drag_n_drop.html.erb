@@ -24,11 +24,6 @@
       <li class="drop_item" id="lines"><a href="#" name="draggable-btn-03">Lines</a></li>
       <li class="drop_item" id="headlines"><a href="#" name="draggable-btn-04">Headlines</a></li>
       <li class="drop_item" id="standings"><a href="#" name="draggable-btn-05">Standings</a></li>
-      <li class="drop_item" id="profile"><a href="#" name="draggable-btn-06">Profile</a></li>
-      <!--<li class="hidden"><a href="#" name="draggable-btn-07">Button 07</a></li>
-      <li class="hidden"><a href="*" name="draggable-btn-08">Button 08</a></li>
-      <li class="hidden"><a href="*" name="draggable-btn-09">Button 09</a></li>
-      <li class="hidden"><a href="*" name="draggable-btn-10">Button 10</a></li>-->
     </ul>
     <div class="clear"></div>
   </div>
@@ -36,40 +31,3 @@
 
   <%= sortable_element('draggables_list', :tag => 'li', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
 
-
-<!--<li class='drop_item' id='challenges'>
-      Challenges
-  </li> 
-
-  <li class='drop_item' id='friends'>
-      Fan Club
-  </li>
-  -->
-
-<%
-    #path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-    #parser = XML::Parser.file(path)
-    #profile = parser.parse
-    
-    #help_node = profile.find_first('//root/popupHelp')
-    
-    #if help_node && help_node['show'] == 'yes' then
-%>    
-
-    <%#
-        javascript_tag "
-            Event.observe($('scoreboard'), 'mousemove', ShowHelp.bindAsEventListener($('scoreboard'), 'Drag and drop this icon onto one of the boxes below to see the latest scores for your tagged teams'));
-            Event.observe($('schedule'), 'mousemove', ShowHelp.bindAsEventListener($('schedule'), 'Drag and drop this icon onto one of the boxes below to see upcoming schedules for your tagged teams'));
-            Event.observe($('lines'), 'mousemove', ShowHelp.bindAsEventListener($('lines'), 'Drag and drop this icon onto one of the boxes below to see the vegas lines for your tagged teams upcoming games'));
-            Event.observe($('headlines'), 'mousemove', ShowHelp.bindAsEventListener($('headlines'), 'Drag and drop this icon onto one of the boxes below to see the latest headlines for your tagged teams'));
-            Event.observe($('standings'), 'mousemove', ShowHelp.bindAsEventListener($('standings'), 'Drag and drop this icon onto one of the boxes below to see the latest standings for your tagged teams'));
-            Event.observe($('profile'), 'mousemove', ShowHelp.bindAsEventListener($('profile'), 'Drag and drop this icon onto one of the boxes below to see your profile'));
-        "
-    %>
-    <%# if show_playoffs %>
-        <%# javascript_tag "Event.observe($('playoffs'), 'mousemove', ShowHelp.bindAsEventListener($('playoffs'), 'Drag and drop this icon onto one of the boxes below to see the playoff matchups for your tagged teams that are in post season play'));" %>
-    <%# end %>
-
-<%
-    #end
-%>

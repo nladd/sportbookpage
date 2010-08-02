@@ -1,34 +1,26 @@
 
+<%= render :partial => "draggables/partials/header" %>
+
+  <ul id="<%= @drop_id %>_content">
 
 <%
   @leagues.size.times do |l|
 %>
   
-  <div class="row_title" align="center">
-      <div class="<%= ROW_TITLE_GRADIENT %> row_title_gradient"><%= @leagues[l].full_name %></div>
-  </div>
+  <li class="subhead"><%= @leagues[l].abbreviation %> Playoffs - Round <%= @rounds[l] %></li>
   
-  <div class="row">
+  <li class="colHead">
     <%
       @max_rounds[l].times do |r|
-        style = ""
-        if (r+1) == @rounds[l]
-          style = "background: #5380ff; color: white"
-        else
-          style = ""
-        end
-    
     %>
-      
-    <div class="cell_60">
       <%= link_to_remote "Round #{r+1}",
             {:url => { :controller => 'draggables', :action => 'route_action' },
             :with => "'level=#{@level}&amp;round=#{r+1}&amp;league_id=#{@leagues[l].affiliation_id}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" },
             {:style => style}
-      %>
-    </div>
+      %>&nbsp;&nbsp;
     <% end %>
-  </diV>
+  </li>
+  
   
   <%
     @conferences[l].size.times do |c|

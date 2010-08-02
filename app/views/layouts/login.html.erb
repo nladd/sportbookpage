@@ -4,34 +4,71 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>sportbookpage.com - Login</title>
+  <title>sportbookpage.com - Home</title>
+  
   <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag "crawler" %>
-<!--
+  <!--
 Text and/or Image Crawler Script ©2009 John Davenport Scheuer
 as first seen in http://www.dynamicdrive.com/forums/ username: jscheuer1
 This Notice Must Remain for Legal Use
 -->
+  <%= javascript_include_tag "drop_down_menu", "crawler", "targetFunctions" %>
+
   
-<!--[if IE]>
-  <%= stylesheet_link_tag 'common/ie_common' %>
-<![endif]-->
-<![if !(IE) ]>
-  <%= stylesheet_link_tag 'common/common' %>
-<![endif]>
+  <%= stylesheet_link_tag 'common/main' %>
+  
 
-<%= stylesheet_link_tag 'login/login', 'draggables/draggables', 'draggables/cell' %>
-
+  <%= javascript_tag "Ajax.Responders.register({
+    onCreate: function(){ document.body.style.cursor = 'progress'},
+    onComplete: function(){ document.body.style.cursor = 'default' }
+  });"
+  %>
+  
 </head>
-<body style="background: black">
+<body onload="MM_preloadImages('/images/css/btn-bg-grass-ovr.jpg','/images/css/btn-bg-clay-ovr.jpg','/images/css/btn-bg-ice-ovr.jpg','/images/css/btn-bg-wood-ovr.jpg','/images/css/btn-bg-asphalt-ovr.jpg','/images/css/btn-bg-mat-ovr.jpg')">
   
-  <!--<img src="/images/backgrounds/sbp_home_screenshot.png" alt="background" class="background" id="background"/>-->
+  <div id="content">
+    <div id="header">
+      <%= render :partial => "layouts/header" %>
+    </div><!-- End Header -->
+    
+    <div id="home">
+      <div id="column-left">
+          <h1>Customize your sports.</h1>
+          <p>Stop scouring the web for the information you need now.</p>
+          
+          <p>Whether you’re a casual fan or a fantasy sports fanatic, <em>SportbookPage.com</em> is revolutionizing the way you see sports.</p>
+          
+          <p>Just tag the sports and teams you care about and instantly you’ll be immersed in scores, schedules, up-to-the-minute news and headlines and more. It's that simple.</p>
+          
+          <p>Sign up today and in just a few minutes you’ll be on your way to a whole new sporting experience.</p>
+          
+          <p><a href="general.html" name="overview">See how it works &rarr;</a></p>
+          
+        <div class="clear"></div>    
+      </div> <!-- End Left Column -->
   
-  <%# render :partial => "layouts/ticker" %>
+      <%= yield  %>
   
-  <%= yield  %>
-  
-  <%# javascript_tag "$('background').setOpacity(.2);" %>
+      <div class="clear"></div>
+    </div> <!-- End home page content -->
+    
+  </div> <!-- End main page content -->
+
+  <!-- footer -->
+  <div id="footer">
+    <ul>
+      <li class="social"><img src="/images/css/footer-links-twitter.png" name="twitter" alt="Follow us on Twitter" /></li>
+      <li class="social"><img src="/images/css/footer-links-facebook.png" name="facebook" alt="Follow us on Facebook" /></li>
+      <li class="social"><img src="/images/css/footer-links-homepage.png" name="homepage" alt="Make us your homepage" /></li>
+      
+      <li class="floatleft">&copy; SportBookPage.com</li>
+      <li class="floatleft"><a href="mailto:*" name="contact-info">info@sportbookpage.com</a></li>
+      <li class="floatleft">Further info if desired</li>
+ 
+      <div class="clear"></div>    
+    </ul>
+  </div>
 
 </body>
 </html>

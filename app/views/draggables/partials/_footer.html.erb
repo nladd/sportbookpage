@@ -1,0 +1,11 @@
+
+<div id="<%= @drop_id %>_scroll-down" class="scroll-dwn" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-dwn" class="dwn" onclick="jumpToBottom('<%= @drop_id %>_content')" title="Click to jump to bottom"></a>
+</div>
+
+<%=
+  javascript_tag "
+      Event.observe($('#{@drop_id}_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', -5));
+      Event.observe($('#{@drop_id}_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('#{@drop_id}_content'), '#{@drop_id}_content', 5));"
+  
+%>

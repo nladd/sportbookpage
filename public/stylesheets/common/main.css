@@ -351,6 +351,14 @@ float:right;
 display:inline;
 }
 
+#home #column-right li select {
+background:#FFFFFF;
+border:#CCCCCC thin solid;
+float:right;
+display:inline;
+margin: 0 0 0 5px;
+}
+
 #home #column-right li input.date {
 width:40px;
 margin:0 5px 0 0;
@@ -513,7 +521,7 @@ float:left;
 background:url(/images/css/form-submit.jpg) no-repeat bottom right;
 display:inline;
 border:none;
-margin:0 0 10px 10px;
+margin: 10px 0 10px 0;
 cursor:pointer;
 }
 
@@ -966,7 +974,7 @@ float:left;
 background:url(/images/css/form-submit.jpg) no-repeat bottom right;
 display:inline;
 border:none;
-margin:0 0 10px 10px;
+margin:10px;
 cursor:pointer;
 }
 
@@ -1134,7 +1142,7 @@ color:#4696bb;
 
 #draggables #holder {
 width:620px;
-height:90px;
+height:auto;
 background:url(/images/css/draggables-holder-bg.jpg) no-repeat top left;
 border-bottom:#CCCCCC thin solid;
 }
@@ -1246,81 +1254,67 @@ height:auto;
 float:left;
 margin:0 5px 0 0;
 display:inline;
+/*overflow: hidden;*/
 }
 
 /* collapsed column spans */
 
 #draggables #target-holder span.clps02col {
 width:140px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps03col {
 width:90px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps04col {
 width:65px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps05col {
 width:52px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps06col {
 width:45px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps07col {
 width:39px;
-text-align:left;
 }
 
 #draggables #target-holder span.clps08col {
 width:34px;
-text-align:left;
 }
 
 /* expanded column spans */
 
 #draggables #target-holder span.expn02col {
 width:294px;
-text-align:left;
 }
 
 #draggables #target-holder span.expn03col {
 width:182px;
-text-align:left;
 }
 
 #draggables #target-holder span.expn04col {
 width:140px;
-text-align:left;
-
 }
 
 #draggables #target-holder span.expn05col {
 width:110px;
-text-align:left;
 }
 
 #draggables #target-holder span.expn06col {
 width:96px;
-text-align:left;
 }
 
 #draggables #target-holder span.expn07col {
 width:82px;
-text-align:left;
 }
 
 #draggables #target-holder span.expn08col {
 width:72px;
-text-align:left;
 }
 
 /* target list items */
@@ -1332,7 +1326,8 @@ background:none;
 border-bottom:#CCCCCC thin solid;
 padding:5px 4px 4px 4px;
 font-size:.7em;
-line-height:1em;
+line-height:auto;
+text-align: left;
 }
 
 #draggables #target-holder li h1 {
@@ -1355,12 +1350,13 @@ color:#4696bb;
 }
 
 #draggables #target-holder li p {
-font-size:1em;
+font-size:1.1em;
 width:auto;
 height:auto;
 display:block;
 margin:5px 0 0 0;
 padding:0;
+line-height: 1.2em;
 }
 
 #draggables #target-holder li em {
@@ -1796,4 +1792,131 @@ float:right;
 margin:0 0 0 5px;
 
 display:inline;
+}
+
+
+/* pop up */
+
+#pop-up {
+width:325px;
+min-height:325px;
+background:url(/images/css/pop-up-bg.png) top left repeat;
+border:#FFFFFF thin solid;
+font-size:.9em;
+color:#FFFFFF;
+position:fixed;
+z-index:5000;
+top:10%;
+left:25%;
+
+
+}
+
+#pop-up span {
+padding:0 15px 15px 15px;
+}
+
+#pop-up h1 {
+font-size:1.2em;
+color:#4696bb;
+margin:0;
+padding:0;
+}
+
+#pop-up p {
+line-height:1.4em;
+color:#FFFFFF;
+margin:4px 0 0 0;
+padding:0;
+}
+
+#pop-up form {
+width:100%;
+}
+
+#pop-up input {
+background:#FFFFFF;
+width:100%;
+height:auto;
+margin:6px 0 0 0;
+}
+
+#pop-up input.submit {
+width:81px;
+height:30px;
+font-size:.8em;
+font-weight:bold;
+color:#FFFFFF;
+text-align:center;
+text-shadow:#000000 0px -1px 0px;
+background:url(/images/css/form-submit-blue.jpg) no-repeat bottom right;
+border:none;
+position:relative;
+float:right;
+}
+
+#pop-up input.submit:hover {
+background:url(/images/css/form-submit-blue-ovr.jpg) no-repeat bottom right;
+}
+
+#pop-up label {
+width:auto;
+height:auto;
+margin:0;
+padding:0;
+}
+
+#pop-up .close {
+width:15px;
+height:15px;
+background:url(/images/css/pop-up-close.jpg) top right no-repeat;
+float:right;
+display:inline;
+cursor:pointer;
+}
+
+
+/* drop-up menu */
+
+#drop-up {
+background:url(/images/css/drop-up-bg.jpg) bottom left repeat-x;
+border-top:#FFFFFF thin solid;
+width:auto;
+height:auto;
+position:relative;
+z-index:4000;
+
+_background:none;
+}
+
+#drop-up .content {
+padding:15px;
+
+_z-index:4001;
+}
+
+#drop-up ul {
+float:left;
+margin:0 40px 0 0;
+
+_z-index:4002;
+
+}
+
+#drop-up ul h1 {
+font-size:.8em;
+color:#4696bb;
+}
+
+#drop-up li {
+font-size:.7em;
+color:#333333;
+}
+
+#drop-up li:hover {
+font-size:.7em;
+color:#4696bb;
+cursor:pointer;
+
+_cursor:pointer;
 }

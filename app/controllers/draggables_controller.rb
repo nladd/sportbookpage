@@ -141,8 +141,7 @@ class DraggablesController < ApplicationController
   #
   #############################################################################
   def load_standings()
-  
-    side_bar = "/draggables/partials/blank"
+
     @filter = params['full_partial']
   
     if (@level == 'home')
@@ -231,7 +230,6 @@ class DraggablesController < ApplicationController
       end
       
       @drop_title = "Standings"
-      side_bar = "/draggables/partials/vertical_tabs"
     
     elsif (@level == 'league' || @level == 'team')
     
@@ -257,20 +255,16 @@ class DraggablesController < ApplicationController
     
       end
       
-      side_bar = "/draggables/partials/blank"
       @drop_title = "#{@league.abbreviation} Standings"
       
     end
     
     
-    @partial_path = "draggables/" + @level + "/" + choose_template + "standings"
+    @partial_path = "draggables/" + @level + "/standings"
     
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", @drop_title)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
-                page.call('createGradient', @drop_id + "_frame")
-                page.call("drawCurvyCorners")
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
   
   end
@@ -282,7 +276,6 @@ class DraggablesController < ApplicationController
   #############################################################################
   def load_schedule()
   
-    side_bar = "/draggables/partials/blank"
     @filter = params['full_partial']
   
     if (@level == 'home')
@@ -325,8 +318,7 @@ class DraggablesController < ApplicationController
       @games = @games.compact
       
       
-      @drop_title = "Schedules"  
-      side_bar = "draggables/partials/vertical_tabs"
+      @drop_title = "Schedules"        
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
@@ -346,7 +338,6 @@ class DraggablesController < ApplicationController
 #      @games = @games.compact
      
       @drop_title = "#{@league.abbreviation} Schedule"
-      side_bar = "draggables/partials/blank"
             
     elsif (@level == 'team')
       @league = Affiliation.get_league(session[:league_id])
@@ -354,16 +345,15 @@ class DraggablesController < ApplicationController
       
       @games = Team.get_next_n_games(@team.team_id, 200)
       
-      side_bar = "draggables/partials/blank"
       @drop_title = "#{@team.last_name} Schedule"
       
     end
     
-    @partial_path = '/draggables/' + @level + '/' + choose_template + 'schedule'
+    @partial_path = '/draggables/' + @level + '/schedule'
 
-  
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
   
   end
@@ -375,8 +365,7 @@ class DraggablesController < ApplicationController
   #
   #############################################################################
   def load_scoreboard()
-    
-    side_bar = "/draggables/partials/blank"
+
     @filter = params['full_partial']
     
     if (@level == 'home')
@@ -418,7 +407,6 @@ class DraggablesController < ApplicationController
       
       
       @drop_title = "Scoreboard"
-      side_bar = "draggables/partials/vertical_tabs"
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
@@ -437,7 +425,6 @@ class DraggablesController < ApplicationController
 #      end
                 
       @drop_title = "#{@league.abbreviation} Scoreboard"
-      side_bar = "draggables/partials/blank"
       
     elsif (@level == 'team')
       @league = Affiliation.get_league(session[:league_id])
@@ -445,16 +432,16 @@ class DraggablesController < ApplicationController
       
       @games = Team.get_previous_n_games(@team.team_id, 200)
       
-      side_bar = "draggables/partials/blank"
       @drop_title = "#{@team.last_name} Scoreboard"
       
     end
 
 
-    @partial_path = "draggables/" + @level + "/" + choose_template + "scoreboard" 
+    @partial_path = "draggables/" + @level + "/scoreboard" 
 
     render(:update) {|page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
 
   end
@@ -575,11 +562,7 @@ class DraggablesController < ApplicationController
     @partial_path = "draggables/" + @level + "/playoffs" 
 
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", @drop_title)
-                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.call('createGradient', @drop_id + "_frame")
-                page.call("drawCurvyCorners")
     }
         
       
@@ -603,9 +586,7 @@ class DraggablesController < ApplicationController
     @partial_path = "draggables/home/" + choose_template + "challenges"
 
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", @drop_title)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", "")
     }
 
   end
@@ -618,7 +599,6 @@ class DraggablesController < ApplicationController
   #############################################################################
   def load_headlines()
 
-    side_bar = "/draggables/partials/blank"
     @filter = params['full_partial']
   
     if (@level == 'home')
@@ -670,8 +650,6 @@ class DraggablesController < ApplicationController
         end
                                     
       end
-      
-      side_bar = "draggables/partials/vertical_tabs"
 
     elsif (@level == 'league')
       
@@ -730,11 +708,8 @@ class DraggablesController < ApplicationController
     @partial_path = "draggables/" + @level + "/headlines"
 
     render(:update) {|page| 
-                page.replace_html(@drop_id + "_title", "")
-                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.call('createGradient', @drop_id + "_frame")
-                page.call("drawCurvyCorners")
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
   
   end
@@ -747,7 +722,6 @@ class DraggablesController < ApplicationController
   #############################################################################
   def load_lines()
 
-    side_bar = "/draggables/partials/blank"
     @filter = params['full_partial']
 
     if (@level == 'home')
@@ -760,7 +734,6 @@ class DraggablesController < ApplicationController
           @leagues[i] = nil
           next
         end
-  
       
         if (@filter.blank?) then
           if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
@@ -789,7 +762,6 @@ class DraggablesController < ApplicationController
       @lines = @lines.compact
 
       @drop_title = "Lines"
-      side_bar = "/draggables/partials/vertical_tabs"
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
@@ -808,7 +780,6 @@ class DraggablesController < ApplicationController
     
     
       @drop_title = "#{@league.abbreviation} Lines"
-      side_bar = "/draggables/partials/blank"
       
     elsif (@level == 'team')
       @team = Team.get_team(session[:team_id]) 
@@ -818,14 +789,11 @@ class DraggablesController < ApplicationController
     end
     
     
-    @partial_path = '/draggables/' + @level + '/' + choose_template + 'lines'
+    @partial_path = '/draggables/' + @level + '/lines'
     
     render(:update) { |page|
-                page.replace_html(@drop_id + "_title", @drop_title)
-                page.replace_html("#{@drop_id}_side_bar", :partial => side_bar)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.call('createGradient', @drop_id + "_frame")
-                page.call("drawCurvyCorners")
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
   
   end
@@ -881,9 +849,8 @@ class DraggablesController < ApplicationController
     @partial_path = '/draggables/' + @level + '/leaders'
   
     render(:update) { |page| 
-                page.replace_html(@drop_id + "_title", @drop_title)
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", "")
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
   
   
@@ -922,12 +889,11 @@ class DraggablesController < ApplicationController
 
 
     template = choose_template    
-    @partial_path = '/draggables/' + @level + '/' + template + 'player_card'
+    @partial_path = '/draggables/' + @level + '/player_card'
   
     render(:update) { |page| 
-                page.replace_html(@drop_id + "_title", "&nbsp;")
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", "")
+                page.call('expandCollapseCells', "#{@drop_id}")
     }
 
 

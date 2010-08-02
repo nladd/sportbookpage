@@ -214,7 +214,7 @@ class UsersController < ApplicationController
       partial = "users/partials/invitation_form"
     end
     
-    render(:update) { |page| page.replace_html('light_form', :partial => partial) }
+    render(:update) { |page| page.replace_html('pop-up', :partial => partial) }
   end
   
   

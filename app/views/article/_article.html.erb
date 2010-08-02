@@ -1,12 +1,27 @@
 
 
-<div class="article_content">
-  <%= @content %>
-</div>
+<%= render :partial => "draggables/partials/header" %>
 
-<div class="row">
-<%= link_to_remote "Back", 
-        :url => {:controller => 'draggables', :action => 'route_action'},
-        :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
-%>
-</div>
+<ul id="<%= @drop_id %>_content">
+  
+  <li>
+    <%= link_to_remote "Back", 
+            :url => {:controller => 'draggables', :action => 'route_action'},
+            :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
+    %>
+  </li>
+  <li>
+    <h1><%= @title %></h1>
+    <em><%= @date.blank? ? "" : @date.strftime("%m/%d %I:%M%P") %></em>
+    <p><%= @content %></p>
+  </li>
+
+  <li>
+    <%= link_to_remote "Back", 
+            :url => {:controller => 'draggables', :action => 'route_action'},
+            :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
+    %>
+  </li>
+</ul>
+
+<%= render :partial => "draggables/partials/footer" %>

@@ -9,6 +9,25 @@ class Document < ActiveRecord::Base
   validates_length_of :priority, :allow_nil => true, :maximum => 100
   validates_length_of :stats_coverage, :allow_nil => true, :maximum => 100
   
+  #############################################################################
+  # Description:
+  #   Get a document by it's document_id
+  #
+  # Params:
+  #   -document_id - int - id of the document
+  #
+  # Return:
+  #   :select => "document_contents.*, documents.*"
+  #############################################################################
+  def self.get_document(document_id)
+    
+    return Document.find_by_id(
+                      document_id,
+                      :select => "documents.*, document_contents.*, CONVERT_TZ(documents.date_time, '+00:00', '#{TIMEZONE}') AS date_time",
+                      :joins => "INNER JOIN document_contents ON document_contents.document_id = #{document_id}"
+    )
+  
+  end
   
   #############################################################################
   # Description:
@@ -26,11 +45,11 @@ class Document < ActiveRecord::Base
   # Return:
   #   :select => "document_contents.*, documents.*"
   #############################################################################
-  def self.get_league_docs_by_fixture_key(affiliation_id, fixture_key, limit = 5,
+  def self.get_league_docs_by_fixture_key(league_id, fixture_key, limit = 5,
                                 order = "documents.date_time DESC")
     
     return AffiliationsDocument.find_all_by_affiliation_id(
-                    affiliation_id,
+                    league_id,
                     :select => "dc.*, documents.*, documents.date_time AS dt, CONVERT_TZ(documents.date_time, '+00:00', '#{TIMEZONE}') AS date_time",
                     :joins => "INNER JOIN documents ON documents.id = affiliations_documents.document_id
                               INNER JOIN document_contents AS dc ON dc.document_id = affiliations_documents.document_id
@@ -94,7 +113,6 @@ class Document < ActiveRecord::Base
   #############################################################################
   def self.get_person_docs_by_fixture_key(person_id, fixture_key, limit = 5,
                                               order = "documents.date_time DESC")
-  
     
     return PersonsDocument.find(
                     :all,
@@ -127,14 +145,7 @@ class Document < ActiveRecord::Base
   # Return:
   #   :select => "document_contents.*, documents.*"
   #############################################################################
-  def self.get_event_docs_by_fixture_key(event_id, fixture_key, order = nil, limit = nil)
-  
-    if order.blank? then
-      order = "documents.date_time DESC"
-    end
-    if limit.blank? then
-      limit = 5
-    end
+  def self.get_event_docs_by_fixture_key(event_id, fixture_key, order = "documents.date_time DESC", limit = 5)
     
     return EventsDocument.find(
                     :all,

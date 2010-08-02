@@ -57,19 +57,25 @@ function toggle_all_checkboxes(form) {
     
 }
 
-function toggle_sport_checkbox(sport) {
+function toggleHeaderCheckbox(id) {
 
-  Effect.toggle(sport, 'slide', {duration: .5});
+  Effect.toggle(id, 'slide', {duration: .5});
 
   if(sport_toggle == 0) {
     sport_toggle = 1;
   }
   else {
-    //if the parent sport checkbox is unchecked, uncheck all the sub-team checkboxes too
-    team_checkboxes = $(sport).getElementsByClassName(sport);
-    for (var i = 0; i < team_checkboxes.length; i++) {
-      team_checkboxes[i].checked = false;
-    }  
+    //if the parent sport checkbox is unchecked, uncheck all the sub checkboxes too
+    sub_checkboxes = $(id).select('input');
+    for (var i = 0; i < sub_checkboxes.length; i++) {
+      sub_checkboxes[i].checked = false;
+    }
+  
+    //get all list below this element and hide them
+    sub_lists = $(id).select('ul');
+    for (var i = 0; i < sub_lists.length; i++) {
+      sub_lists[i].hide();
+    }
     sport_toggle = 0;
   }
   

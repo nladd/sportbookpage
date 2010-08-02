@@ -1,13 +1,12 @@
 
-
-<div class="row" style="white-space: normal">
-  An invitation to join SportbookPage.com has been sent to the following e-mail addresses:
-  <% @emails.each do |email| %>
-    <br/>&nbsp;&nbsp;&nbsp;<%= email %>
-  <% end %>
-</div>
-<div class="row" style="text-align: center;">
-  <a href = "javascript:void(0)" onclick = "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); return false; $('selections').hide();">
-      Close
-  </a>
-</div>
+<div class="close" onclick="Effect.toggle('pop-up', 'appear', {duration: .5})"></div>
+<span>            
+  <p>
+    An invitation to join SportbookPage.com was sent to the following e-mail addresses:<br/>
+    <% @emails.each do |email| %>
+      <br/>&nbsp;&nbsp;&nbsp;<%= email %>
+    <% end %>
+    <br/><br/>
+    <a href = "javascript:void(0)" onclick = "Effect.toggle('pop-up', 'appear', {duration: .5})">Close</a>
+  </p>
+</span>

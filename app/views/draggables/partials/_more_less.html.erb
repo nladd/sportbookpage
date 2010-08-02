@@ -5,9 +5,9 @@
 <%    
       elsif (@j % 12) == 0
 %>
-        </div> <!-- close <hide_#> -->
-        <div id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
-          <li style="height: 20px">
+        
+        
+          <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
             
             <% if @j != 12 then %>
             <span class="clps05col">
@@ -20,8 +20,8 @@
             </span>
             
           </li>
-        </div>
         
+        </div> <!-- close <hide_#> -->
         <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
 <%
       end
