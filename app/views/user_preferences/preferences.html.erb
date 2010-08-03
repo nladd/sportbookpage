@@ -128,7 +128,7 @@
     <hr />
     <%# hidden_field_tag( 'sports[]', abbr + "," + (@pro_leagues[l].affiliation_id).to_s ) %>
     <h2><%= check_box_tag( 'sports[]', abbr + "," + (@pro_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %> <%= @pro_leagues[l].abbreviation %></h2>
-    <div class="conference" id="sport_list_<%= abbr %>">
+    <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
     @pro_divisions[l].size.times do |d|
 %>
