@@ -25,22 +25,22 @@ class UsersController < ApplicationController
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
     @profile = parser.parse
-    drop_1_node = @profile.find_first('//root/drop_1')
+    drop_1_node = @profile.find_first('//root/target01')
     @drop_1 = drop_1_node.content
     session['drop_1'] = @drop_1
-    drop_2_node = @profile.find_first('//root/drop_2')
+    drop_2_node = @profile.find_first('//root/target02')
     @drop_2 = drop_2_node.content
     session['drop_2'] = @drop_2
-    drop_3_node = @profile.find_first('//root/drop_3')
+    drop_3_node = @profile.find_first('//root/target03')
     @drop_3 = drop_3_node.content
     session['drop_3'] = @drop_3
-    drop_4_node = @profile.find_first('//root/drop_4')
+    drop_4_node = @profile.find_first('//root/target04')
     @drop_4 = drop_4_node.content
     session['drop_4'] = @drop_4
         
-    user_path = ["Home"] 
-    user_path_urls = ["/home"] 
-    @path_html = build_path(user_path, user_path_urls)
+    #user_path = ["Home"] 
+    #user_path_urls = ["/home"] 
+    #@path_html = build_path(user_path, user_path_urls)
    
    
     respond_to do |format|
@@ -69,13 +69,13 @@ class UsersController < ApplicationController
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
     @profile = parser.parse
-    drop_1_node = @profile.find_first('//root/drop_1')
+    drop_1_node = @profile.find_first('//root/target01')
     @drop_1 = drop_1_node.content
-    drop_2_node = @profile.find_first('//root/drop_2')
+    drop_2_node = @profile.find_first('//root/target02')
     @drop_2 = drop_2_node.content
-    drop_3_node = @profile.find_first('//root/drop_3')
+    drop_3_node = @profile.find_first('//root/target03')
     @drop_3 = drop_3_node.content
-    drop_4_node = @profile.find_first('//root/drop_4')
+    drop_4_node = @profile.find_first('//root/target04')
     @drop_4 = drop_4_node.content
     
     cgi_name = CGI.escape("#{@user.first_name} #{@user.last_name}")
@@ -84,9 +84,9 @@ class UsersController < ApplicationController
     @level = "home"
     @drag_n_drop = "home/drag_n_drop"
         
-    user_path = [@user.first_name + " " + @user.last_name + " Home"] 
-    user_path_urls = ["/fanatic/#{cgi_name}"] 
-    @path_html = build_path(user_path, user_path_urls)
+    #user_path = [@user.first_name + " " + @user.last_name + " Home"] 
+    #user_path_urls = ["/fanatic/#{cgi_name}"] 
+    #@path_html = build_path(user_path, user_path_urls)
 
     render :template => "users/index"
 

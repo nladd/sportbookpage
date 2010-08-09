@@ -40,7 +40,34 @@ This Notice Must Remain for Legal Use
     
     <!-- center column -->
     <div id="column-center">
+      <div id="top-nav">
+        <ul>
+          <li class="home"><a href="/home" name="home"></a></li>
+          <li class="main">
+            <%= link_to_remote "Invite Fans",
+                        {:url => {:controller => "users", :action => "invite_friend"},
+                        :complete => "Effect.toggle('pop-up', 'appear', {duration: .5})" },
+                        {:name => "invite-friends"}
+              %>
+          </li>
+          <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
+          <li class="main">
+            <%= link_to_remote "Save Layout", 
+                        {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
+                        {:name => "save-layout"}
+            %>
+          </li>
+          <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
+          <li class="main"><a href="/logout">Logout</a></li>
+          <li class="help"><a href="logged-in-general.html" name="help"></a></li>
+        </ul>
+        
+        <div class="clear"></div>
+      </div>
+      
+      <!-- begin main content-->
       <%= yield %>
+      
     </div><!-- End Center Column -->
     
     <!-- Right Column -->

@@ -55,7 +55,7 @@ COLLEGE_LEAGUES = ["NCAA Men's Basketball Division 1",
 				   "NCAA Men's Football Division 1A",
 				   "NCAA Men's Football Division 1AA",
 				   "NCAA Men's Football Division 2",
-				   "NCAA Men's Football Division 3",
+				   #"NCAA Men's Football Division 3",
 				   "NCAA Men's Baseball",
 				   "NCAA Women's Basketball Division 1"]
 
@@ -67,7 +67,7 @@ ALL_LEAGUES = ["National Basketball Association",
 			"NCAA Men's Football Division 1A",
 			"NCAA Men's Football Division 1AA",
 			"NCAA Men's Football Division 2",
-			"NCAA Men's Football Division 3",
+			#"NCAA Men's Football Division 3",
 			"NCAA Men's Baseball",
 			"NCAA Women's Basketball Division 1"]
 
@@ -80,15 +80,9 @@ STANDINGS_SCOPE = {"National Basketball Association" => "all",
             "NCAA Men's Football Division 1A" => "league",
             "NCAA Men's Football Division 1AA" => "league",
             "NCAA Men's Football Division 2" => "league",
-			"NCAA Men's Football Division 3" => "league",
+			#"NCAA Men's Football Division 3" => "league",
 			"NCAA Men's Baseball" => "league",
 			"NCAA Women's Basketball Division 1" => "league"}
-
-
-
-ROW_TITLE_GRADIENT = "gradient 7b0606 C10707 horizontal"
-ROW_TITLE_TEXT_GRADIENT = "'ffffff', 'f46f0c'"
-DROP_TITLE_GRADIENT = "gradient 315ad0 ffffff vertical"
 
 
 Rails::Initializer.run do |config|

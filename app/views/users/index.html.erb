@@ -1,35 +1,16 @@
 
-  <div id="top-nav">
-    <ul>
-      <li class="home"><a href="/home" name="home"></a></li>
-      <li class="main">
-        <%= link_to_remote "Invite Fans",
-                    {:url => {:controller => "users", :action => "invite_friend"},
-                    :complete => "Effect.toggle('pop-up', 'appear', {duration: .5})" },
-                    {:name => "invite-friends"}
-          %>
-      </li>
-      <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
-      <li class="main">
-        <%= link_to_remote "Save Layout", 
-                    {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
-                    {:name => "save-layout"}
-        %>
-      </li>
-      <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
-      <li class="main"><a href="/logout">Logout</a></li>
-      <li class="help"><a href="logged-in-general.html" name="help"></a></li>
-    </ul>
-    
-    <div class="clear"></div>
-  </div>
-  
   <div id="draggables">
     <div id="header">
       <ul>
         <li class="help"><a href="*" name="draggables-help"></a></li>
-        <li class="head">My Draggables <em name="system-message" style="margin:0 0 0 15px;">System Alert</em></li>
-        <li class="save"><a href="*" name="draggables-save" title="Save My Draggables">Save Draggables</a></li>
+        <li class="head">My Draggables <em id="alert_text" name="system-message"></em></li>
+        <li class="save">
+          <%= link_to_remote "Save Draggables", 
+                        {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
+                        {:name => "draggables-save",
+                        :title => "Save My Draggables"}
+            %>
+        </li>
       </ul>
       <div class="clear"></div>
     </div>

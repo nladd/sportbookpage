@@ -90,7 +90,7 @@ CREATE TABLE `invitations` (
 #);
 
 
-
+ALTER TABLE display_names ADD COLUMN url VARCHAR(255);
 ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
 ALTER TABLE events ADD COLUMN playoff_round INT;
 ALTER TABLE basketball_rebounding_stats ADD COLUMN rebounds_offensive_per_game INT;

@@ -1,28 +1,4 @@
   
-    <div id="top-nav">
-        <ul>
-          <li class="home"><a href="/home" name="home"></a></li>
-          <li class="main">
-            <%= link_to_remote "Invite Fans",
-                        {:url => {:controller => "users", :action => "invite_friend"},
-                        :complete => "Effect.toggle('light', 'appear', {duration: .5}); Effect.toggle('lightbox_fade', 'appear', {duration: .5}); " },
-                        {:name => "invite-friends"}
-              %>
-          </li>
-          <li class="main"><a href="/edit/sports_and_teams" name="change-teams">Change Teams</a></li>
-          <li class="main">
-            <%= link_to_remote "Save Layout", 
-                        {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
-                        {:name => "save-layout"}
-            %>
-          </li>
-          <li class="main"><a href="*" name="settings">Settings</a></li>
-          <li class="main"><a href="/logout">Logout</a></li>
-          <li class="help"><a href="logged-in-general.html" name="help"></a></li>
-        </ul>
-        
-        <div class="clear"></div>
-    </div>
     
     <% if flash[:notice] -%>
     <span style="width: 100%; text-align: center">
@@ -46,15 +22,23 @@
     </span>
     
     <span>
-        <h1><%= @user.first_name + " " + @user.last_name %> <i><a href="javascript:void(0);" name="edit" onclick="$('static-profile').toggle(); $('edit-profile').toggle();">Edit</a></i></h1>
-        <input type="hidden" value="<%= @user.first_name %>" name="first_name"/><input type="hidden" value="<%= @user.middle_name %>" name="middle_name"/><input type="hidden" value="<%= @user.last_name %>" name="last_name"/>
+        <h1><%= @user.first_name + " " + @user.last_name %> <br />
+          <i><a href="javascript:void(0);" style="display:inline" name="edit" onclick="$('static-profile').toggle(); $('edit-profile').toggle(); $('keep').toggle();">Edit</a><a id="keep" style="float: right; display: inline">Keep private</a></i>
+        </h1>
         <ul id="static-profile" name="user-info" <%= if !@saved then "style=\"display: none\"" end %> >
-            <li>DOB: <%= @user.birthday %></li>
-            <li><%= @user.hometown + ", " + @user.state %></li>
-            <li><%= @user.sex == "m" ? "Male" : "Female" %></li>
+            <li>DOB: <%= @user.birthday %> <input id="show_birthday" name="show[birthday]" style="float: right" type="checkbox" /></li>
+            <li><%= @user.hometown + ", " + @user.state %> <input id="show_hometown" name="show[hometown]" style="float: right" type="checkbox" /></li>
+            <li><%= @user.sex == "m" ? "Male" : "Female" %> <input id="show_sex" name="show[sex]" style="float: right" type="checkbox" /></li>
             <div class="clear"></div>
         </ul>
         <ul id="edit-profile" name="user-info" <%= if @saved then "style=\"display: none\"" end %> >
+            <input type="hidden" value="<%= @user.middle_name %>" name="middle_name"/>
+            <li>
+              First name: <input type="text" size="15" value="<%= @user.first_name %>" name="first_name"/>
+            </li>
+            <li>
+              Last name: <input type="text" size="15" value="<%= @user.last_name %>" name="last_name"/>
+            </li>
             <li>
                 DOB: <%= select_date( Date.parse(@user.birthday), { :order => [:month, :day, :year], :start_year => Time.now.year - 5, :end_year => Time.now.year - 95 } ) %>
                 <br /><em style="color: red"><%= @user.errors[:birthday] %></em>
@@ -113,13 +97,12 @@
     
     <hr />
 
-    <h1>Your Tagged Teams</h1>
+    <h1>Tagged Teams</h1>
+    <hr />
+    <h1 id="pro_tab" class="selected" style="display: inline" onclick="toggleTabs($H({ pro_tab: 'pro'}), $H({ college_tab: 'college'}));">Pro</h1>
+    <h1 id="college_tab" style="display: inline" onclick="toggleTabs($H({ college_tab: 'college'}), $H({ pro_tab: 'pro'}));">College</h1>
 
-<!--<div class="tab_row">
-  <a href="javascript:void(0);" onclick="$('pro').show(); $('ncaa_d1').hide(); $('pro_tab').setStyle({background: '#5380ff', border: '2px #315ad0 solid'}); $('ncaa_d1_tab').setStyle({background: '#d9d9db', border: '2px #d9d9db solid' });"><div id="pro_tab" class="tab selected">Pro</div></a>
-  <a href="javascript:void(0);" onclick="$('ncaa_d1').show(); $('pro').hide(); $('ncaa_d1_tab').setStyle({background: '#5380ff', border: '2px #315ad0 solid'}); $('pro_tab').setStyle({background: '#d9d9db', border: '2px #d9d9db solid' });"><div id="ncaa_d1_tab" class="tab">College</div></a>
-</div>-->
-
+  <div id="pro">
 
 <%  
   @pro_leagues.size.times do |l| 
@@ -142,7 +125,7 @@
                 <li>
                     <%= check_box_tag( abbr + '[]', @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s, false, :class => (@pro_teams[l][d][t].full_name).gsub(/[\s\.']/, '_') ) %>
                     <label><%= @pro_teams[l][d][t].full_name %></label>
-                    <em><%= db_team.followers %> followers</em>
+                    <em><%= db_team.followers %> fans</em>
                 </li>
         <%
             end # close teams loop
@@ -162,113 +145,67 @@
   end # close leagues loop
 %>
     <input name="save" type="submit" class="submit" value="Save" />
-<%
-    end #close form
-%>
 
-
+  </div> <!-- close pro <div> -->
+  
+  
 <!--------------------------------  COLLEGE SPORTS ---------------------------->
 
 
 
-<div id="ncaa_d1" class='form' style="display: none">
-  
-  <table>
-    
-<%
+<div id="college" style="display: none">
+
+<%  
   @college_leagues.size.times do |l|
     abbr = @college_leagues[l].abbreviation.gsub(/[\s']/, "_")
-    num_conferences = @college_conferences[l].length
 %>
-    <tr>
-      <td>
-      
-        <%= check_box_tag( 'college[]', @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s, false, :id => abbr + "_checkbox", :onclick => "toggle_sport_checkbox('sport_list_" + abbr + "'); return true;" ) %>
-    
-        <span class='sport_label'><%= @college_leagues[l].full_name %></span>
-        <div class="sport_list" id="sport_list_<%= abbr %>" style="display: none">
-          <table class="list_table">
-
-            <%    
-              num_conferences.times do |c|
-                
-                
-                
-                if (c == 0) then
-            %>      
-            <tr>
-              <%  elsif (c % 3) == 0 %>
-            </tr>
-            <tr>
-              <% 
-                  end 
-
-                  if (num_conferences%3 == 0) then
-                    index = (c)/3 + ((c%3) * num_conferences)/3
-                  elsif (c%3 < num_conferences%3) then
-                    index = c/3 + ((Float(num_conferences)/Float(3)).round) * (c%3)
-                  else
-                    index = ((c%3) * num_conferences)/3 + c/3 + 1
-                  end
-
-                  c_abbr = @college_conferences[l][index].full_name.gsub(/[\s']/, "_") + @college_leagues[l].affiliation_id.to_s
-
-                  num_teams = @college_teams[l][index].length  
-              %>
-              <td style="vertical-align: top"><%= check_box_tag('', @college_conferences[l][index].full_name.to_s + "," + (@college_conferences[l][index].affiliation_id).to_s, false, :class => "conference", :onclick => "toggle_sport_checkbox('sport_list_" + c_abbr + "'); return true;" ) + @college_conferences[l][index].full_name.to_s %>
-
-                <div class="sport_list" id="sport_list_<%= c_abbr %>" style="display: none">
-                <table id="tbl" class="list_table">
-
-                  <%    
-                    num_teams.times do |i|
-                      class_name = (@college_teams[l][index][i].full_name).gsub(/[\s\.']/, '_')
-                      db_team = Team.find(@college_teams[l][index][i].team_id)
-                  %>      
-                  <tr id="tr">
-
-                    <td id="td">
-                        <%= check_box_tag( abbr + '[]', @college_teams[l][index][i].full_name.to_s + "," + (@college_teams[l][index][i].team_id).to_s, false, :class => class_name + " " + c_abbr ) + @college_teams[l][index][i].full_name.to_s %><br />
-                        <span style="color: lightGray"><%= db_team.followers %> followers</span>
-                    </td>
-                  </tr>
-                  <%
-                    end # close teams loop
-                  %>
-
-                  <tr>
-                    <td>
-                      <%= check_box_tag( "check_all_sport_list_" + c_abbr,  "check_all", false, :onclick => "toggle_all_checkboxes('sport_list_" + c_abbr + "'); return true;", :class => c_abbr ) %>
-                      <span id="check_all_sport_list_<%= c_abbr %>_label">Check All</span><span id="uncheck_all_sport_list_<%= c_abbr %>_label" style="display: none">Uncheck All</span>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </td>
-
-
-              <%
-                end # close conferences loop
-              %>
-            </tr>
-          </table>
-        </div>
-      </td>
-    </tr>
-
+    <hr />
+    <%# hidden_field_tag( 'college[]', abbr + "," + (@college_leagues[l].affiliation_id).to_s ) %>
+    <h2><%= check_box_tag( 'college[]', abbr + "," + (@college_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %> <%= @college_leagues[l].abbreviation %></h2>
+    <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
-  end # close college_leagues loop 
-%>  
-    <tr>&nbsp;</tr>
-    <tr>
-      <td align="left"><%= submit_tag( "Save" , :class => "submit" ) %></td>
-    </tr>
+    @college_conferences[l].size.times do |c|
+%>
+        <span>
+            <h3><input type="checkbox" checked="false" onclick="toggleHeaderCheckbox('<%= abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_') %>'); return true;" /><%= @college_conferences[l][c].full_name %></h3>
+            <ul id="<%= abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_') %>" style="display: none">
+<%
+        @college_teams[l][c].size.times do |t|
+            db_team = Team.find(@college_teams[l][c][t].team_id)
+%>
+                <li>
+                    <%= check_box_tag( abbr + '[]', @college_teams[l][c][t].last_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s, false, :class => (@college_teams[l][c][t].full_name).gsub(/[\s\.']/, '_') ) %>
+                    <label><%= @college_teams[l][c][t].full_name %></label>
+                    <em><%= db_team.followers %> fans</em>
+                </li>
+        <%
+            end # close teams loop
+        %>
+                <li>
+                    <%= check_box_tag( "check_all_" + abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_'),  "check_all", false, :onclick => "toggle_all_checkboxes('" + abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_') + "'); return true;" ) %>
+                    <label id="check_all_<%= abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_') %>_label">Check All</label><label id="uncheck_all_<%= abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_') %>_label" style="display: none">Uncheck All</label>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </span>
+    <%
+        end # close conferences loop
+    %>
+    </div> <!-- close conference div -->
+<%
+  end # close leagues loop
+%>
+    <input name="save" type="submit" class="submit" value="Save" />
     
-  </table>
+    </div> <!-- close college <div> -->
+     
+<%
+    end #close form
+%>
+ 
+ 
   
-    
-</div>
-
+  
 
 
 <%= javascript_tag "uncheck_all('register_form');" %>
@@ -316,6 +253,32 @@
   end
   # if the team is already in the user's profile, check the box
   checked = false
+  
+  
+  node = profile.find_first('//root/birthday')      
+  if !(node.blank?)
+    if (node['show'] == "no")
+%>
+      <%= javascript_tag "$('show_birthday').checked = true" %>
+<%
+    end  
+  end
+  node = profile.find_first('//root/hometown')      
+  if !(node.blank?)
+    if (node['show'] == "no")
+%>
+      <%= javascript_tag "$('show_hometown').checked = true" %>
+<%
+    end  
+  end
+  node = profile.find_first('//root/sex')      
+  if !(node.blank?)
+    if (node['show'] == "no")
+%>
+      <%= javascript_tag "$('show_sex').checked = true" %>
+<%
+    end  
+  end
   
 %>
   

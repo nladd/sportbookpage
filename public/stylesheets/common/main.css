@@ -882,6 +882,20 @@ color:#4696bb;
 font-weight:bold;
 }
 
+#column-center h1:hover {
+cursor: pointer;
+}
+
+#column-center h1.selected {
+padding:10px;
+font-size:1em;
+color:#FFFFFF;
+font-weight:bold;
+background:url(/images/css/column-left-select-row-bg.jpg) repeat-y top right;
+}
+
+
+
 #column-center h2 {
 padding:0 10px 0 10px;
 font-size:1em;
@@ -921,6 +935,7 @@ margin:0 0 2px 3px;
 font-size:.8em;
 color:#4696bb;
 font-weight:normal;
+display: inline;
 }
 
 #column-center p {
@@ -1117,6 +1132,13 @@ display:inline;
 _margin:-12px 0 0 3px;
 }
 
+#draggables #header li.head em {
+margin:0 0 0 15px;
+font-variant: small-caps;
+font-size: 1.05em;
+font-weight:bold;
+color:#d71fde;
+}
 
 #draggables #header li.save a {
 font-size:.6em;

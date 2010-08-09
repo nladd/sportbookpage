@@ -298,6 +298,38 @@ function ShowHelp(event) {
 }
 
 
+/****************************************************************************
+ *
+ * Toggles tabs when a tab is selected. Accepts two parameters: a hash of the selected tab id,
+ * to selected content id, and a hash of the tab ids  and tab content ids of the tabs in this
+ * tab list. Show the selected tab and toggle its background so it is highlighted, and then
+ * hide all the other tabs and toggle their backgrounds so they are not selected.
+ * 
+ * *****************************************************************************/
+function toggleTabs(selectedHash, tabsHash) {
+  
+  selected = selectedHash.keys()[0];
+  
+  $(selectedHash.get(selected)).show();
+  //select the item
+  $(selected).setStyle({padding:'10px',
+                        fontSize:'1em',
+                        color:'#FFFFFF',
+                        fontWeight:'bold',
+                        background: 'url(/images/css/column-left-select-row-bg.jpg) repeat-y top right'})
+    
+  tabsHash.each(function(pair) {
+    $(pair.value).hide();
+    // unselect the item
+    $(pair.key).setStyle({padding:'10px',
+                          fontSize:'1em',
+                          color:'#4696bb',
+                          background: 'none',
+                          fontWeight:'bold'})
+  });
+  
+}
+
 /******************************************************************************
  * Functions defined by Brett for the design
  * ****************************************************************************/

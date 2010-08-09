@@ -66,13 +66,12 @@ class DraggablesController < ApplicationController
   #############################################################################
   def load_friends()
   
-    template = choose_template
-    @partial_path = 'draggables/home/' + template + 'fan_club'
+    @user = User.find(session[:user_id])
+  
+    @partial_path = 'draggables/home/fan_club'
   
     render(:update) { |page| 
-                page.replace_html(@drop_id + "_title", "")
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", "")
     }
   
   end
@@ -100,13 +99,10 @@ class DraggablesController < ApplicationController
     @profile = parser.parse
     @status = @profile.find_first("//root/status")
     
-    template = choose_template
-    @partial_path = "draggables/home/" + template + "profile"
+    @partial_path = "draggables/home/profile"
     
     render(:update) { |page|
-                page.replace_html(@drop_id + "_title", "")
                 page.replace_html(@drop_id, :partial => @partial_path)
-                page.replace_html("#{@drop_id}_side_bar", "")
     }
   
   end
@@ -123,13 +119,11 @@ class DraggablesController < ApplicationController
     @roster = Team.get_roster(@team.team_id)  
   
     @drop_title = "#{@team.last_name} Roster"
-    template = choose_template
-    @partial_path = "draggables/" + @level + "/" + template + "roster"
+    
+    @partial_path = "draggables/" + @level + "/roster"
   
     render(:update) { |page| 
-              page.replace_html(@drop_id + "_title", @drop_title)
               page.replace_html(@drop_id, :partial => @partial_path)
-              page.replace_html("#{@drop_id}_side_bar", "")
     }
   
   end

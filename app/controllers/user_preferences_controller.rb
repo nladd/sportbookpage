@@ -213,28 +213,7 @@ class UserPreferencesController < ApplicationController
       end  
 
     end    
-    
-    # load the current profile settings as the default value to display
-    #@currentValues = Hash.new
-    #        
-    #path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
-    #parser = XML::Parser.file(path)
-    #profile = parser.parse
-    #
-    #PROFILE_KEYS.each do |key|
-    #  node = profile.find('//root/' + key)
-    #  
-    #  if !(node.blank?)
-    #    @currentValues[key] = CGI.unescape(node[0].content)
-    #    if (node[0]['show'] == 'yes')
-    #      @currentValues['show_' + key] = true
-    #    else
-    #      @currentValues['show_' + key] = false
-    #    end
-    #    
-    #  end
-      
-    #end
+
         
     #get the professional leagues covered
     @pro_leagues = Affiliation.get_pro_leagues()
@@ -348,26 +327,27 @@ class UserPreferencesController < ApplicationController
     
     @user = User.find(session[:user_id])
     
-    profile_path = RAILS_ROOT + '/public/users/' + @user.id.to_s + '/' + @user.id.to_s + '.profile'
+    profile_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
 
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
     
-    node = profile.find_first('//root/drop_1')
-    node.content = session['drop_1']
-    node = profile.find_first('//root/drop_2')
-    node.content = session['drop_2']
-    node = profile.find_first('//root/drop_3')
-    node.content = session['drop_3']
-    node = profile.find_first('//root/drop_4')
-    node.content = session['drop_4']
+    # on a drop, the session variable get populated with the drop name
+    node = profile.find_first('//root/target01')
+    node.content = session['target01'].to_s
+    node = profile.find_first('//root/target02')
+    node.content = session['target02'].to_s
+    node = profile.find_first('//root/target03')
+    node.content = session['target03'].to_s
+    node = profile.find_first('//root/target04')
+    node.content = session['target04'].to_s
   
     profile.save(profile_path)
     
-    render(:update) {|page| 
-      page.replace_html("message_banner", "Drag and Drop preferences saved!") 
-      page.show("message_banner")
-      page.visual_effect(:fade, "message_banner", :duration => 5)
+    render(:update) {|page|
+      page.show("alert_text")
+      page.replace_html("alert_text", "Drag and Drop preferences saved!")
+      page.visual_effect(:fade, "alert_text", :duration => 10.0)
     }
   
   end
@@ -419,13 +399,13 @@ private
     # create the profile document
     profile = XML::Document.new()
     profile.root = XML::Node.new('root')
-    profile.root << drop_1_node = XML::Node.new('drop_1')
+    profile.root << drop_1_node = XML::Node.new('target01')
     drop_1_node << "profile"
-    profile.root << drop_2_node = XML::Node.new('drop_2')
+    profile.root << drop_2_node = XML::Node.new('target02')
     drop_2_node << "headlines"
-    profile.root << drop_3_node = XML::Node.new('drop_3')
+    profile.root << drop_3_node = XML::Node.new('target03')
     drop_3_node << "schedule"
-    profile.root << drop_4_node = XML::Node.new('drop_4')
+    profile.root << drop_4_node = XML::Node.new('target04')
     drop_4_node << "scoreboard"
     profile.root << XML::Node.new('friends')
     profile.root << status_node = XML::Node.new('status')
@@ -580,8 +560,8 @@ private
   # -nil
   ###############################################
   def write_profile(user)
-    user_id = (user.id).to_s
-    profile_path = RAILS_ROOT + '/public/users/' + user_id + '/' + user_id + '.profile'
+
+    profile_path = RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile"
 
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
@@ -598,8 +578,10 @@ private
     root << node = XML::Node.new("birthday") if node.blank?
     #write the value
     node.content = CGI.escape(@user.birthday)
-    # determine if the user has elected to the item in their profile
-    show.blank? ? node['show'] = 'yes' : node['show'] = show["birthday"]
+    # determine if the user has elected to not show the item in their profile
+    logger.info "show = " + show['birthday'].to_s
+    
+    show['birthday'].blank? ? node['show'] = "yes" :  node['show'] = "no"
     
     # get the hometown node if it exists
     node = profile.find('//root/hometown').first
@@ -608,7 +590,7 @@ private
     #write the value
     node.content = CGI.escape(@user.hometown + ", " + @user.state)
     # determine if the user has elected to the item in their profile
-    show.blank? ? node['show'] = 'yes' : node['show'] = show["hometown"]
+    show['hometown'].blank? ? node['show'] ="yes" : node['show'] = "no" 
     
     # get the sex node if it exists
     node = profile.find('//root/sex').first
@@ -617,7 +599,7 @@ private
     #write the value
     node.content = CGI.escape(@user.sex == "m" ? "Male" : "Female")
     # determine if the user has elected to the item in their profile
-    show.blank? ? node['show'] = 'yes' : node['show'] = show["sex"]
+    show['sex'].blank? ? node['show'] = "yes" : node['show'] = "no"
           
     profile.save(profile_path)
   end
@@ -633,7 +615,7 @@ private
   # -nil
   ###############################################
   def write_sports_and_teams(user)
-    profile_path = RAILS_ROOT + '/public/users/' + (user.id).to_s + '/' + (user.id).to_s + ".profile"
+    profile_path = RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile"
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
     root = profile.root
