@@ -1,13 +1,12 @@
 require 'rubygems'
 require 'xml/libxml'
-#require '/usr/lib/ruby/gems/1.8/gems/libxml-ruby-1.1.3/lib/xml/libxml'
 require 'helpers/challenge_form_helper.rb'
 
 class UsersController < ApplicationController
   
   include ChallengeForm
   
-  layout :choose_layout
+  layout "users"
 
   #############################################################################
   # Description:
@@ -99,11 +98,10 @@ class UsersController < ApplicationController
   #
   #############################################################################
   def friends_search
-      #when on the search page, we want to keep displaying the user's menus
+      
       @user = User.find(session[:user_id])
       @results = nil
-      
-      
+            
       if params['name'] != nil && params['name'] != '' then
       
         criteria = params['name']
@@ -130,17 +128,17 @@ class UsersController < ApplicationController
         
       end
     
-      user_path = ["Search"] 
-      user_path_urls = ["/search"] 
-      @path_html = build_path(user_path, user_path_urls)
+      #user_path = ["Search"] 
+      #user_path_urls = ["/search"] 
+      #@path_html = build_path(user_path, user_path_urls)
     
-      respond_to do |format|
-        format.html #friend_search.html.erb
-      end
+      render(:update) {|page|
+        page.replace_html("fanclub_content", :partial => "/users/partials/search_results")
+      }
   
-  rescue
+  #rescue
     #TODO: Error handling  
-    logger.error "Error occurred! friends_controller.search()"
+  #  logger.error "Error occurred! friends_controller.search()"
     
   end
 
@@ -154,35 +152,42 @@ class UsersController < ApplicationController
   def add_friend
   
     @user = User.find(session[:user_id])    
-    @add_friend = User.find(params['friend_id'])
+    @friend = User.find(params['friend_id'])
     
-    @add_result = "Added"
+    add_result = nil
 
-    if !(@add_friend.blank?) then
-      path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+    if !(@friend.blank?) then
+      path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
       parser = XML::Parser.file(path)
       profile = parser.parse
       friends_node = (profile.find('//root/friends')).first
       friends = friends_node.children
 
-      friends.each do |friend|
-        if (friend['id'] == (@add_friend.id).to_s) then
-          @add_result = @add_friend.first_name + " is already one of your friends"
+      friends.each do |f|        
+        if (f['id'].eql?(@friend.id.to_s)) then
+          add_result = @friend.first_name + " is already one of your friends"
           break
         end
       end
 
-      if (@add_result == "Added") then
+      if (add_result.blank?) then
         friends_node << new_friend_node = XML::Node.new('friend')
-        new_friend_node['id'] = (@add_friend.id).to_s
-        new_friend_node << @add_friend.first_name + " " + @add_friend.last_name
-      
+        new_friend_node['id'] = (@friend.id).to_s
+        new_friend_node << @friend.first_name + " " + @friend.last_name
+        
         profile.save(path)
+        
+        add_result = "#{@friend.first_name} was added to your Fanclub!"
       end
     
     end
   
-    render(:update) { |page| page.replace_html('add_' + (@add_friend.id).to_s, @add_result) }
+    render(:update) { |page|
+      page.replace_html('fanclub_content', :partial => "/users/partials/fanclub")
+      page.show("alert_text")
+      page.replace_html("alert_text", add_result)
+      page.visual_effect(:fade, "alert_text", :duration => 10.0, :from => 1.0, :to => 0.0)
+    }
   
   end
 
@@ -260,11 +265,7 @@ private
   #
   #############################################################################
   def choose_layout    
-    if ['friends_search'].include? action_name
-      'full_page'
-    else
       'users'
-    end
   end
   
  

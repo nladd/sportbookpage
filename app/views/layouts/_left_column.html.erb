@@ -4,14 +4,54 @@
       <img src="/images/css/advertisement-system.jpg" alt="SystemMessage" name="system-message" />
 	</div>
 	
+	
+	<%
+	  # Get the user's profile info if they've chosed to make it public
+	  
+	  profile = Hash.new
+	  
+	  path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+	  parser = XML::Parser.file(path)
+	  xml = parser.parse
+	  
+	  node = xml.find_first("//root/birthday")
+	  profile.store("Birthday:", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = xml.find_first("//root/hometown")
+	  profile.store("Hometown:", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = xml.find_first("//root/sex")
+	  profile.store("Gender:", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = xml.find_first("//root/status")
+	  status = CGI.unescape(node.content.to_s)
+		
+	%>
+	
 	<!-- User info -->
 	<div id="user-info">
-	  <a href="#" name="headshot" id="left-column-photo"><img src="/users/<%= @user.id %>/<%= @user.id %>_thumbnail.png" alt="headshot" class="headshot" /></a>
-	  <h1><a href="*" name="edit"><%= @user.first_name + " " + @user.last_name %></a></h1>
+	  <a href="/home" name="headshot" id="left-column-photo"><img src="/users/<%= @user.id %>/<%= @user.id %>_thumbnail.png" alt="headshot" class="headshot" /></a>
+	  <h1><a href="/home" name="edit" style="font-size: 1.2em; font-weight: bold"><%= @user.first_name + " " + @user.last_name %></a></h1>
+	  <h1 id="static_status" class="clear">
+		<i id="status_text" style="color: #000000"><%= status %></i><br />
+		<a href="javascript:void(0);" style="text-decoration: underline" onclick="$('static_status').hide(); $('update_status').show();">Update status</a>
+	  </h1>
+	  <% if (session[:visiting_id].blank?) %>
+	  <h1 id="update_status" class="clear" style="display: none">
+		<%= text_area_tag ("status", status, {:size => "18x3", :maxLength => 80, :id=>"status" } ) %>
+		<%= link_to_remote "Save", {:url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status').value", :complete => "$('static_status').show(); $('update_status').hide();"}, { :style => "text-decoration: underline" } %>
+	  </h1>
+	  <% end %>
+	
+	  </h1>
+	  <% profile.each_pair  do |key, value| %>
 	  <h1 class="clear">
-	    <a href="*" name="help">Hotstreak</a>:
-	    <span class="win">128</span>/<span class="loss">220</span><span class="winpct">(.37)</span>
-          </h1>
+	    <span name="normal"><%= key %></span>
+	    <span class="normal"><%= value %></span>
+      </h1>
+      <% end %>
+	  
+	  <h1 class="clear">
+	    <a name="help">Hotstreak</a>:
+	    <span class="win"><%= @user.wins %></span> / <span class="loss"><%= (@user.wins + @user.losses) %></span> <span class="normal">(<%= @user.losses == 0 ? ".000" : (@user.wins.to_f/(@user.wins + @user.losses).to_f).to_s[0..4] %>)</span>
+      </h1>
 	  <div class="clear"></div>
 	</div>
 	  

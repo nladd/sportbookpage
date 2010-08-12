@@ -57,7 +57,7 @@ This Notice Must Remain for Legal Use
                         {:name => "save-layout"}
             %>
           </li>
-          <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
+          <li class="main"><a href="/preferences" name="change-teams">Settings</a></li>
           <li class="main"><a href="/logout">Logout</a></li>
           <li class="help"><a href="logged-in-general.html" name="help"></a></li>
         </ul>
@@ -72,19 +72,7 @@ This Notice Must Remain for Legal Use
     
     <!-- Right Column -->
     <div id="column-right">
-      <div id="ad-right"><img src="/images/css/advertisement-rightcolumn.jpg" alt="Advertiser" name="ad-right"/></div>
-      
-      <!-- Fanclub -->
-      <div class="fanclub">
-        <%= render :partial => "layouts/fan_club" %>
-      </div>
-      
-
-      <!-- Chalkboard -->
-      <div id="chalkboard" class="chalkboard">
-        <%= render :partial => 'users/partials/chalk_board' %>
-      </div>
-            
+      <%= render :partial => "layouts/right_column" %>
     </div><!-- End right column -->
     
     <div class="clear"></div>

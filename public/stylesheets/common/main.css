@@ -603,7 +603,7 @@ display:inline;
 }
 
 #column-left #user-info span.win {
-color:#00FF00;
+color:#009933;
 font-weight:bold;
 margin:0 0 0 3px;
 }
@@ -613,7 +613,7 @@ color:#FF0000;
 margin:0 0 0 0;
 }
 
-#column-left #user-info span.winpct {
+#column-left #user-info span.normal {
 margin:0 0 0 2px;
 }
 
@@ -1016,7 +1016,7 @@ margin:0 0 4px 3px;
 }
 
 #column-center .hotstreak span.win {
-color:#00FF00;
+color:#009933;
 float:none;
 margin:0 0 0 15px;
 }
@@ -1685,8 +1685,8 @@ background:url(/images/css/left-row-bg-odd.jpg) repeat-y top right;
 
 #column-right .fanclub li.odd:hover {
 border-bottom:#333333 thin solid;
-cursor:pointer;
-color:#4696bb;
+/*cursor:pointer;
+color:#4696bb;*/
 }
 #column-right .chalkboard li.odd:hover {
 border-bottom:#333333 thin solid;
@@ -1699,8 +1699,8 @@ background:url(/images/css/left-row-bg-evn.jpg) repeat-y top right;
 
 #column-right .fanclub li.even:hover {
 border-bottom:#333333 thin solid;
-cursor:pointer;
-color:#4696bb;
+/*cursor:pointer;
+color:#4696bb;*/
 }
 #column-right .chalkboard li.even:hover {
 border-bottom:#333333 thin solid;

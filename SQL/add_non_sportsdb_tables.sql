@@ -11,7 +11,6 @@ CREATE TABLE `sessions` (
   KEY `index_sessions_on_updated_at` (`updated_at`)
 );
 
-
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
   `hashed_password` varchar(255) default NULL,
@@ -32,6 +31,8 @@ CREATE TABLE `users` (
   `sex` char(1) default NULL,
   `reg_comp` tinyint(1) default '0',
   `state` varchar(2) default NULL,
+  `wins` int(11) default '0',
+  `losses` int(11) default '0',
   PRIMARY KEY  (`id`),
   KEY `first_name` (`first_name`),
   KEY `hometown` (`hometown`),

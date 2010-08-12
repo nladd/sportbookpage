@@ -309,10 +309,7 @@ class UserPreferencesController < ApplicationController
     profile.save(path)
     
     render(:update) {|page| 
-      page.replace_html('status_text', "<span style='font-weight: bold'>Status: </span>" + @status.to_s ) 
-      page.replace_html('status_input', "<input id='status' maxLength='80' name='status' size='40' type='text' value='" + @status.to_s + "' />"  )
-      
-
+      page.replace_html('status_text', @status.to_s )      
     }
     
   end
@@ -347,7 +344,7 @@ class UserPreferencesController < ApplicationController
     render(:update) {|page|
       page.show("alert_text")
       page.replace_html("alert_text", "Drag and Drop preferences saved!")
-      page.visual_effect(:fade, "alert_text", :duration => 10.0)
+      page.visual_effect(:fade, "alert_text", :duration => 10.0, :from => 1.0, :to => 0.0)
     }
   
   end
@@ -400,13 +397,13 @@ private
     profile = XML::Document.new()
     profile.root = XML::Node.new('root')
     profile.root << drop_1_node = XML::Node.new('target01')
-    drop_1_node << "profile"
+    drop_1_node << "headlines"
     profile.root << drop_2_node = XML::Node.new('target02')
-    drop_2_node << "headlines"
+    drop_2_node << "schedule"
     profile.root << drop_3_node = XML::Node.new('target03')
-    drop_3_node << "schedule"
+    drop_3_node << "scoreboard"
     profile.root << drop_4_node = XML::Node.new('target04')
-    drop_4_node << "scoreboard"
+    drop_4_node << "standings"
     profile.root << XML::Node.new('friends')
     profile.root << status_node = XML::Node.new('status')
     status_node << "New member"
@@ -579,9 +576,7 @@ private
     #write the value
     node.content = CGI.escape(@user.birthday)
     # determine if the user has elected to not show the item in their profile
-    logger.info "show = " + show['birthday'].to_s
-    
-    show['birthday'].blank? ? node['show'] = "yes" :  node['show'] = "no"
+    show.blank? || show['birthday'].blank? ? node['show'] = "yes" :  node['show'] = "no"
     
     # get the hometown node if it exists
     node = profile.find('//root/hometown').first
@@ -590,7 +585,7 @@ private
     #write the value
     node.content = CGI.escape(@user.hometown + ", " + @user.state)
     # determine if the user has elected to the item in their profile
-    show['hometown'].blank? ? node['show'] ="yes" : node['show'] = "no" 
+    show.blank? || show['hometown'].blank? ? node['show'] ="yes" : node['show'] = "no" 
     
     # get the sex node if it exists
     node = profile.find('//root/sex').first
@@ -599,7 +594,7 @@ private
     #write the value
     node.content = CGI.escape(@user.sex == "m" ? "Male" : "Female")
     # determine if the user has elected to the item in their profile
-    show['sex'].blank? ? node['show'] = "yes" : node['show'] = "no"
+    show.blank? || show['sex'].blank? ? node['show'] = "yes" : node['show'] = "no"
           
     profile.save(profile_path)
   end
