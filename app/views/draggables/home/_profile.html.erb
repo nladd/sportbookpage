@@ -1,59 +1,48 @@
 
-<div id="profile_content" class="profile_content">
+<div class="head">
+  <h1 name="section-title"><%= @drop_title %></h1>
+  <h2><a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expandCollapseTarget('<%= @drop_id %>');">Expand</a></h2>
+</div>
 
-<table id="profile_table" class="profile_table" cellspacing=2>
-  <tr><td rowspan='10' valign="top">
-    <img src='/users/<%= (@user.id).to_s %>/<%= (@user.id).to_s %>.png' alt='No image available' id="profile_pic" class="profile_pic" />
-  </td></tr>
-  
-  
-  <tr><td>
-    <span style="font-weight: bold">Name: </span><%= @user.first_name + " " + @user.last_name %>
-  </td>
-  </tr>
-<%
-      if (!(@status.blank?) && @status['show'] == 'yes')
-%>
-  <td>
-    <div id="status_text">
-      <span style="font-weight: bold">Status: </span><%= @status.content %>
-    </div>
-    <div id="status_input" style="display:none">
-      <span style="font-weight: bold">Status: </span><%= text_field_tag ("status", @status.content, {:size => 40, :maxLength => 80, :id=>"status" } ) %>
-    </div>
-  </td>
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-up" class="up" onclick="jumpToTop('<%= @drop_id %>_content')" title="Click to jump to top"></a>
+</div>
 
-  <% if (session[:visiting_id].blank?) %>
-    <td style="float: right">
-      <div id="update_status">
-        <a href="javascript:void(0);" onclick="$('save_status').show(); $('status_input').show(); $('status_text').hide(); $('update_status').hide();">Update</a>
-      </div>
-      <div id="save_status" style="display: none">
-        <%= link_to_remote "Save", :url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status').value", :complete => "$('save_status').hide(); $('status_input').hide(); $('status_text').show(); $('update_status').show();" %>
-      </div>
-    </td>
-  <% end %>
-
-  </tr>
-  <%
-end
-
-    PROFILE_KEYS.each do |key|
-
-      node = @profile.find_first("//root/" + key)
-      if (@options[key] && node && node['show'] == 'yes')
-        text = CGI.unescape(node.content)
-    %>
-          <tr colspan='2'><td>
-            <span style="font-variant: small-caps"><%= @options[key] + ": " %></span><%= text.gsub(/\n/, '<br/>') %>
-          </td></tr>
-          <%
-      end
+<!-- User info -->
+<div id="profile" class="profile">
       
-    end  # end loop
+      
+      <a href="/home" name="headshot" id="left-column-photo"><img src="/users/<%= @user.id %>/<%= @user.id %>.png" alt="headshot" class="headshot" /></a>
+      <h2><a href="/home" name="edit" style="font-size: 1.2em; font-weight: bold"><%= @user.first_name + " " + @user.last_name %></a></h2>
+      
+      <div id="static_status_intarget">  
+        <i id="status_text_intarget" style="color: #000000"><%= @status %></i><br />
+        <a href="javascript:void(0);" style="text-decoration: underline" onclick="$('static_status_intarget').hide(); $('update_status_intarget').show();">Update status</a>
+      </div>
+      <% if (session[:visiting_id].blank?) %>
+      <div id="update_status_intarget" style="display: none">
+        <%= text_area_tag ("status", @status, {:size => "18x3", :maxLength => 80, :id=>"status_intarget" } ) %>
+        <%= link_to_remote "Save", {:url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status_intarget').value", :complete => "$('static_status_intarget').show(); $('update_status_intarget').hide(); $('status_text_intarget').innerHTML = $('status_intarget').value;"}, { :style => "text-decoration: underline" } %>
+      </div>
+      <% end %>
+      
+      
+      <div class="clear"></div>
+      <br />
+      
+      <div>
+      <% @profile.each_pair  do |key, value| %>
+      
+        <a><%= key %>: <%= value %></a>
+        <div class="clear"></div>
+      <% end %>
+      
+      
+        <a name="help">Hotstreak</a>:&nbsp;<a class="win"><%= @user.wins %></a>&nbsp;/&nbsp;<a class="loss"><%= (@user.wins + @user.losses) %></a>&nbsp;<a>(<%= @user.losses == 0 ? ".000" : (@user.wins.to_f/(@user.wins + @user.losses).to_f).to_s[0..4] %>)</a>
+      </div>
+      
+      <div class="clear"></div>
+      
+</div>
 
-  %>
-  </table>
-</div> <!-- profile_content div -->
-
-
+<%= render :partial => "draggables/partials/footer" %>

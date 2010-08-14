@@ -48,12 +48,10 @@ padding:0 7px 5px 5px;
 
 .clear {
 clear:both;
-
 }
 
 .floatleft {
 float:left;
-
 display:inline;
 }
 
@@ -561,13 +559,13 @@ margin:10px 0 10px 0;
 }
 
 /*Left column user info*/
-#column-left #user-info {
+#column-left #profile {
 width:160px;
 height:auto;
 margin:5px 0 5px 0;
 }
 
-#column-left #user-info img.headshot {
+#column-left #profile img.headshot {
 width:auto;
 height:auto;
 margin:0 4px 4px 4px;
@@ -575,11 +573,11 @@ float:left;
 display:inline;
 }
 
-/*#column-left #user-info img.headshot:hover {
+/*#column-left #profile img.headshot:hover {
 border:#4696bb thin solid;
 }*/
 
-#column-left #user-info h1 {
+#column-left #profile h1 {
 font-size:.7em;
 font-weight:normal;
 color:#4696bb;
@@ -588,32 +586,32 @@ padding:0 4px 4px 4px;
 
 }
 
-#column-left #user-info h1 a {
+#column-left #profile h1 a {
 color:#4696bb;
 }
 
-#column-left #user-info i a {
+#column-left #profile i a {
 color:#4696bb;
 font-size:.9em;
 }
 
-#column-left #user-info h1 span {
+#column-left #profile h1 span {
 font-size:inherit;
 display:inline;
 }
 
-#column-left #user-info span.win {
+#column-left #profile span.win {
 color:#009933;
 font-weight:bold;
 margin:0 0 0 3px;
 }
 
-#column-left #user-info span.loss {
+#column-left #profile span.loss {
 color:#FF0000;
 margin:0 0 0 0;
 }
 
-#column-left #user-info span.normal {
+#column-left #profile span.normal {
 margin:0 0 0 2px;
 }
 
@@ -1246,6 +1244,26 @@ margin:0;
 padding:0;
 }
 
+#draggables #target-holder div h2 {
+margin: 10px 0 0 0;
+}
+
+#draggables #target-holder div div {
+margin: 3px 0 2px 10px; 
+font-size: .75em;
+}
+
+#draggables #target-holder div div a.win {
+color:#009933;
+font-weight:bold;
+margin:0 0 0 3px;
+}
+
+#draggables #target-holder div div a.loss {
+color:#FF0000;
+margin:0 0 0 0;
+}
+
 /* expanded target */
 
 #draggables #target-holder span.expanded {
@@ -1470,6 +1488,8 @@ background:url(/images/css/target-scroll-arrow-up.gif) no-repeat center center;
 
 
 #draggables #target-holder .scroll-dwn {
+position: absolute;
+bottom: 0px;
 width:100%;
 height:20px;
 background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;
@@ -1487,8 +1507,6 @@ display:inline;
 #draggables #target-holder .scroll-dwn a.dwn {
 background:url(/images/css/target-scroll-arrow-dwn.gif) no-repeat center center;
 }
-
-
 
 
 /* right column */
@@ -1591,11 +1609,9 @@ display:inline;
 
 /* right column list items  */
 
-#column-right .fanclub {
-max-height: 250px;
-}
-#column-right .chalkboard {
-max-height: 300px;
+#column-right ul {
+overflow: hidden;
+max-height: 400px;
 }
 
 #column-right li {
@@ -1713,10 +1729,18 @@ height:10px;
 background:url(/images/css/right-column-scroll-up.jpg) no-repeat top left;
 }
 
+#column-right .scroll-up:hover {
+cursor: pointer;
+}
+
 #column-right .scroll-down {
 width:auto;
 height:10px;
 background:url(/images/css/right-column-scroll-dwn.jpg) no-repeat top left;
+}
+
+#column-right .scroll-down:hover {
+cursor: pointer;
 }
 
 /* nav low */

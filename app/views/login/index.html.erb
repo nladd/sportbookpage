@@ -133,7 +133,10 @@
 	  <% end %>
 	  <li>
 		<label>Gender:</label>
-		<span style="float: right">Female</span><input type="radio" name="sex" value="f" <%= "checked" if @user.sex == 'f' %> /><span style="float: right">Male</span><input type="radio" name="sex" value="m" <%= "checked" if @user.sex == 'm' %> />
+		<span style="float: right">Female</span>
+		<input type="radio" name="sex" value="f" />
+		<span style="float: right">Male</span>
+		<input type="radio" name="sex" value="m" />
 		<div class="clear"></div>
 	  </li>
 	  <% if !@user.errors[:sex].blank? %>

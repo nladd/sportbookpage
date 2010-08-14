@@ -242,7 +242,9 @@ class UsersController < ApplicationController
       
       write_comment_xml(@author, @user.id)
       
-      render(:update) { |page| page.replace_html('chalkboard', :partial => 'users/partials/chalk_board') }
+      render(:update) { |page|
+        page.replace_html('chalkboard', :partial => '/users/partials/chalkboard')
+      }
  
     end
     
@@ -281,7 +283,7 @@ private
   #############################################################################
   def write_comment_xml(submitter, owner_id)
   
-    @submit_comment = CGI.escape(params[:comment])
+    submit_comment = CGI.escape(params[:comment])
     time = Time.now
     
     # convert time to 12hr am/pm
@@ -289,26 +291,23 @@ private
     minute = ( time.min < 10 ? "0" + (time.min).to_s : (time.min).to_s )
     
     #path of file to write
-    path = RAILS_ROOT + "/public/users/" + owner_id.to_s + "/" + owner_id.to_s + ".chalkboard"
+    path = RAILS_ROOT + "/public/users/#{owner_id}/#{owner_id}.chalkboard"
 
     chalkboard = XML::Document.file(path)   
     chalkboard.root << new_comment = XML::Node.new('comment')
 
     new_comment << from_node = XML::Node.new('from')
     from_node << submitter.first_name + " " + submitter.last_name
-    from_node['id'] = submitter.id
+    from_node['id'] = submitter.id.to_s
     new_comment << time_node = XML::Node.new('time')
     time_node << hour.to_s + ":" + minute + ( time.hour < 12 ? "am" : "pm" )
     new_comment << date_node = XML::Node.new('date')
     date_node << time.month.to_s + "/" + time.day.to_s + "/" + time.year.to_s
     new_comment << text_node = XML::Node.new('text')
-    text_node << @submit_comment
+    text_node << submit_comment
    
-    if chalkboard.save(path, :indent => true, :encode => 'UTF-8')
-      return 1
-    else
-      return 0
-    end
+    chalkboard.save(path)
+      
     
   end
   

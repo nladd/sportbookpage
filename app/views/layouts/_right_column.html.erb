@@ -2,95 +2,18 @@
 <div id="ad-right"><img src="/images/css/advertisement-rightcolumn.jpg" alt="Advertiser" name="ad-right"/></div>
       
 <!-- Fanclub -->
-<div class="fanclub">
-  
-  <div id="header">
-    <a id="plus_minus_fanclub" href="javascript:void(0);" class="expanded" onclick="$('plus_minus_fanclub').toggleClassName('expanded'); $('plus_minus_fanclub').toggleClassName('collapsed'); $('fanclub_content').toggle();"></a>
-    <h1>Fanclub</h1>
-  </div>
-  
-  <div class="search">
-    <%# form_remote_tag :url => {:controller => "users", :action => "friends_search"}, :html => {:id => "fan_search_form"} do %>
-      <input id="search_name" name="name" style="font-size: .8em" class="field" value="Search fans..." onfocus="$('search_name').clear()" type="text" />
-      <%= link_to_remote "<input name=\"fan-search-submit\" class=\"submit\" onclick=\"$('fan_search_form').submit();\"/>",
-                  {:url =>  { :controller => "users", :action => "friends_search" },
-                  :with => "'name=' + encodeURIComponent($('search_name').value)" }
-       %>
-      <div class="clear"></div>
-    <%# end %>
-  </div>
-  
-  <div id="fanclub_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-up"></a></div>
-  
-  <ul id="fanclub_content">
-    <%= render :partial => "/users/partials/fanclub" %>
-  </ul>
-  
-  <div id="fanclub_scroll-down" class="scroll-down" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-down"></a></div>
+<div id="fanclub" class="fanclub">
+  <%= render :partial => "/users/partials/fanclub" %>  
+</div> <!-- close fanclub -->
 
-<%=
-  javascript_tag "
-      Event.observe($('fanclub_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('fanclub_content'), 'fanclub_content', -5));
-      Event.observe($('fanclub_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('fanclub_content'), 'fanclub_content', 5));"
-  
-%>
-</div>
+<%= draggable_element ("fanclub", {:revert => true, :ghosting => true}) %>
 
 
 <!-- Chalkboard -->
 <div id="chalkboard" class="chalkboard">
-  <div id="header">
-    <a id="plus_minus_chalkboard" href="javascript:void(0);" class="expanded" onclick="$('plus_minus_chalkboard ').toggleClassName('expanded'); $('plus_minus_chalkboard').toggleClassName('collapsed'); $('chalkboard_content').toggle();"></a>
-    <h1>Chalkboard</h1>
-    <% if !session[:visiting_id].blank? %>
-    <h2><a href="#" name="edit-chalkboard" onclick="Effect.toggle('add_comment', 'appear', {duration: .6}); $('user_comment').value = '';">Comment</a></h2>
-    <% end %>
-  </div>
-  
-  <div class="add_comment_text_box" id="add_comment" style="display:none">
-    <%= text_area_tag('comment', nil, {:style => 'width: 175px;height: 50px;', :value => '', :id => "user_comment"}) %>
-    
-   <h2><%= link_to_remote "Chalk It", 
-      {:url =>  { :controller => "users", :action => "submit_comment" },
-      :with => "'comment=' + encodeURIComponent($('user_comment').value)" },
-      { :onclick => "Effect.toggle('add_comment', 'appear', {duration: .6}); " } %></h2>
-  </div>
-  <div class="clear"></div>
-          
-  <div id="chalkboard_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-up"></a></div>
-          
-  <ul id="chalkboard_content">
-<%
-  path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard"
-  parser = XML::Parser.file(path)
-  profile = parser.parse
-  comments = profile.find('//root/comment')
-  (comments.length - 1).downto(0) do |i|
-    comment = comments[i]
-    img_path = "/users/#{comment.find('from').first['id']}/#{comment.find('from').first['id']}_thumbnail.png"
-    text = CGI.unescape(comment.find('text').first.content)
-%>
-          
-  <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
-    <a href="javascript:void(0);" name="headshot"><img src="<%= img_path %>" class="headshot" /></a>
-    <p><%= text.gsub(/\n/, '<br/>') %></p>
-    <em>Posted by <a href="*" name="friend"><%= CGI.unescape(comment.find('from').first.content) %></a> on <%= CGI.unescape(comment.find('date').first.content) + " " + CGI.unescape(comment.find('time').first.content) %>.
-    <br/><a href="*" name="reply">Reply</a> | <a href="*" name="edit">Delete</a></em>
-    <div class="clear"></div>
-  </li>
-  
-<% end %>
-  
-  <div id="chalkboard_scroll-down" class="scroll-down" onmouseout="stopScroll();"><a href="*" name="fanclub-scroll-down"></a></div>
+  <%= render :partial => "/users/partials/chalkboard" %> 
+</div> <!-- close chalkboard -->
 
-  </ul>
+<%= draggable_element ("chalkboard", {:revert => true, :ghosting => true}) %>
 
-<%=
-  javascript_tag "
-      Event.observe($('chalkboard_scroll-up'), 'mouseover', scrollDropArea.bindAsEventListener($('chalkboard_content'), 'chalkboard_content', -5));
-      Event.observe($('chalkboard_scroll-down'), 'mouseover', scrollDropArea.bindAsEventListener($('chalkboard_content'), 'chalkboard_content', 5));"
-  
-%>
-
-</div>
-      
+<div class="clear"></div>

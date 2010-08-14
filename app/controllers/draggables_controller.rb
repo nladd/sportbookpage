@@ -32,10 +32,12 @@ class DraggablesController < ApplicationController
     
     if (@dragged_id == "schedule" )
       load_schedule()
-    elsif (@dragged_id == "friends")
-      load_friends()
+    elsif (@dragged_id == "fanclub")
+      load_fanclub()
     elsif (@dragged_id == "profile")
       load_profile()
+    elsif (@dragged_id == "chalkboard")
+      load_chalkboard()
     elsif (@dragged_id == "roster")
       load_roster()
     elsif (@dragged_id == "standings")
@@ -61,20 +63,42 @@ class DraggablesController < ApplicationController
 
   #############################################################################
   # Description:
-  #   Load the variables needed to render a user's friends
+  #   Load the variables needed to render a user's fanclub
   #
   #############################################################################
-  def load_friends()
+  def load_fanclub()
   
-    @user = User.find(session[:user_id])
+    xml_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+    parser = XML::Parser.file(xml_path)
+    profile = parser.parse
+    friends_node = (profile.find('//root/friends')).first
+    @friends = friends_node.children
   
-    @partial_path = 'draggables/home/fan_club'
+    @partial_path = '/draggables/home/fanclub'
+    @drop_title = 'Fanclub'
   
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
     }
   
   end
+  
+  #############################################################################
+  # Description:
+  #   Load the variables needed to render a user's chalkboard
+  #
+  #############################################################################
+  def load_chalkboard()
+
+    @partial_path = '/draggables/home/chalkboard'
+    @drop_title = 'Chalkboard'
+  
+    render(:update) { |page| 
+                page.replace_html(@drop_id, :partial => @partial_path)
+    }
+  
+  end
+
 
   
   #############################################################################
@@ -83,23 +107,25 @@ class DraggablesController < ApplicationController
   #
   #############################################################################
   def load_profile()
-  
-    @options = {"birthday" => "Birthday", 
-           "hometown" => "Hometown",
-           "about_me" => "More", 
-           "favorite_coach" => "Favorite Coach", 
-           "jersey_number" => "Jersey Number", 
-           "favorite_team" => "Favorite Team", 
-           "favorite_athlete" => "Favorite Player",  
-           "favorite_sport" => "Sport"}
-
-    user_id = @user.id
-    path = RAILS_ROOT + "/public/users/#{user_id}/#{user_id}.profile"
-    parser = XML::Parser.file(path)
-    @profile = parser.parse
-    @status = @profile.find_first("//root/status")
     
-    @partial_path = "draggables/home/profile"
+    # Get the user's profile info if they've chosed to make it public
+    @profile = Hash.new
+    
+    path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+    parser = XML::Parser.file(path)
+    xml = parser.parse
+    
+    node = xml.find_first("//root/birthday")
+    @profile.store("Birthday", CGI.unescape(node.content)) if node["show"].eql?("yes")
+    node = xml.find_first("//root/hometown")
+    @profile.store("Hometown", CGI.unescape(node.content)) if node["show"].eql?("yes")
+    node = xml.find_first("//root/sex")
+    @profile.store("Gender", CGI.unescape(node.content)) if node["show"].eql?("yes")
+    node = xml.find_first("//root/status")
+    @status = CGI.unescape(node.content.to_s)
+    
+    @partial_path = "/draggables/home/profile"
+    @drop_title = "Profile"
     
     render(:update) { |page|
                 page.replace_html(@drop_id, :partial => @partial_path)

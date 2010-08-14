@@ -13,9 +13,9 @@
   friends_node = (profile.find('//root/friends')).first
   friends = friends_node.children
 
-  i = 0
+  i = -1
   @results.each do |result|
-    
+    i += 1
     img_path = "/users/#{result.id}/#{result.id}_thumbnail.png"
     
     result_profile_path = RAILS_ROOT + "/public/users/#{result.id}/#{result.id}.profile"

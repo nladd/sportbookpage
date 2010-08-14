@@ -1,0 +1,65 @@
+
+<div class="head">
+  <h1 name="section-title"><%= @drop_title %></h1>
+  <h2><a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expandCollapseTarget('<%= @drop_id %>');">Expand</a></h2>
+</div>
+
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-up" class="up" onclick="jumpToTop('<%= @drop_id %>_content')" title="Click to jump to top"></a>
+</div>
+
+<!-- Fanclub -->
+<ul id="<%= @drop_id %>_content" class="fanclub">
+  <%
+      
+    i = -1
+    @friends.each do |friend|
+      i += 1
+      friend_id = friend['id']
+      img_path = "/users/#{friend_id}/#{friend_id}_thumbnail.png"
+      friend_profile_path = RAILS_ROOT + "/public/users/#{friend_id}/#{friend_id}.profile"
+      parser = XML::Parser.file(friend_profile_path)
+      xml = parser.parse
+      
+      @profile = Hash.new
+      
+      node = xml.find_first("//root/birthday")
+      @profile.store("Birthday", CGI.unescape(node.content)) if node["show"].eql?("yes")
+      node = xml.find_first("//root/hometown")
+      @profile.store("Hometown", CGI.unescape(node.content)) if node["show"].eql?("yes")
+      node = xml.find_first("//root/sex")
+      @profile.store("Gender", CGI.unescape(node.content)) if node["show"].eql?("yes")
+      
+      status = xml.find_first('//root/status')
+      status.blank? ? status = "" : status = status.content
+      
+      cgi_name = CGI.escape(friend.content)
+  %>
+    
+      <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
+        <span class="clps02col clps">
+          <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
+            <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
+            <a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();"><img src="<%= img_path %>" class="headshot" /></a>              
+            <h1><a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();"><%= friend.content %></a></h1>
+            <p><i><%= status %></i></p>
+          </form>
+        </span>
+        
+        <span class="clps02col clps">
+          <% @profile.each_pair  do |key, value| %>
+            <p>
+              <a><%= key %>: <%= value %></a>
+            </p>
+          <% end %>
+        </span>
+        
+        <div class="clear"></div>
+      </li>
+    
+    
+       
+  <% end %>
+</ul> <!-- close Fanclub -->
+
+<%= render :partial => "draggables/partials/footer" %>
