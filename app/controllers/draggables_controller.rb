@@ -56,6 +56,8 @@ class DraggablesController < ApplicationController
       load_leaders()
     elsif (@dragged_id == "player_card")
       load_player_card()
+    else
+      return
     end
       
   end
@@ -281,7 +283,7 @@ class DraggablesController < ApplicationController
     
     
     @partial_path = "draggables/" + @level + "/standings"
-    
+   
     render(:update) {|page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
                 page.call('expandCollapseCells', "#{@drop_id}")
@@ -359,7 +361,7 @@ class DraggablesController < ApplicationController
      
       @drop_title = "#{@league.abbreviation} Schedule"
             
-    elsif (@level == 'team')
+    elsif (@level == 'team' || @level.eql?("person"))
       @league = Affiliation.get_league(session[:league_id])
       @team = Team.get_team(session[:team_id]) 
       
@@ -369,7 +371,7 @@ class DraggablesController < ApplicationController
       
     end
     
-    @partial_path = '/draggables/' + @level + '/schedule'
+    @partial_path = "/draggables/#{@level}/schedule"
 
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
@@ -446,7 +448,7 @@ class DraggablesController < ApplicationController
                 
       @drop_title = "#{@league.abbreviation} Scoreboard"
       
-    elsif (@level == 'team')
+    elsif (@level == 'team' || @level.eql?("person"))
       @league = Affiliation.get_league(session[:league_id])
       @team = Team.get_team(session[:team_id])
       
@@ -722,10 +724,35 @@ class DraggablesController < ApplicationController
         @dates[a] = datetime_to_time(@articles[a].date_time)
 
       end
+    elsif (@level.eql?("person"))
+      @league = Affiliation.get_league(session[:league_id])
+      @team = Team.get_team(session[:team_id])
+      
+      @articles = Document.get_person_docs_by_fixture_key(@team.team_id, "general-news", 5)
+      
+      @titles = Array.new(@articles.size)
+      @abstracts = Array.new(@articles.size)
+      @dates = Array.new(@articles.size) 
+      
+      @articles.size.times do |a|
+        
+        parser = XML::Parser.file(FEEDFETCHER_ARCHIVE + @articles[a].sportsml)
+        article_xml = parser.parse
+        @titles[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
+        #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
+        @abstracts[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
+        if @abstracts[a].length > 200
+          @abstracts[a] = @abstracts[a][0, 200] + "..."
+        end
+        
+        @dates[a] = datetime_to_time(@articles[a].date_time)
 
+      end
+      
     end
     
-    @partial_path = "draggables/" + @level + "/headlines"
+    @partial_path = "draggables/#{@level}/headlines"
+    @drop_title = "Headlines"
 
     render(:update) {|page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
@@ -809,7 +836,7 @@ class DraggablesController < ApplicationController
     end
     
     
-    @partial_path = '/draggables/' + @level + '/lines'
+    @partial_path = "/draggables/#{@level}/lines"
     
     render(:update) { |page|
                 page.replace_html(@drop_id, :partial => @partial_path)
@@ -831,42 +858,41 @@ class DraggablesController < ApplicationController
     @sport = Affiliation.get_sport_by_league_id(session[:league_id])
     sport_name = (@sport.full_name).downcase
     
-    if (@stat_field = params["stat_field"]) == nil
+    if (@stat_name = params["stat_name"]) == nil
       if sport_name == 'basketball' 
-        @stat_field = "points_scored_per_game"
+        @stat_name = "Points per game"
       elsif sport_name == 'ice hockey'
-        @stat_field = "points"
+        @stat_name = "Points"
       elsif sport_name == 'american football'
-        @stat_field = "touchdowns_total"
+        @stat_name = "Touchdowns"
       elsif sport_name == 'baseball'
-        @stat_field = "home_runs"
+        @stat_name = "Home Runs"
       end
         
     end
     
     @league = Affiliation.get_league(session[:league_id])
       
-    @stat = StatsMapping.find_by_stats_field_and_sport(@stat_field, sport_name)
-    @stats_fields = StatsMapping.get_stats_fields(@stat.stats_type, sport_name, "AND stats_field <> '#{@stat_field}' AND priority = 1")
+    @stat = StatsMapping.find_by_stats_name_and_sport(@stat_name, sport_name)
+    @stats_fields = StatsMapping.get_stats_fields(@stat.stats_type, sport_name, "AND stats_name <> '#{@stat_name}' AND priority = 1")
 
     @stats_mappings = StatsMapping.find_all_by_sport_and_priority(sport_name, 1)
   
     if(@level == 'league')
-      @leaders = Affiliation.get_leaders(@league.affiliation_id, @stat.stats_table, @stat_field)
+      @leaders = Affiliation.get_leaders(@league.affiliation_id, @stat.stats_table, @stat.stats_field)
     
-      @drop_title = "#{@league.abbreviation} Leaders"
+      @drop_title = "#{@league.abbreviation} League Leaders"
     
     elsif(@level == 'team')
       @team = Team.get_team(session[:team_id])
-      @leaders = Team.get_leaders(@team.team_id, @stat_field)
+      @leaders = Team.get_leaders(@team.team_id, @stat_name)
     
-      @drop_title = "#{@team.last_name} Leader"
+      @drop_title = "#{@team.last_name} Team Leader"
     
     end
   
   
-    template = choose_template
-    @partial_path = '/draggables/' + @level + '/leaders'
+    @partial_path = "/draggables/#{@level}/leaders"
   
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
@@ -907,9 +933,7 @@ class DraggablesController < ApplicationController
     
     @player = Person.get_card(session[:person_id])
 
-
-    template = choose_template    
-    @partial_path = '/draggables/' + @level + '/player_card'
+    @partial_path = "/draggables/#{@level}/player_card"
   
     render(:update) { |page| 
                 page.replace_html(@drop_id, :partial => @partial_path)

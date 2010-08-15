@@ -1,38 +1,68 @@
 
-
-<div class="row" style="font-size: 1.5em; color: DimGray">
-  <div class="cell_60" style="border-right: 2px solid LightGray">#<%= @player.uniform_number %></div>
-  <div class="cell_180" style="border-right: 2px solid LightGrey"><%= @player.full_name %></div>
-  <div class="cell_80" style="border-right: 2px solid LightGrey"><%= (@player.position).capitalize! %></div>
-  <div class="cell_120"><%= @player.team_full_name %></div>
-</div>
-
-<div class="row">
-  <div class="cell_40">&nbsp;</div>
-</div>
-
+<%= render :partial => "draggables/partials/header" %>
+  <div style="color: DimGrey; font-size: 1.75em">
+    <div style="border-right: 2px solid LightGray">#<%= @player.uniform_number %>&nbsp;<%= @player.full_name %></div>
+    <div style="border-right: 2px solid LightGrey"><%= (@player.position).capitalize! %></div>
+  </div>
+  
+  <ul id="<%= @drop_id %>_content">
 
   <%
     @stats_types.size.times do |i|
       name = @stats_types[i].stats_type.gsub(/_|#{@sport_name}/, " ")
       name = name.strip.capitalize!
   %>
-      <div class="row">
-        <div class="cell_30"><%= name + "s" %></div>
-      </div>
-      <div class="row" style="font-size: .75em">  
-      <% @fields[i].size.times do |f| %>
-        <div class="cell_30" style="text-align: center"><%= @fields[i][f].abbreviation %><br/>
-          <%= @stats[i].blank? ? "NA" : (@stats[i][@fields[i][f].stats_field].blank? ? "NA" : @stats[i][@fields[i][f].stats_field]) %>
-        </div>
+      <li style="text-align: center">
+        <span class="clps01col clps" style="text-align: left"><h1><%= name + "s" %></h1></span>
+        <div class="clear"></div>
+      </li>
+      <!-- collapsed column headers -->
+      <li class="colHead show clps" style="text-align: center">
+        <%
+          j = -1
+          @fields[i].size.times do |f|
+            j += 1
+            break if (j > 9)
+        %>
+          <span class="clps12col clps"><%= @fields[i][f].abbreviation %></span>
+        <% end %>
+        <div class="clear"></div>
+      </li>
+      <!-- collapsed content -->
+      <li class="show clps" style="text-align: center">
+        <%
+          j = -1
+          @fields[i].size.times do |f|
+            j += 1
+            break if (j > 9)
+        %>
+          <span class="clps12col clps"><%= @stats[i].blank? ? "NA" : (@stats[i][@fields[i][f].stats_field].blank? ? "NA" : @stats[i][@fields[i][f].stats_field]) %></span>
+        <% end %>
+        <div class="clear"></div>
+      </li>
       
-      <% end %>
-      </div>
-  <%    
-    end
-  %>  
+      
+      <!-- expanded column headers -->
+      <li class="colHead hidden expn" style="text-align: center; display:none">
+        <% @fields[i].size.times do |f| %>
+          <span class="clps30col clps"><%= @fields[i][f].abbreviation %></span>
+        <% end %>
+        <div class="clear"></div>
+      </li>
+      <!-- expanded content -->
+      <li class="hidden expn" style="text-align: center; display: none">
+        <% @fields[i].size.times do |f| %>
+          <span class="clps30col clps"><%= @stats[i].blank? ? "NA" : (@stats[i][@fields[i][f].stats_field].blank? ? "NA" : @stats[i][@fields[i][f].stats_field]) %></span>
+        <% end %>
+        <div class="clear"></div>
+      </li>
+  <%
+      end # close stats_types loop
+  %>
   
+  </ul>
 
+<%= render :partial => "draggables/partials/footer" %>
 
 
 <!--

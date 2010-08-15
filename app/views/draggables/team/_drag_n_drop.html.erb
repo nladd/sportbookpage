@@ -1,74 +1,39 @@
 
-  <li class='space_holder'></li> 
+<div id="holder">
+    <ul id="draggables_list">
+      <%
+        leagues = Affiliation.get_all_leagues
+        show_playoffs = false
+        leagues.each do |league|
+            if Affiliation.is_in_post_season(league.affiliation_id)
+                show_playoffs = true
+                break
+            end
+        end
+        
+        if show_playoffs
+      %>
+        <li class="drop_item" id="playoffs">
+          <a href="#" name="draggable-btn-01">Playoffs</a>
+        </li>
+      <% end %>
+      <li><a name="space-holder"></a></li>  
+      <li class="drop_item" id="scoreboard"><a name="draggable-btn-01">Scores</a></li>
+      <li class="drop_item" id="schedule"><a name="draggable-btn-02">Schedule</a></li>
+      <!--<li class="drop_item" id="lines"><a name="draggable-btn-03">Lines</a></li>-->
+      <li class="drop_item" id="headlines"><a name="draggable-btn-04">Headlines</a></li>
+      <li><a name="space-holder"></a></li>
+      <li><a name="space-holder"></a></li>
+      <li class="drop_item" id="standings"><a name="draggable-btn-05">Standings</a></li>
+      <li class="drop_item" id="roster"><a name="draggable-btn-05">Roster</a></li>
+      <li class="drop_item" id="leaders"><a name="draggable-btn-05">Leaders</a></li>
+      <!--<li class="drop_item" id="stats"><a name="draggable-btn-05">Stats</a></li>-->
+      <li><a name="space-holder"></a></li>
+    </ul>
+    <div class="clear"></div>
+</div>
 
-  <li class='drop_item' id='scoreboard'>
-      Scoreboard
-  </li>
 
-  <li class='drop_item' id='schedule'>
-      Schedule
-  </li>
-  
-  <!--<li class='drop_item' id='stats'>
-      Team Stats
-  </li>--> 
- 
-  <li class='drop_item' id='headlines'>
-      Headlines
-  </li>
-  
-  <li class='space_holder'></li>
-  <li class='space_holder'></li> 
-  
-  <li class='drop_item' id='roster'>
-      Roster
-  </li>
+<%= sortable_element('draggables_list', :tag => 'li', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
 
-  <li class='drop_item' id='leaders'>
-    Leaders
-  </li>
-
-  <!--<li class='drop_item' id='challenges'>
-      Challenges
-  </li>
-
-  <li class='drop_item' id='friends'>
-      Fan Club
-  </li>
-  
-  <li class='space_holder'></li>-->
-  
-  <li class='drop_item' id='profile'>
-      Profile
-  </li>
- 
-  <li class='space_holder'></li> 
- 
-<%
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-    parser = XML::Parser.file(path)
-    profile = parser.parse
     
-    help_node = profile.find_first('//root/popupHelp')
-    
-    if help_node && help_node['show'] == 'yes' then
-%>    
-
-    <%=
-        javascript_tag "
-            Event.observe($('scoreboard'), 'mousemove', ShowHelp.bindAsEventListener($('scoreboard'), 'Drag and drop this icon onto one of the boxes below to see the latest scores for your tagged teams'));
-            Event.observe($('schedule'), 'mousemove', ShowHelp.bindAsEventListener($('schedule'), 'Drag and drop this icon onto one of the boxes below to see upcoming schedules for your tagged teams'));
-            Event.observe($('stats'), 'mousemove', ShowHelp.bindAsEventListener($('stats'), 'Drag and drop this icon onto one of the boxes below to see a team\'s stats'));
-            Event.observe($('headlines'), 'mousemove', ShowHelp.bindAsEventListener($('headlines'), 'Drag and drop this icon onto one of the boxes below to see the latest headlines for your tagged teams'));
-            Event.observe($('roster'), 'mousemove', ShowHelp.bindAsEventListener($('roster'), 'Drag and drop this icon onto one of the boxes below to see a team\'s roster'));
-            Event.observe($('leaders'), 'mousemove', ShowHelp.bindAsEventListener($('leaders'), 'Drag and drop this icon onto one of the boxes below to see a team\'s stat leaders'));
-            Event.observe($('profile'), 'mousemove', ShowHelp.bindAsEventListener($('profile'), 'Drag and drop this icon onto one of the boxes below to see your profile'));
-        "
-    %>
-    <%# if show_playoffs %>
-        <%# javascript_tag "Event.observe($('playoffs'), 'mousemove', ShowHelp.bindAsEventListener($('playoffs'), 'Drag and drop this icon onto one of the boxes below to see the playoff matchups for your tagged teams that are in post season play'));" %>
-    <%# end %>
-
-<%
-    end
-%>

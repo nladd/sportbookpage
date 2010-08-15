@@ -49,6 +49,14 @@ function ShowNestedMenu(id)
     $(openMenu).hide();
   }
   openMenu = id;
+  
+  var offset = $('nav-low').cumulativeOffset();
+  $(id).setStyle({
+	left: offset[0] + 'px',
+	top: (offset[1] - $(id).getHeight() - 2) + 'px',
+	width: $('nav-low').getWidth() + 'px'
+  });
+  
   $(id).show();
 }
 
@@ -57,13 +65,22 @@ function CloseAllMenus(id)
   if(id) {
    	$(id).hide();
   }
- 	if(openMenu) {
+  if(openMenu) {
    	$(openMenu).hide();
   }
 }
 
+function toggleCollegeTeams(conference) {
+  
+  var teams = $(conference).getElementsByClassName(conference);
+  
+  for (i = 0; i < teams.length; i++) {
+	$(teams[i]).toggle();
+  }
+}
+
 //close menu if user clicks outside menu
-document.onclick = CloseAllMenus('sports');
+//document.onclick = CloseAllMenus('sports');
 
 
 

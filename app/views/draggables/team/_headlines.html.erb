@@ -1,25 +1,32 @@
 
-<div id="<%= @drop_id %>_headline" class="<%= 'tall_' if ( @drop_id == 'drop_2' || @drop_id == 'drop_3' ) %>headlines">
-  
-<%
-    @articles.size.times do |a|
-%>
+<%= render :partial => "draggables/partials/header" %>
 
-    <%= link_to_remote @titles[a],
+  <ul id="<%= @drop_id %>_content">
+
+<% @articles.size.times do |a| %>
+
+    <li>
+      <h1>
+        <%= link_to_remote @titles[a],
            :url => {:controller => "article", :action => "article"},
            :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
         %>
-    <br/>
-        <%= @dates[a].strftime("%x %I:%M%p") %>
-    <br/>
-    <%= @abstracts[a] %>
-  
-    <br/>
-    <br/>
+        <em><%= @dates[a].strftime("%m/%d %I:%M%p") %></em>
+      </h1>
+      <p><%= @abstracts[a] %></p>
+      <em>
+        <%= link_to_remote "Read more",
+           :url => {:controller => "article", :action => "article"},
+           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+        %>
+      </em>
+    </li>
+
   
 <%
     end  #close articles loop 
 %>
-</div>
+  
+  </ul>
 
-
+<%= render :partial => "draggables/partials/footer" %>

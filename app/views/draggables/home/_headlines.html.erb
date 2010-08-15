@@ -3,15 +3,11 @@
 
   <ul id="<%= @drop_id %>_content">
 
-<%
-  @leagues.size.times do |i|
-%>
+<% @leagues.size.times do |i| %>
   
    <li class="subhead"><%= @leagues[i].abbreviation %> Top Stories</li>
    
-<%
-    @articles[i].size.times do |a|
-%>
+<% @articles[i].size.times do |a| %>
 
     <li>
       <h1>
@@ -19,8 +15,9 @@
            :url => {:controller => "article", :action => "article"},
            :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[i][a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
         %>
+        <em><%= @dates[i][a].strftime("%m/%d %I:%M%p") %></em>
       </h1>
-      <p><!--<%= @dates[i][a].strftime("%x %I:%M%p") %>--><%= @abstracts[i][a] %></p>
+      <p><%= @abstracts[i][a] %></p>
       <em>
         <%= link_to_remote "Read more",
            :url => {:controller => "article", :action => "article"},

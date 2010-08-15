@@ -324,19 +324,20 @@ class UserPreferencesController < ApplicationController
     
     @user = User.find(session[:user_id])
     
+    level = session[:level]
     profile_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
 
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
     
     # on a drop, the session variable get populated with the drop name
-    node = profile.find_first('//root/target01')
+    node = profile.find_first('//root/#{level}/target01')
     node.content = session['target01'].to_s
-    node = profile.find_first('//root/target02')
+    node = profile.find_first('//root/#{level}/target02')
     node.content = session['target02'].to_s
-    node = profile.find_first('//root/target03')
+    node = profile.find_first('//root/#{level}/target03')
     node.content = session['target03'].to_s
-    node = profile.find_first('//root/target04')
+    node = profile.find_first('//root/#{level}/target04')
     node.content = session['target04'].to_s
   
     profile.save(profile_path)
@@ -395,19 +396,59 @@ private
   
     # create the profile document
     profile = XML::Document.new()
+    
+    #create the root node
     profile.root = XML::Node.new('root')
-    profile.root << drop_1_node = XML::Node.new('target01')
+    
+    #create the node to save a user's draggable preferences
+    profile.root << home_targets = XML::Node.new('home')
+    #create the default draggable for the home page
+    home_targets << drop_1_node = XML::Node.new('target01')
     drop_1_node << "headlines"
-    profile.root << drop_2_node = XML::Node.new('target02')
+    home_targets << drop_2_node = XML::Node.new('target02')
     drop_2_node << "schedule"
-    profile.root << drop_3_node = XML::Node.new('target03')
+    home_targets << drop_3_node = XML::Node.new('target03')
     drop_3_node << "scoreboard"
-    profile.root << drop_4_node = XML::Node.new('target04')
+    home_targets << drop_4_node = XML::Node.new('target04')
     drop_4_node << "standings"
+    #create the default draggables for the league page
+    profile.root << league_targets = XML::Node.new('league')
+    league_targets << drop_1_node = XML::Node.new('target01')
+    drop_1_node << "headlines"
+    league_targets << drop_2_node = XML::Node.new('target02')
+    drop_2_node << "schedule"
+    league_targets << drop_3_node = XML::Node.new('target03')
+    drop_3_node << "scoreboard"
+    league_targets << drop_4_node = XML::Node.new('target04')
+    drop_4_node << "standings"
+    #create the default draggables for the team page
+    profile.root << team_targets = XML::Node.new('team')
+    team_targets << drop_1_node = XML::Node.new('target01')
+    drop_1_node << "headlines"
+    team_targets << drop_2_node = XML::Node.new('target02')
+    drop_2_node << "schedule"
+    team_targets << drop_3_node = XML::Node.new('target03')
+    drop_3_node << "scoreboard"
+    team_targets << drop_4_node = XML::Node.new('target04')
+    drop_4_node << "standings"
+    #create the default draggables for the person page
+    profile.root << person_targets = XML::Node.new('person')
+    person_targets << drop_1_node = XML::Node.new('target01')
+    drop_1_node << "headlines"
+    person_targets << drop_2_node = XML::Node.new('target02')
+    drop_2_node << "schedule"
+    person_targets << drop_3_node = XML::Node.new('target03')
+    drop_3_node << "scoreboard"
+    person_targets << drop_4_node = XML::Node.new('target04')
+    drop_4_node << "standings"
+    
+    #create the friends and status nodes
     profile.root << XML::Node.new('friends')
     profile.root << status_node = XML::Node.new('status')
     status_node << "New member"
     status_node['show'] = 'yes'
+    
+    #save the user's profile
     profile.save(xml_path + ".profile")
     
   end

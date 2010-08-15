@@ -1,32 +1,30 @@
 
-  <div class="row" style="font-weight: bold">
-    <div class="cell_50">NUM</div>
-    <div class="cell_200">Name</div>
-    <div class="cell_100">Pos</div>
-    <div class="cell_40">HT</div>
-    <div class="cell_40">WT</div>
-    <div class="cell_60">DOB</div>
-  </div>
+
+<%= render :partial => "draggables/partials/header" %>
+
+  <ul id="<%= @drop_id %>_content">
+    <li class="colHead" style="text-align: center">
+     <span class="clps12col clps">#</span>
+     <span class="clps03col clps" style="text-align: left">Name</span>
+     <span class="clps08col clps">Pos</span>
+     <span class="clps08col clps">HT</span>
+     <span class="clps08col clps">WT</span>
+     <span class="clps08col clps">DOB</span>
+     <div class="clear"></div>
+   </li>
+    
+  <% @roster.each do |player| %>
+    <li style="text-align: center">
+      <span class="clps12col clps"><%= player.uniform_number %></span>
+      <span class="clps03col clps" style="text-align: left"><a href="/player/<%= player.person_id %>"><%= player.full_name %></a></span>
+      <span class="clps08col clps"><%= player.position %></span>
+      <span class="clps08col clps"><%= player.height %></span>
+      <span class="clps08col clps"><%= player.weight %></span>
+      <span class="clps08col clps"><%= datetime_to_time(player.birth_date).strftime("%m/%d/%y") %></span>
+      <div class="clear"></div>
+    </li>
+  <% end %>
   
-  <%
-    i = 0
-    @roster.each do |player|
-      if (i%2 == 0) 
-        html_class = "even_row"
-      else
-        html_class = "odd_row"
-      end
-  %>
-  <div class="<%= html_class %>">
-    <div class="cell_50"><%= player.uniform_number %></div>
-    <div class="cell_200"><a href="/player/<%= player.person_id %>"><%= player.full_name %></a></div>
-    <div class="cell_100"><%= player.position %></div>
-    <div class="cell_40"><%= player.height %></div>
-    <div class="cell_40"><%= player.weight %></div>
-    <div class="cell_60"><%= datetime_to_time(player.birth_date).strftime("%m/%d/%y") %></div>
-  </div>
-  
-  <%
-      i += 1
-    end
-  %>
+  </ul>
+
+<%= render :partial => "draggables/partials/footer" %>

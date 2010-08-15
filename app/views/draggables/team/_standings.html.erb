@@ -1,67 +1,75 @@
 
-<div class="row">
-    <div class="cell_80">
-      <%= link_to_remote "Division",
-          {:url => { :controller => 'draggables', :action => 'route_action' },
-          :with => "'level=#{@level}&amp;standings_type=division&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
-      %>
-    </div>
-    <div class="cell_80">
-      <%= link_to_remote "Conference",
-          {:url => { :controller => 'draggables', :action => 'route_action' },
-          :with => "'level=#{@level}&amp;standings_type=conference&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
-      %>
-    </div>
-</div>
+<%= render :partial => "draggables/partials/header" %>
 
-
-  <%
-    i = 0
-    
-    @standings.each do |division_standings|
-    
-%>     
-  <div class="row_title" style="" align="center">
-    <%= @sub_affiliations[i].full_name + " " + @sub_affiliation_type %>
-  </div>
-  <div class="row" style="font-weight: bold">
-    <div class="cell_40">Rank</div>
-    <div class="cell_160">Team</div>
-    <div class="cell_40">GP</div>
-    <div class="cell_60">%</div>
-    <div class="cell_50">Wins</div>
-    <div class="cell_60">Losses</div>
-    <div class="cell_60">Streak</div>
-  </div>
+  <ul id="<%= @drop_id %>_content">
 
 <%
+   
+    @sub_affiliations.size.times do |d|
+    
+%>
+	<li class="colHead show clps">
+	  <span class="clps03col clps" style="text-align: left"><%= @sub_affiliations[d].full_name %></span>
+	  <span class="clps08col clps">GP</span>
+	  <span class="clps08col clps">%</span>
+	  <span class="clps08col clps">W</span>
+	  <span class="clps08col clps">L</span>
+	  <span class="clps08col clps">STRK</span>
+	  <div class="clear"></div>
+	</li>
+	<li class="colHead hidden expn" style="display:none">
+	  <span class="clps05col clps" style="text-align: left"><%= @sub_affiliations[d].full_name %></span>
+	  <span class="clps10col clps">GP</span>
+	  <span class="clps10col clps">%</span>
+	  <span class="clps10col clps">W</span>
+	  <span class="clps10col clps">L</span>
+	  <span class="clps10col clps">STRK</span>
+	  <span class="clps10col clps">Home</span>
+	  <span class="clps10col clps">Road</span>
+	  <div class="clear"></div>
+	</li>
+  
+<%
      j = 0 
-     division_standings.each do |standing|
+     @standings[d].each do |standing|
         streak_type = ""
         if standing.streak_type.to_s == 'loss' then
           streak_type = "L"
         elsif standing.streak_type.to_s == 'win'
           streak_type = "W"
         end
-      
-        if ( (j % 2) == 0) then
-          html_class = "even_row"
-        else
-          html_class = "odd_row"
-        end
-%>
-        <div class="<%= html_class %>">
-          <div class="cell_40"><%= standing.rank.to_s %></div>
-          <div class="cell_160"><a href="/team/<%= standing.team_id %>"><%= standing.full_name %></a></div>
-          <div class="cell_40"><%= standing.events_played.to_s %></div>
-          <div class="cell_60"><%= (standing.winning_percentage.to_s)[1..-1] %></div>
-          <div class="cell_50"><%= standing.wins.to_s %></div>
-          <div class="cell_60"><%= standing.losses.to_s %></div>
-          <div class="cell_60"><%= streak_type + standing.streak_total.to_s %></div>
-        </div>
 
-<%      j += 1
-      end   # close division_standings loop
-      i += 1
-    end   # close standings loop
 %>
+
+	<li style="text-align: center" class="show clps">
+	  <span class="clps03col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= standing.first_name %></a></span>
+	  <span class="clps08col clps"><%= standing.events_played.to_s %></span>
+	  <span class="clps08col clps"><%= (standing.winning_percentage.to_s)[1..-1] %></span>
+	  <span class="clps08col clps"><%= standing.wins.to_s %></span>
+	  <span class="clps08col clps"><%= standing.losses.to_s %></span>
+	  <span class="clps08col clps"><%= streak_type + standing.streak_total.to_s %></span>
+	  <div class="clear"></div>
+	</li>
+	<li style="text-align: center; display:none" class="hidden expn">
+	  <span class="clps05col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= standing.first_name %></a></span>
+	  <span class="clps10col clps"><%= standing.events_played.to_s %></span>
+	  <span class="clps10col clps"><%= (standing.winning_percentage.to_s)[1..-1] %></span>
+	  <span class="clps10col clps"><%= standing.wins.to_s %></span>
+	  <span class="clps10col clps"><%= standing.losses.to_s %></span>
+	  <span class="clps10col clps"><%= streak_type + standing.streak_total.to_s %></span>
+	  <span class="clps10col clps"><%= standing.home_wins.to_s + "-" + standing.home_losses.to_s %></span>
+	  <span class="clps10col clps"><%= standing.away_wins.to_s + "-" + standing.away_losses.to_s %></span>
+	  <div class="clear"></div>
+	</li>
+	
+<%      
+        j += 1
+      end   # close standings loop
+     
+    end   # close sub_affiliations loop
+%>
+
+  </ul>
+
+<%= render :partial => "draggables/partials/footer" %>
+

@@ -70,6 +70,10 @@ visibility:hidden;
 display:none;
 }
 
+.show {
+visibility:visible;
+display:normal;
+}
 
 /* body backgrounds
 
@@ -1188,6 +1192,7 @@ _margin:0 0 0 -1px;
 
 #draggables #holder li:hover {
 background:url(/images/css/draggables-btn-bg-ovr.jpg);
+cursor: move;
 }
 
 #draggables #holder li a {
@@ -1327,6 +1332,46 @@ width:39px;
 width:34px;
 }
 
+#draggables #target-holder span.clps09col {
+width:31px;
+}
+
+#draggables #target-holder span.clps10col {
+width:28px;
+}
+
+#draggables #target-holder span.clps11col {
+width:25px;
+}
+
+#draggables #target-holder span.clps12col {
+width:23px;
+}
+
+#draggables #target-holder span.clps13col {
+width:21px;
+}
+
+#draggables #target-holder span.clps14col {
+width:20px;
+}
+
+#draggables #target-holder span.clps15col {
+width:18px;
+}
+
+#draggables #target-holder span.clps20col {
+width:14px;
+}
+
+#draggables #target-holder span.clps25col {
+width:11px;
+}
+
+#draggables #target-holder span.clps30col {
+width:9px;
+}
+
 /* expanded column spans */
 
 #draggables #target-holder span.expn02col {
@@ -1355,6 +1400,46 @@ width:82px;
 
 #draggables #target-holder span.expn08col {
 width:72px;
+}
+
+#draggables #target-holder span.expn09col {
+width:65px;
+}
+
+#draggables #target-holder span.expn10col {
+width:58px;
+}
+
+#draggables #target-holder span.expn11col {
+width:52px;
+}
+
+#draggables #target-holder span.expn12col {
+width:48px;
+}
+
+#draggables #target-holder span.expn13col {
+width:44px;
+}
+
+#draggables #target-holder span.expn14col {
+width:41px;
+}
+
+#draggables #target-holder span.expn15col {
+width:38px;
+}
+
+#draggables #target-holder span.expn20col {
+width:29px;
+}
+
+#draggables #target-holder span.expn25col {
+width:23px;
+}
+
+#draggables #target-holder span.expn30col {
+width:19px;
 }
 
 /* target list items */
@@ -1668,7 +1753,7 @@ width:125px;
 float:right;
 display:inline;
 font-style:italic;
-font-size:.7em;
+font-size:.75em;
 padding:4px 4px 4px 0;
 clear:both;
 }
@@ -1924,24 +2009,24 @@ cursor:pointer;
 
 /* drop-up menu */
 
-#drop-up {
+.drop-up {
 background:url(/images/css/drop-up-bg.jpg) bottom left repeat-x;
 border-top:#FFFFFF thin solid;
-width:auto;
 height:auto;
-position:relative;
-z-index:4000;
-
+z-index:40000;
 _background:none;
+
+/* my edits */
+position: absolute;
 }
 
-#drop-up .content {
+.drop-up .content {
 padding:15px;
 
 _z-index:4001;
 }
 
-#drop-up ul {
+.drop-up ul {
 float:left;
 margin:0 40px 0 0;
 
@@ -1949,20 +2034,24 @@ _z-index:4002;
 
 }
 
-#drop-up ul h1 {
+.drop-up ul h1 {
 font-size:.8em;
 color:#4696bb;
 }
 
-#drop-up li {
+.drop-up ul li h1 {
+font-size:1.15em;
+color:#4696bb;
+}
+
+.drop-up li {
 font-size:.7em;
 color:#333333;
 }
 
-#drop-up li:hover {
+.drop-up li:hover {
 font-size:.7em;
 color:#4696bb;
-cursor:pointer;
-
+cursor: pointer;
 _cursor:pointer;
 }

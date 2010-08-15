@@ -375,14 +375,14 @@ class Team < ActiveRecord::Base
   # Return:
   #   
   #############################################################################
-  def self.get_leaders(team_id, stats_field, time=TIME, 
+  def self.get_leaders(team_id, stats_name, time=TIME, 
                                     limit=50, publisher_id=PUBLISHER_ID)
     
     league = Team.get_league(team_id)
     sport = Affiliation.get_sport_by_league_id(league.affiliation_id)
     sport_name = (sport.full_name).downcase
     
-    stat = StatsMapping.find_by_stats_field_and_sport(stats_field, sport_name)
+    stat = StatsMapping.find_by_stats_name_and_sport(stats_name, sport_name)
     
     stats_tables = StatsMapping.get_stats_tables(stat.stats_type, sport_name)
     stats_fields = StatsMapping.get_stats_fields(stat.stats_type, sport_name)
@@ -424,7 +424,7 @@ class Team < ActiveRecord::Base
               INNER JOIN core_stats ON core_stats.id = c_stats.stat_repository_id
               INNER JOIN display_names ON display_names.entity_id = persons.id AND entity_type = 'persons'" + join_statement,
               :conditions => "person_phases.membership_type = 'teams' AND person_phases.phase_status != 'inactive'",
-              :order => "#{stat.stats_table}.#{stats_field} + 0 DESC",
+              :order => "#{stat.stats_table}.#{stat.stats_field} + 0 DESC",
               :limit => limit)
 
   

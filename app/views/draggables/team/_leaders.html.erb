@@ -1,64 +1,102 @@
 
-<div class="row">
-  <div class="cell_250">Stat:</div>
-</div>
-<div class="row">
-  <div class="cell_250">
-        <%= 
-          collection_select(:stat, :stats_field, 
-            @stats_mappings,
-            :stats_field, :stats_name, 
-            {:include_blank => "Select Stat...."})
-        %>
-  </div>
-  <div class="cell_60">
-    <%= button_to_remote("Go", 
+<%= render :partial => "draggables/partials/header" %>
+
+<ul id="<%= @drop_id %>_content">
+  <li>
+    <span class="clps01col clps">Stat:&nbsp;&nbsp;
+      <%= 
+        collection_select(:stat, :stats_name, 
+          @stats_mappings,
+          :stats_name, :stats_name, 
+          {:include_blank => "Select Stat...."})
+      %>&nbsp;&nbsp;
+      <%= button_to_remote("Go", 
                       {:url => {:controller => "draggables", :action => "route_action"},
-                      :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;stat_field=' + $('stat_stats_field').value"} )
+                      :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;stat_name=' + $('stat_stats_name').value"} )
+      %>
+    </span>
+    <div class="clear"></div>
+  </li>
+
+  <!-- collapsed target header -->
+  <li class="colHead show clps" style="text-align: center">
+    <span class="clps05col clps" style="text-align: left">Player</span>
+    <span class="clps12col clps"><%= @stat.abbreviation %></span>
+    <span class="clps12col clps">GP</span>
+    <%
+      i = -1
+      @stats_fields.each do |field|
+        i += 1
+        break if (i > 5)
     %>
-  </div>
-</div>
-
-
-      
-<div class="row">
-  <div class="cell_180" align="left">Player</div>
-  <div class="cell_50" align="center"><%= @stat.abbreviation %></div>
-  <div class="cell_50" align="center">GP</div>
-  <% @stats_fields.each do |field| %>
-    <div class="cell_50" align="center">
+    <span class="clps12col clps">
       <%= field.abbreviation %>
-    </div>
-  <% end %>
-</div>
-
-<% 
-  i = 0
-  @leaders.each do |leader|
-    if (i%2 == 0)
-      html_class = "even_row"
-    else
-      html_class = "odd_row"
-    end
-%>
-  <div class="<%= html_class %>">
-    <div class="cell_180" align="left"><a href="/player/<%= leader.person_id %>"><%= leader.full_name %></a></div>
-    <div class="cell_50" align="center"><%= leader[@stat.stats_field] %><% if !(@stat.counter_field).blank? %>/<%= leader[@stat.counter_field] %><% end %></div>
-    <div class="cell_50" align="center"><%= leader.events_played %></div>
-    <% @stats_fields.each do |field| %>
-      <div class="cell_50" align="center">
-        <% if leader[field.stats_field] == nil %>
-          NA
-        <% else %>
-          <%= leader[field.stats_field] %><% if !(field.counter_field).blank? %>/<%= leader[field.counter_field] %>  
-          <% end %>
-            
-        <% end %>
-      </div>
+    </span>
     <% end %>
-  </div>
+    <div class="clear"></div>
+  </li>
+  <!-- expanded target header -->
+  <li class="colHead hidden expn" style="display:none; text-align: center">
+    <span class="clps13col clps" style="text-align: left">Player</span>
+    <span class="clps30col clps"><%= @stat.abbreviation %></span>
+    <span class="clps30col clps">GP</span>
+    <%
+      @stats_fields.each do |field|
+    %>
+    <span class="clps30col clps">
+      <%= field.abbreviation %>
+    </span>
+    <% end %>
+    <div class="clear"></div>
+  </li>
+
+  <% @leaders.each do |leader| %>
+  <!-- collapsed target content -->
+  <li class="show clps" style="text-align: center">
+    <span class="clps05col clps" style="text-align: left"><a href="/player/<%= leader.person_id %>"><%= leader.full_name %></a></span>
+    <span class="clps12col clps"><%= leader[@stat.stats_field] %><% if !(@stat.counter_field).blank? %>/<%= leader[@stat.counter_field] %><% end %></span>
+    <span class="clps12col clps"><%= leader.events_played %></span
+    <%
+      i = -1
+      @stats_fields.each do |field|
+        i += 1
+        break if (i > 5)
+    %>
+    <span class="clps12col clps">
+      <% if leader[field.stats_field] == nil %>
+        NA
+      <% else %>
+        <%= leader[field.stats_field] %><% if !(field.counter_field).blank? %>/<%= leader[field.counter_field] %>  
+      <% end %>
+    <% end %>
+    </span>
+    <% end %>
+    <div class="clear"></div>
+  </li>
+  <% end %>
   
-<%
-    i += 1
-  end
-%>
+  <!-- expanded target content -->
+  <% @leaders.each do |leader| %>
+  <li class="hidden expn" style="display:none; text-align: center">
+    <span class="clps13col clps" style="text-align: left"><a href="/player/<%= leader.person_id %>"><%= leader.full_name %></a></span>
+    <span class="clps30col clps"><%= leader[@stat.stats_field] %><% if !(@stat.counter_field).blank? %>/<%= leader[@stat.counter_field] %><% end %></span>
+    <span class="clps30col clps"><%= leader.events_played %></span
+    <%
+      @stats_fields.each do |field|
+    %>
+    <span class="clps30col clps">
+      <% if leader[field.stats_field] == nil %>
+        NA
+      <% else %>
+        <%= leader[field.stats_field] %><% if !(field.counter_field).blank? %>/<%= leader[field.counter_field] %>  
+      <% end %>
+    <% end %>
+    </span>
+    <% end %>
+    <div class="clear"></div>
+  </li>
+  <% end %>
+
+</ul>
+
+<%= render :partial => "draggables/partials/footer" %>

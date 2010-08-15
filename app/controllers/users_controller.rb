@@ -24,16 +24,16 @@ class UsersController < ApplicationController
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
     @profile = parser.parse
-    drop_1_node = @profile.find_first('//root/target01')
+    drop_1_node = @profile.find_first("//root/#{@level}/target01")
     @drop_1 = drop_1_node.content
     session['drop_1'] = @drop_1
-    drop_2_node = @profile.find_first('//root/target02')
+    drop_2_node = @profile.find_first("//root/#{@level}/target02")
     @drop_2 = drop_2_node.content
     session['drop_2'] = @drop_2
-    drop_3_node = @profile.find_first('//root/target03')
+    drop_3_node = @profile.find_first("//root/#{@level}/target03")
     @drop_3 = drop_3_node.content
     session['drop_3'] = @drop_3
-    drop_4_node = @profile.find_first('//root/target04')
+    drop_4_node = @profile.find_first("//root/#{@level}/target04")
     @drop_4 = drop_4_node.content
     session['drop_4'] = @drop_4
         
@@ -293,9 +293,15 @@ private
     #path of file to write
     path = RAILS_ROOT + "/public/users/#{owner_id}/#{owner_id}.chalkboard"
 
-    chalkboard = XML::Document.file(path)   
+    parser = XML::Parser.file(path)
+    chalkboard = parser.parse
+    #get the most recent comment's id so we can increment it for the new comment being written
+    last_comment = chalkboard.find_first('//root/comment')
+    last_comment.blank? ? comment_id = -1 : comment_id = last_comment['id'].to_i
+    
+    #write the new comment
     chalkboard.root << new_comment = XML::Node.new('comment')
-
+    new_comment['id'] = (comment_id + 1).to_s
     new_comment << from_node = XML::Node.new('from')
     from_node << submitter.first_name + " " + submitter.last_name
     from_node['id'] = submitter.id.to_s

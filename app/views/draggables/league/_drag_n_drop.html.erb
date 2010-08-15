@@ -1,92 +1,33 @@
 
-<!--  <li class='half_space_holder'></li> -->
+<div id="holder">
+    <ul id="draggables_list">
+      <%
+        leagues = Affiliation.get_all_leagues
+        show_playoffs = false
+        leagues.each do |league|
+            if Affiliation.is_in_post_season(league.affiliation_id)
+                show_playoffs = true
+                break
+            end
+        end
+        
+        if show_playoffs
+      %>
+        <li class="drop_item" id="playoffs">
+          <a href="#" name="draggable-btn-01">Playoffs</a>
+        </li>
+      <% end %>
+        
+      <li class="drop_item" id="scoreboard"><a name="draggable-btn-01">Scores</a></li>
+      <li class="drop_item" id="schedule"><a name="draggable-btn-02">Schedules</a></li>
+      <li class="drop_item" id="lines"><a name="draggable-btn-03">Lines</a></li>
+      <li class="drop_item" id="headlines"><a name="draggable-btn-04">Headlines</a></li>
+      <li class="drop_item" id="standings"><a name="draggable-btn-05">Standings</a></li>
+      <!--<li class="drop_item" id="leaders"><a name="draggable-btn-06">Leaders</a></li>-->
+    </ul>
+    <div class="clear"></div>
+</div>
 
-  <li class="space_holder"></li>
 
-  <li class='drop_item' id='scoreboard'>
-      Scoreboard
-  </li>
-
-  <li class='drop_item' id='schedule'>
-      Schedule
-  </li>
+<%= sortable_element('draggables_list', :tag => 'li', :overlap => 'horizontal', :constraint => false, :scroll => 'window') %>
   
-  <li class='drop_item' id='lines'>
-      Vegas lines
-  </li>
-  
-  <li class="space_holder"></li>
-  <li class="space_holder"></li>
-  
-  <li class='drop_item' id='standings'>
-      Standings
-  </li>
- 
-<!--  <li class='half_space_holder'></li> -->
- 
-  <li class='drop_item' id='headlines'>
-      Headlines
-  </li>
-
-  <!--<li class='drop_item' id='leaders'>
-    Leaders
-  </li>
-
-  <li class='drop_item' id='challenges'>
-      Challenges
-  </li>
-
-  <li class='drop_item' id='friends'>
-      Fan Club
-  </li>-->
-  
-  <li class='drop_item' id='profile'>
-      Profile
-  </li>
- 
-  <%
-    
-    show_playoffs = false
-    if Affiliation.is_in_post_season(session[:league_id])
-        show_playoffs = true
-    end
-
-    
-    if show_playoffs
-  %>
-    <li class="drop_item" id="playoffs">
-      Playoffs
-    </li>
-  <% else %>
-    <li class='space_holder'></li> 
-  <% end %>
-
-  
-  
-  <%
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
-    parser = XML::Parser.file(path)
-    profile = parser.parse
-    
-    help_node = profile.find_first('//root/popupHelp')
-    
-    if help_node && help_node['show'] == 'yes' then
-%>    
-
-    <%=
-        javascript_tag "
-            Event.observe($('scoreboard'), 'mousemove', ShowHelp.bindAsEventListener($('scoreboard'), 'Drag and drop this icon onto one of the boxes below to see the latest scores for your tagged teams'));
-            Event.observe($('schedule'), 'mousemove', ShowHelp.bindAsEventListener($('schedule'), 'Drag and drop this icon onto one of the boxes below to see upcoming schedules for your tagged teams'));
-            Event.observe($('lines'), 'mousemove', ShowHelp.bindAsEventListener($('lines'), 'Drag and drop this icon onto one of the boxes below to see the vegas lines for your tagged teams upcoming games'));
-            Event.observe($('headlines'), 'mousemove', ShowHelp.bindAsEventListener($('headlines'), 'Drag and drop this icon onto one of the boxes below to see the latest headlines for your tagged teams'));
-            Event.observe($('standings'), 'mousemove', ShowHelp.bindAsEventListener($('standings'), 'Drag and drop this icon onto one of the boxes below to see the latest standings for your tagged teams'));
-            Event.observe($('profile'), 'mousemove', ShowHelp.bindAsEventListener($('profile'), 'Drag and drop this icon onto one of the boxes below to see your profile'));
-        "
-    %>
-    <% if show_playoffs %>
-        <%= javascript_tag "Event.observe($('playoffs'), 'mousemove', ShowHelp.bindAsEventListener($('playoffs'), 'Drag and drop this icon onto one of the boxes below to see the playoff matchups for your tagged teams that are in post season play'));" %>
-    <% end %>
-
-<%
-    end
-%>
