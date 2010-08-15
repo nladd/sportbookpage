@@ -74,6 +74,11 @@ CREATE TABLE `stats_mappings` (
 );
 
 
+CREATE TABLE `position_stats_mappings` (
+  `position_id` int(11) default NULL,
+  `stats_mapping_id` int(11) default NULL
+);
+
 CREATE TABLE `invitations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date_sent` DATETIME DEFAULT NOW(),
