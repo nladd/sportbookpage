@@ -68,13 +68,13 @@ class UsersController < ApplicationController
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
     @profile = parser.parse
-    drop_1_node = @profile.find_first('//root/target01')
+    drop_1_node = @profile.find_first('//root/home/target01')
     @drop_1 = drop_1_node.content
-    drop_2_node = @profile.find_first('//root/target02')
+    drop_2_node = @profile.find_first('//root/home/target02')
     @drop_2 = drop_2_node.content
-    drop_3_node = @profile.find_first('//root/target03')
+    drop_3_node = @profile.find_first('//root/home/target03')
     @drop_3 = drop_3_node.content
-    drop_4_node = @profile.find_first('//root/target04')
+    drop_4_node = @profile.find_first('//root/home/target04')
     @drop_4 = drop_4_node.content
     
     cgi_name = CGI.escape("#{@user.first_name} #{@user.last_name}")
