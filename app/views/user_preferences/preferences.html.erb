@@ -10,6 +10,7 @@
     <% end -%>
     
     <% form_tag('/preferences', :multipart => true, :name => 'teams', :id => "register_form") do %>
+    <%= link_to "Back", :back, :class => "back"  %>
     <input name="save" type="submit" class="submit" value="Save" />
     
     <hr />
@@ -23,7 +24,7 @@
     
     <span>
         <h1><%= @user.first_name + " " + @user.last_name %> <br />
-          <i><a href="javascript:void(0);" style="display:inline" name="edit" onclick="$('static-profile').toggle(); $('edit-profile').toggle(); $('keep').toggle();">Edit</a><a id="keep" style="float: right; display: inline">Keep private</a></i>
+          <i><a href="javascript:void(0);" style="display:inline" name="edit" onclick="$('static-profile').toggle(); $('edit-profile').toggle(); $('keep').toggle();">Edit</a><a id="keep" style="float: right; display: inline" onclick="$('show_birthday').checked = true; $('show_hometown').checked = true; $('show_sex').checked = true;">Keep private</a></i>
         </h1>
         <ul id="static-profile" name="user-info" <%= if !@saved then "style=\"display: none\"" end %> >
             <li>DOB: <%= @user.birthday %> <input id="show_birthday" name="show[birthday]" style="float: right" type="checkbox" /></li>
@@ -160,8 +161,7 @@
     abbr = @college_leagues[l].abbreviation.gsub(/[\s']/, "_")
 %>
     <hr />
-    <%# hidden_field_tag( 'college[]', abbr + "," + (@college_leagues[l].affiliation_id).to_s ) %>
-    <h2><%= check_box_tag( 'college[]', abbr + "," + (@college_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %> <%= @college_leagues[l].abbreviation %></h2>
+    <h2><%= check_box_tag( 'college[]', @college_leagues[l].abbreviation.to_s + "," + (@college_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %> <%= @college_leagues[l].abbreviation %></h2>
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
     @college_conferences[l].size.times do |c|
@@ -195,6 +195,7 @@
 <%
   end # close leagues loop
 %>
+    <%= link_to "Back", :back, :class => "back"  %>
     <input name="save" type="submit" class="submit" value="Save" />
     
     </div> <!-- close college <div> -->

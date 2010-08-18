@@ -195,7 +195,7 @@ _margin:0 0 0 -3px;
 #ad-leaderboard .center{
 width:728px;
 height:90px;
-margin:10px;
+margin:10px 20px 10px 10px;
 }
 
 
@@ -300,6 +300,10 @@ border:#CCCCCC thin solid;
 float:left;
 display:inline;
 clear:both;
+}
+
+#home #column-right #login input.radio {
+filter: alpha(opacity=0);
 }
 
 #home #column-right #login input.submit {
@@ -548,7 +552,6 @@ margin:0 0 0 0;
 #column-left {
 width:160px;
 height:100%;
-
 }
 
 
@@ -781,6 +784,11 @@ height:300px;
 margin:10px 0 0 0;
 }
 
+#ad-left-column span {
+position: relative;
+right: 0px;
+float: right;
+}
 
 /* center column */
 
@@ -996,6 +1004,27 @@ cursor:pointer;
 }
 
 #column-center input.submit:hover {
+background:url(/images/css/form-submit-ovr.jpg) no-repeat;
+}
+
+#column-center a.back {
+width:81px;
+height:30px;
+line-height: 30px;
+font-size:.8em;
+font-weight:bold;
+color:#FFFFFF;
+text-align:center;
+text-shadow:#000000 0px -1px 0px;
+float:left;
+background:url(/images/css/form-submit.jpg) no-repeat bottom right;
+display:inline;
+border:none;
+margin:10px;
+cursor:pointer;
+}
+
+#column-center a.back:hover {
 background:url(/images/css/form-submit-ovr.jpg) no-repeat;
 }
 
@@ -1737,7 +1766,6 @@ height:30px;
 float:left;
 margin:4px 0 4px 4px;
 border:#CCCCCC thin solid;
-
 display:inline;
 }
 
@@ -2051,6 +2079,16 @@ color:#333333;
 
 .drop-up li:hover {
 font-size:.7em;
+color:#4696bb;
+cursor: pointer;
+_cursor:pointer;
+}
+
+.drop-up li a {
+color:#333333;
+}
+
+.drop-up li a:hover {
 color:#4696bb;
 cursor: pointer;
 _cursor:pointer;

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+# required packages for FeedFetcherDeluxe by XMLTeams
+apt-get install libcompress-zlib-perl libfile-slurp-perl libdate-pcalc-perl
+
+
+# required packages for a mail server
+apt-get install postfix postfix-mysql
+apt-get install libsasl2-modules libsasl2-modules-sql libgsasl7 libauthen-sasl-cyrus-perl sasl2-bin libpam-mysql
+apt-get install clamav-base libclamav6 clamav-daemon clamav-freshclam
+apt-get install amavisd-new  spamassassin spamc postgrey
+apt-get install squirrelmail squirrelmail-locales php-pear
+apt-get install shorewall-common shorewall-perl 
+apt-get install courier-base courier-authdaemon courier-authlib-mysql courier-imap courier-imap-ssl courier-ssl

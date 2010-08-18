@@ -108,7 +108,7 @@ This Notice Must Remain for Legal Use
         <%
           teams[l][d].size.times do |t|
         %>
-        <li><%= teams[l][d][t].first_name %></li>
+        <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %></a></li>
         <%
           end # close teams loop
         %>
@@ -123,12 +123,12 @@ This Notice Must Remain for Legal Use
     end # close pro_leagues loop
   %>
   
-  <!-- Pop up for professional team menus -->
+  <!-- Pop up for college team menus -->
   <%
-    #get the professional leagues covered
+    #get the college leagues covered
     @college_leagues = Affiliation.get_college_leagues()
     
-    #allocate new arrays to store the divisions and teams for each league
+    #allocate new arrays to store the conferences and teams for each sport
     college_conferences = Array.new(@college_leagues.size)
     teams = Array.new(@college_leagues.size)
     
@@ -147,9 +147,6 @@ This Notice Must Remain for Legal Use
           c_abbr = college_conferences[l][d].full_name.gsub(/[\s']/, "_")
           #for each division in a league, get the teams of that division
           teams[l][d] = Affiliation.get_teams_by_division(college_conferences[l][d].affiliation_id, @college_leagues[l].affiliation_key)
-          
-          logger.info "conference = " + college_conferences[l][d].full_name if college_conferences[l][d].abbreviation.blank?
-          
       %>
       
       <%# "<div class='clear'></div>" if d % 8 == 0 %>
@@ -159,7 +156,7 @@ This Notice Must Remain for Legal Use
         <%
           teams[l][d].size.times do |t|
         %>
-        <li class="<%= c_abbr %>" style="display:none"><%= teams[l][d][t].first_name %></li>
+        <li class="<%= c_abbr %>" style="display:none"><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %><a/></li>
         <%
           end # close teams loop
         %>
@@ -169,7 +166,7 @@ This Notice Must Remain for Legal Use
       %>
       <div class="clear"></div>    
     </div>
-  </div> <!-- close professional pop up menus-->
+  </div> <!-- close college pop up menus-->
   <%
     end # close pro_leagues loop
   %>

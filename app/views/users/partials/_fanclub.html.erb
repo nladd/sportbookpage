@@ -4,14 +4,13 @@
   </div>
   
   <div class="search">
-    <%# form_remote_tag :url => {:controller => "users", :action => "friends_search"}, :html => {:id => "fan_search_form"} do %>
-      <input id="search_name" name="name" style="font-size: .8em" class="field" value="Search fans..." onfocus="$('search_name').clear()" type="text" />
+      <input id="search_name" tabindex="1" name="name" style="font-size: .8em" class="field" value="Search fans..." onfocus="$('search_name').clear()" type="text" />
       <%= link_to_remote "<input name=\"fan-search-submit\" class=\"submit\" onclick=\"$('fan_search_form').submit();\"/>",
                   {:url =>  { :controller => "users", :action => "friends_search" },
-                  :with => "'name=' + encodeURIComponent($('search_name').value)" }
+                  :with => "'name=' + encodeURIComponent($('search_name').value)",
+                  :tabindex => "2"}
        %>
       <div class="clear"></div>
-    <%# end %>
   </div>
   
   <div id="fanclub_scroll-up" class="scroll-up" onmouseout="stopScroll();"><a onclick="jumpToTop('fanclub_content')" title="Click to jump to top" name="fanclub-scroll-up"></a></div>
@@ -42,7 +41,7 @@
         <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
           <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
             <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
-              <a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();"><img src="<%= img_path %>" class="headshot" /></a>
+              <a href="javascript:void(0);" name="fan-name" style="display: inline" onclick="$('form_<%= friend_id %>').submit();"><img src="<%= img_path %>" class="headshot" /></a>
               <p>
                 <a href="javascript:void(0);" name="fan-name" onclick="$('form_<%= friend_id %>').submit();"><%= friend.content %></a>
                 <%= status %>
