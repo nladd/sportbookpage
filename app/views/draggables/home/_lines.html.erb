@@ -3,6 +3,12 @@
 
  <ul id="<%= @drop_id %>_content">
 
+<% if @leagues.size < 1 %>
+  <li>
+    <p>There is no current data available for the teams selected in your profile. Try adding teams that are currently in season or click the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+  </li>
+<% end %>
+
 <%
   @leagues.size.times do |@i|
 %>

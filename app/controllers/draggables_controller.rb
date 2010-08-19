@@ -144,7 +144,7 @@ class DraggablesController < ApplicationController
   def load_roster( )
   
     @team = Team.get_team(session[:team_id])
-    @roster = Team.get_roster(@team.team_id)  
+    @roster = Team.get_roster(@team.team_id, "display_names.last_name ASC")  
   
     @drop_title = "#{@team.last_name} Roster"
     

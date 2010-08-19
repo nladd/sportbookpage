@@ -16,7 +16,7 @@
   <% @roster.each do |player| %>
     <li style="text-align: center">
       <span class="clps12col clps"><%= player.uniform_number %></span>
-      <span class="clps03col clps" style="text-align: left"><a href="/player/<%= player.person_id %>"><%= player.full_name %></a></span>
+      <span class="clps03col clps" style="text-align: left"><a href="/player/<%= player.person_id %>"><%= player.last_name + ", " + player.first_name %></a></span>
       <span class="clps08col clps"><%= player.position %></span>
       <span class="clps08col clps"><%= player.height %></span>
       <span class="clps08col clps"><%= player.weight %></span>

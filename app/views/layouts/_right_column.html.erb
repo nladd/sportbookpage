@@ -1,19 +1,19 @@
 
-<div id="ad-right"><img src="/images/css/advertisement-rightcolumn.jpg" alt="Advertiser" name="ad-right"/></div>
-      
-<!-- Fanclub -->
-<div id="fanclub" class="fanclub">
-  <%= render :partial => "/users/partials/fanclub" %>  
-</div> <!-- close fanclub -->
-
-<%= draggable_element ("fanclub", {:revert => true, :ghosting => true}) %>
-
+<div id="ad-right">
+  <script  src="http://tag.contextweb.com/TagPublish/getjs.aspx?action=VIEWAD&cwrun=200&cwadformat=300X250&cwpid=530391&cwwidth=300&cwheight=250&cwpnet=1&cwtagid=89212"></script>
+</div>
 
 <!-- Chalkboard -->
 <div id="chalkboard" class="chalkboard">
   <%= render :partial => "/users/partials/chalkboard" %> 
 </div> <!-- close chalkboard -->
+  
+<!-- Fanclub -->
+<div id="fanclub" class="fanclub">
+  <%= render :partial => "/users/partials/fanclub" %>  
+</div> <!-- close fanclub -->
 
 <%= draggable_element ("chalkboard", {:revert => true, :ghosting => true}) %>
+<%= draggable_element ("fanclub", {:revert => true, :ghosting => true}) %>
 
 <div class="clear"></div>

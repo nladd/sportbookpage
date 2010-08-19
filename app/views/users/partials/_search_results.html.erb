@@ -5,6 +5,10 @@
     <div class="clear"></div>
   </li>
 <% elsif (@results != nil) then %>
+  <li class="odd">
+    <p style="width: 90%">Results for search: "<%= params['name'] %>"</p>
+    <div class="clear"></div>
+  </li>
 
 <%
   xml_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"

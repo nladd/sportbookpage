@@ -304,6 +304,8 @@ clear:both;
 
 #home #column-right #login input.radio {
 filter: alpha(opacity=0);
+float: right;
+width: 15px;
 }
 
 #home #column-right #login input.submit {
@@ -1629,7 +1631,6 @@ background:url(/images/css/target-scroll-arrow-dwn.gif) no-repeat center center;
 width:180px;
 height:auto;
 float:left;
-
 display:inline;
 *margin:0 0 0 -1px;
 _margin:0 0 0 10px;
@@ -1638,9 +1639,13 @@ _margin:0 0 0 10px;
 /* right column ad */
 
 #column-right #ad-right {
-width:180px;
+/*  width:180px;
 height:150px;
-margin:10px 0 10px 0;
+margin:10px 0 10px 0;*/
+
+width:300px;
+height: 260px;
+float: left;
 }
 
 
@@ -1648,6 +1653,9 @@ margin:10px 0 10px 0;
 
 #column-right ul {
 width:auto;
+overflow: hidden;
+height: auto;
+max-height: 400px;
 }
 
 #column-right  #header {
@@ -1655,6 +1663,7 @@ width:178px;
 height:30px;
 background:url(/images/css/column-right-head-bg.jpg) no-repeat top left;
 border-bottom:#CCCCCC thin solid;
+float: left;
 }
 
 #column-right  #header a.expanded {
@@ -1722,11 +1731,6 @@ display:inline;
 }
 
 /* right column list items  */
-
-#column-right ul {
-overflow: hidden;
-max-height: 400px;
-}
 
 #column-right li {
 color:#ffffff;

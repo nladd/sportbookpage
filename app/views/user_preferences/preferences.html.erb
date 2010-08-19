@@ -10,7 +10,7 @@
     <% end -%>
     
     <% form_tag('/preferences', :multipart => true, :name => 'teams', :id => "register_form") do %>
-    <%= link_to "Back", :back, :class => "back"  %>
+    <a href="/home" class="back">Home</a>
     <input name="save" type="submit" class="submit" value="Save" />
     
     <hr />
@@ -195,7 +195,7 @@
 <%
   end # close leagues loop
 %>
-    <%= link_to "Back", :back, :class => "back"  %>
+    <a href="/home" class="back">Home</a>
     <input name="save" type="submit" class="submit" value="Save" />
     
     </div> <!-- close college <div> -->
@@ -204,8 +204,6 @@
     end #close form
 %>
  
- 
-  
   
 
 
