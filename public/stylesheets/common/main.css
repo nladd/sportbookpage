@@ -782,7 +782,7 @@ cursor:pointer;
 
 #ad-left-column {
 width:160px;
-height:300px;
+height:600px;
 margin:10px 0 0 0;
 }
 
@@ -1639,13 +1639,13 @@ _margin:0 0 0 10px;
 /* right column ad */
 
 #column-right #ad-right {
-/*  width:180px;
-height:150px;
+width:180px;
+height:600px;
 margin:10px 0 10px 0;*/
 
-width:300px;
+/*width:300px;
 height: 260px;
-float: left;
+float: left;*/
 }
 
 
