@@ -3,8 +3,7 @@
     <div id="header">
       <ul>
         <li class="help"><a href="*" name="draggables-help"></a></li>
-        <li class="head">My Draggables <em id="alert_text" name="system-message">
-        <%= dynamic_progress_bar("progress_bar", 0.51) %></em></li>
+        <li class="head">My Draggables <em id="alert_text" name="system-message"></em></li>
         <li class="save">
           <%= link_to_remote "Save Draggables", 
                         {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
@@ -29,10 +28,12 @@
           <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_1}&drop_id=target01&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
       </span>
             
+            
       <%= drop_receiving_element('target01',
             :accept   => ['drop_item', 'profile', 'fanclub', 'chalkboard'],
             :hoverclass => "hover",
             :onDrop => "function(dragged, droppable){
+              $('target01').innerHTML = '<img style=\"display: block; margin: 50% auto 0 auto;\" src=\"/images/progress_bar/ajax-loader.gif\" id=\"loading_image\" />';
               new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target01&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
               new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
               return false;
@@ -49,6 +50,7 @@
             :accept   => ['drop_item', 'profile', 'fanclub', 'chalkboard'],
             :hoverclass => "hover",
             :onDrop => "function(dragged, droppable){
+              $('target02').innerHTML = '<img style=\"display: block; margin: 50% auto 0 auto;\" src=\"/images/progress_bar/ajax-loader.gif\" id=\"loading_image\" />';
               new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target02&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
               new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
               return false;
@@ -65,6 +67,7 @@
             :accept   => ['drop_item', 'profile', 'fanclub', 'chalkboard'],
             :hoverclass => "hover",
             :onDrop => "function(dragged, droppable){
+              $('target03').innerHTML = '<img style=\"display: block; margin: 50% auto 0 auto;\" src=\"/images/progress_bar/ajax-loader.gif\" id=\"loading_image\" />';
               new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target03&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
               new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
               return false;
@@ -81,6 +84,7 @@
             :accept   => ['drop_item', 'profile', 'fanclub', 'chalkboard'],
             :hoverclass => "hover",
             :onDrop => "function(dragged, droppable){
+              $('target04').innerHTML = '<img style=\"display: block; margin: 50% auto 0 auto;\" src=\"/images/progress_bar/ajax-loader.gif\" id=\"loading_image\" />';
               new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=' + $(dragged).id + '&drop_id=target04&level=#{@level}&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});
               new Effect.Highlight($(droppable).id, {startcolor: '#2461ff', endcolor: 'white', restorecolor: 'white', duration: .5} );
               return false;
