@@ -13,14 +13,23 @@ as first seen in http://www.dynamicdrive.com/forums/ username: jscheuer1
 This Notice Must Remain for Legal Use
 -->
   <%= javascript_include_tag "drop_down_menu", "crawler", "targetFunctions" %>
+  <%= progress_bar_includes %>
 
   
   <%= stylesheet_link_tag 'common/main' %>
   
 
-  <%= javascript_tag "Ajax.Responders.register({
+  <%# javascript_tag "Ajax.Responders.register({
     onCreate: function(){ document.body.style.cursor = 'progress'},
     onComplete: function(){ document.body.style.cursor = 'default' }
+  });"
+  %>
+  
+  
+  
+  <%= javascript_tag "Ajax.Responders.register({
+    onCreate: function() { openProgressBar(); },
+    onComplete: function(){ $('progress_bar_progress_bar').innerHTML = 100; }
   });"
   %>
   

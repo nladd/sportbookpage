@@ -3,7 +3,8 @@
     <div id="header">
       <ul>
         <li class="help"><a href="*" name="draggables-help"></a></li>
-        <li class="head">My Draggables <em id="alert_text" name="system-message"></em></li>
+        <li class="head">My Draggables <em id="alert_text" name="system-message">
+        <%= dynamic_progress_bar("progress_bar", 0.51) %></em></li>
         <li class="save">
           <%= link_to_remote "Save Draggables", 
                         {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},

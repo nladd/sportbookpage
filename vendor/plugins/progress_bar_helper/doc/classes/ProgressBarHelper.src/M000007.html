@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>custom_dynamic_progress_bar (ProgressBarHelper)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/progress_bar_helper.rb, line 84</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">custom_dynamic_progress_bar</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">options</span> = {})
+    <span class="ruby-identifier">value</span> = ((<span class="ruby-identifier">value</span><span class="ruby-operator">*</span><span class="ruby-value">100.0</span>).<span class="ruby-identifier">round</span>.<span class="ruby-identifier">to_f</span>)<span class="ruby-operator">/</span><span class="ruby-value">100.0</span>
+        <span class="ruby-comment cmt"># handle the case of several back images</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:bar_images</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">bar_images</span> = <span class="ruby-value str">&quot;'&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">image_path</span>(<span class="ruby-value str">'progress_bar/percentImage_back.png'</span>)<span class="ruby-operator">+</span><span class="ruby-value str">&quot;'&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">bar_images</span> = <span class="ruby-value str">&quot;Array(&quot;</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:bar_images</span>].<span class="ruby-identifier">map!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-value str">&quot;'&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">image_path</span>(<span class="ruby-identifier">x</span>)<span class="ruby-operator">+</span><span class="ruby-value str">&quot;'&quot;</span> }).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;,&quot;</span>)<span class="ruby-operator">+</span><span class="ruby-value str">&quot;)&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># we set the progress bar</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-value str">'&lt;span id=&quot;'</span><span class="ruby-operator">+</span><span class="ruby-identifier">name</span><span class="ruby-operator">+</span><span class="ruby-value str">'&quot;&gt;&lt;/span&gt;'</span>
+    <span class="ruby-comment cmt"># we set the properties of the js observer</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">javascript_tag</span>(<span class="ruby-value str">&quot;
+        Event.observe(window, 'load', function() {&quot;</span><span class="ruby-operator">+</span>
+            <span class="ruby-identifier">name</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;PB = new JS_BRAMUS.jsProgressBar(
+                                    $('&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">name</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;'),&quot;</span><span class="ruby-operator">+</span>
+                                   (<span class="ruby-identifier">value</span><span class="ruby-operator">*</span><span class="ruby-value">100</span>).<span class="ruby-identifier">to_s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;,
+                                    {
+                                            showText    : &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:show_text</span>]<span class="ruby-operator">||</span><span class="ruby-keyword kw">false</span>).<span class="ruby-identifier">to_s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;,
+                                            animate     : &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:animate</span>]<span class="ruby-operator">||</span><span class="ruby-keyword kw">false</span>).<span class="ruby-identifier">to_s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;,
+                                            width       : &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>]<span class="ruby-operator">||</span><span class="ruby-value">120</span>).<span class="ruby-identifier">to_s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;,
+                                            height      : &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:height</span>]<span class="ruby-operator">||</span><span class="ruby-value">12</span>).<span class="ruby-identifier">to_s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;,
+                                            boxImage    : '&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">image_path</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:box_image</span>]<span class="ruby-operator">||</span><span class="ruby-value str">'progress_bar/percentImage.png'</span>)<span class="ruby-operator">+</span><span class="ruby-value str">&quot;',
+                                            barImage    : &quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">bar_images</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;
+                                    }
+                            );},
+                      false);&quot;</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
