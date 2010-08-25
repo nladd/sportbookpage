@@ -2,9 +2,9 @@
 
 <?php
 
-$archive_path = "/home/nathan/FeedFetcherDeluxe/archive/";
+$archive_path = "/home/{$_ENV['USER']}/FeedFetcherDeluxe/archive/";
 
-$conn = mysql_connect('localhost', 'root', '');
+$conn = mysql_connect('localhost', 'root', $argv[1]);
 mysql_select_db("sportbookpage_development");
 
 $time = time() - (10 * 24 * 60 * 60); #subtract 10 days

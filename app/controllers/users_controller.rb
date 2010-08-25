@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           @results = User.find(
                       :all,
                       :select => "id, first_name, middle_name, last_name",
-                      :conditions => "first_name RLIKE '#{regexp}' OR middle_name RLIKE '#{regexp}' OR last_name RLIKE '#{regexp}'",
+                      :conditions => "(first_name RLIKE '#{regexp}' OR last_name RLIKE '#{regexp}') AND id <> 1 AND id <> #{@user.id}",
                       :order => "(CASE WHEN last_name RLIKE '#{regexp}' THEN 'last_name' ELSE 0 END) + (CASE WHEN first_name RLIKE '#{regexp}' THEN 'first_name' ELSE 0 END) + (CASE WHEN middle_name RLIKE '#{regexp}' THEN 'middle_name' ELSE 0 END)")           
 
           if @results.empty? then

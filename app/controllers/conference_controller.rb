@@ -1,6 +1,6 @@
 class ConferenceController < ApplicationController
 
-  layout "users"
+  layout :choose_layout
 
   def index
   
@@ -33,5 +33,10 @@ class ConferenceController < ApplicationController
   
   end
 
+private
+
+  def choose_layout
+    return session[:user_id] == 1 ? "unregistered" : "users"
+  end
 
 end

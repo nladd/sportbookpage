@@ -37,29 +37,22 @@ This Notice Must Remain for Legal Use
     <div id="columns">
       <!-- Left Column -->	
       <div id="column-left" class="floatleft">
-        <%= render :partial => "layouts/left_column" %>
+        <%= render :partial => "unregistered/left_column" %>
       </div><!-- End Left Column -->
     
     <!-- center column -->
     <div id="column-center">
       <div id="top-nav">
         <ul>
-          <li class="home"><a href="/home" name="home"></a></li>
+          <li class="home"><%= link_to "", {:controller => "unregistered", :action => "index"} %></li>
+          <li class="main"><a href="/login">Login</a></li>
           <li class="main">
-            <%= link_to_remote "Invite Fans",
-                        {:url => {:controller => "users", :action => "invite_friend"},
-                        :complete => "Effect.toggle('pop-up', 'appear', {duration: .5})" },
-                        {:name => "invite-friends"}
-              %>
+            <a>About Us</a>
           </li>
-          <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
           <li class="main">
-            <%= link_to_remote "Save Layout", 
-                        {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
-                        {:name => "save-layout"}
-            %>
+            <a href="/login">Register</a>
           </li>
-          <li class="main"><a href="/preferences" name="change-teams">Settings</a></li>
+          <li class="main"><a name="change-teams">Help</a></li>
           <li class="main"><a href="/logout">Logout</a></li>
           <li class="help"><a name="help"></a></li>
         </ul>
@@ -74,7 +67,12 @@ This Notice Must Remain for Legal Use
     
     <!-- Right Column -->
     <div id="column-right">
-      <%= render :partial => "layouts/right_column" %>
+      
+      <div id="ad-right" style="border: black thin solid">
+        <!--<script  src="http://tag.contextweb.com/TagPublish/getjs.aspx?action=VIEWAD&cwrun=200&cwadformat=300X250&cwpid=530391&cwwidth=300&cwheight=250&cwpnet=1&cwtagid=89212"></script>-->
+      </div>  
+      <div class="clear"></div>
+      
     </div><!-- End right column -->
     
     <div class="clear"></div>

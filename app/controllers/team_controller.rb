@@ -4,7 +4,7 @@ require 'xml/libxml'
 
 class TeamController < ApplicationController
 
-  layout "users"
+  layout :choose_layout
 
   def index
 
@@ -36,5 +36,6 @@ class TeamController < ApplicationController
     render :template => 'users/index'
 
   end
+
 
 end

@@ -302,11 +302,7 @@ display:inline;
 clear:both;
 }
 
-#home #column-right #login input.radio {
-filter: alpha(opacity=0);
-float: right;
-width: 15px;
-}
+
 
 #home #column-right #login input.submit {
 width:81px;
@@ -357,6 +353,12 @@ background:#FFFFFF;
 border:#CCCCCC thin solid;
 float:right;
 display:inline;
+}
+
+#home #column-right li input.radio {
+filter: alpha(opacity=0);
+float: right;
+width: 15px;
 }
 
 #home #column-right li select {
@@ -622,6 +624,75 @@ margin:0 0 0 0;
 
 #column-left #profile span.normal {
 margin:0 0 0 2px;
+}
+
+/* left colum login */
+
+#column-left #left-login {
+width:160px;
+height:auto;
+margin:5px 0 5px 0;
+}
+
+#column-left #left-login input {
+width: 150px;
+margin:0 5px 5px 0;
+display: inline;
+font-size:.7em;
+}
+
+#column-left #left-login h1 {
+font-size:.7em;
+font-weight:normal;
+color:#4696bb;
+margin:0 0 0 0;
+padding:0 4px 4px 4px;
+diplay: inline;
+}
+
+#column-left #left-login h1 a {
+color:#4696bb;
+}
+
+#column-left #left-login span {
+width: 100%;
+float: left;
+display: inline;
+}
+
+#column-left #left-login span h1 {
+position: relative;
+font-size:.7em;
+width: 100%;
+text-align: center;
+margin-top: 5px;
+}
+
+#column-left #left-login span a {
+font-size: 1.8em;
+width: 100%;
+text-align: center;
+color:#4696bb;
+display: block;
+text-decoration: underline;
+}
+
+#column-left #left-login input.submit {
+width:81px;
+height:30px;
+font-size:.8em;
+font-weight:bold;
+color:#FFFFFF;
+text-align:center;
+text-shadow:#000000 0px -1px 0px;
+float:right;
+background:url(/images/css/form-submit.jpg) no-repeat bottom right;
+border:none;
+display: inline;
+}
+
+#column-left #left-login input.submit:hover {
+background:url(/images/css/form-submit-ovr.jpg) no-repeat;
 }
 
 /* left column my tagged teams header */

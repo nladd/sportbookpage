@@ -1,7 +1,7 @@
 
 <?php
 
-$conn = mysql_connect('localhost', 'root', '');
+$conn = mysql_connect('localhost', 'root', $argv[1]);
 mysql_select_db("sportboo_testdev");
 
 

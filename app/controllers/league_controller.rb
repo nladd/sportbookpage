@@ -1,6 +1,6 @@
 class LeagueController < ApplicationController
 
-  layout "users"
+  layout :choose_layout
 
   def index
   
@@ -39,8 +39,5 @@ class LeagueController < ApplicationController
     render :template => 'users/index'
   
   end
-
-
-  
 
 end

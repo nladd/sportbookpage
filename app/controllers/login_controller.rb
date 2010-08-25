@@ -21,7 +21,7 @@ class LoginController < ApplicationController
         redirect_to home_url
       else
         flash[:notice] = "Invalid username/password combination"
-        redirect_to :action => "index"
+        redirect_to :back
       end
     end
   end

@@ -43,22 +43,21 @@ class ApplicationController < ActionController::Base
     
   end
   
-
-  #############################################################################
-  # Description:
-  #   Get the leaders for a given sport
-  #
-  #############################################################################
-
   
   
 protected
     
   def authorize
-    unless User.find_by_id(session[:user_id])
-      flash[:notice] = "Please log in"
-      redirect_to :controller => 'login'
+    if session[:user_id] == 1
+      return
+    elsif User.find_by_id(session[:user_id]).blank?
+      session[:user_id] = 1
+      redirect_to :controller => "unregistered"
     end
+  end
+  
+  def choose_layout
+    return session[:user_id] == 1 ? "unregistered" : "users"
   end
     
 end

@@ -1,9 +1,9 @@
 
 <?php
 
-$archive_path = "/home/nathan/FeedFetcherDeluxe/archive/";
+$archive_path = "/home/{$_ENV['USER']}/FeedFetcherDeluxe/archive/";
 
-$conn = mysql_connect('localhost', 'root', '');
+$conn = mysql_connect('localhost', 'root', $argv[1]);
 mysql_select_db("sportboo_testdev);
 
 
