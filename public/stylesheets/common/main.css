@@ -2043,18 +2043,38 @@ position:fixed;
 z-index:5000;
 top:10%;
 left:25%;
-
-
 }
 
 #pop-up span {
 padding:0 15px 15px 15px;
 }
 
+#pop-up .signup {
+width: 260px;
+text-align: center;
+}
+
+#pop-up .signup h1 {
+position: relative;
+font-size:.8em;
+width: 100%;
+text-align: center;
+margin-top: 5px;
+}
+
+#pop-up .signup a {
+font-size: 2.2em;
+width: 100%;
+text-align: center;
+color:#4696bb;
+display: block;
+text-decoration: underline;
+}
+
 #pop-up h1 {
 font-size:1.2em;
 color:#4696bb;
-margin:0;
+margin:5px 0 0 0;
 padding:0;
 }
 

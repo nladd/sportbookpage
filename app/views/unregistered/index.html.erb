@@ -9,7 +9,28 @@
     </div>
     
     <!-- container for pop-up box to invite friends -->
-    <div id="pop-up" style="position:fixed; display: none"></div>
+    <div id="pop-up" style="position:fixed; display: none">
+      <div class="close" onclick="Effect.toggle('pop-up', 'appear', {duration: .5})"></div>
+      <span>            
+        <% form_tag '/login' do %>
+          <h1 style="text-align: center">-Login-</h1>
+          <h1>Email:</h1>
+          <input name="email" tabindex="1" type="text" />
+          <h1>Password:</h1>
+          <input name="password" tabindex="2" type="password" />
+          <input name="login" value="Login" tabindex="3" type="submit" class="submit" />
+          <div class="clear"></div>
+        <% end %>
+        <span class="signup">
+          <h1>Not a member?</h1>
+          <a href="/login">Sign up!</a>
+           <p>Stop scouring the web for the information you need now.</p>
+          <p>Whether you’re a casual fan or a fantasy sports fanatic, <em>SportbookPage.com</em> is revolutionizing the way you see sports.</p>
+          <p>Just tag the sports and teams you care about and instantly you’ll be immersed in scores, schedules, up-to-the-minute news and headlines and more. It's that simple.</p>
+          <p>Sign up today and in just a few minutes you’ll be on your way to a whole new sporting experience.</p>
+        </span>
+      </span>
+    </div>
     
     <%= render :partial => 'draggables/' + @drag_n_drop %>
           

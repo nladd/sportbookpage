@@ -101,3 +101,5 @@ ALTER TABLE teams ADD COLUMN followers INT DEFAULT 0;
 ALTER TABLE events ADD COLUMN playoff_round INT;
 ALTER TABLE basketball_rebounding_stats ADD COLUMN rebounds_offensive_per_game INT;
 ALTER TABLE basketball_rebounding_stats ADD COLUMN rebounds_defensive_per_game INT;
+
+INSERT INTO `users` VALUES (1,'d404a4ded8c55e9b8c2568d6444bb2c52b58ccf1','702116691207800.263150304560719','2010-08-24 05:28:52','2010-08-24 05:30:47','unregistered.user@sportbookpage.com','Unregistered','User','','The answer to my question is the question?','the question',NULL,NULL,10000,'1/1/2000','Somewhere','f',0,'NE',0,0);
