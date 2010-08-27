@@ -13,8 +13,13 @@
     @leagues.size.times do |i|
 %>
   
-   <li class="subhead"><%= @leagues[i].abbreviation %> Top Stories</li>
-   
+  <li class="subhead"><%= @leagues[i].abbreviation %> Top Stories</li>
+  <% if @articles[i].size < 1 %>
+  <li>
+    <p>There are no current news stories available for the teams selected in your profile. Try clicking the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+  </li>
+  <% end %>
+  
 <% @articles[i].size.times do |a| %>
 
     <li>

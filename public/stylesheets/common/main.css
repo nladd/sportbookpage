@@ -986,6 +986,11 @@ color:#000000;
 font-weight:bold;
 }
 
+#column-center h2 a {
+color:#000000;
+cursor: default;
+}
+
 #column-center h3 {
 width:90%;
 padding:0 10px 0 10px;
@@ -995,6 +1000,11 @@ font-weight:normal;
 font-style:italic;
 margin:0 0 4px 0;
 border-bottom:#999999 thin solid;
+}
+
+#column-center h3 a {
+color:#666666;
+cursor: default;
 }
 
 #column-center h3 input {

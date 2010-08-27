@@ -320,7 +320,7 @@ class DraggablesController < ApplicationController
         
         @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id,
-                                  96)
+                                  200)
         
         if (@filter.blank?) then                          
           @games[i].size.times do |j|
@@ -408,7 +408,7 @@ class DraggablesController < ApplicationController
           end
         end
       
-        @games[i] = Affiliation.get_previous_n_games(@leagues[i].affiliation_id, 72)
+        @games[i] = Affiliation.get_previous_n_games(@leagues[i].affiliation_id, 200)
         
         
         if (@filter.blank?) then                          
@@ -434,7 +434,7 @@ class DraggablesController < ApplicationController
       @league = Affiliation.get_league(session[:league_id])
       @games = Affiliation.get_previous_n_games(
                                   @league.affiliation_id, 
-                                  144)                          
+                                  200)                          
       
 #      if (@filter.blank?) then                          
 #        @games.size.times do |i|

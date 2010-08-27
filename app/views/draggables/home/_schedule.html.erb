@@ -23,6 +23,12 @@
       <span class="clps05col clps">TV</span>
       <div class="clear"></div>
     </li>
+    
+    <% if @games[@i].size < 1 %>
+    <li>
+      <p>There are no current games available for the teams selected in your profile. Try clicking the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+    </li>
+    <% end %>
   
 <%
     @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
@@ -65,7 +71,9 @@
       </li>
     </div>
 <% end %>
+    <% if @j != -1 %>
     </div> <!-- close last <hide_#> -->
+    <% end %>
 <%
   end #close leagues loop
 %>
