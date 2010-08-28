@@ -137,13 +137,13 @@ Rails::Initializer.run do |config|
 
   #ActionMailer::Base.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => "smtp.gmail.com",
-    :port => 587,
-    :domain => "sportbookpage.com",
-    :enable_starttls_auto => true,
-    :authentication => :plain,
-    :user_name => "NathanALadd@gmail.com",
-    :password => "meriden"
+    :address => "localhost",
+    :port => 25,
+    :domain => "www.sportbookpage.com",
+    #:enable_starttls_auto => true,
+    #:authentication => :plain,
+    #:user_name => "NathanALadd@gmail.com",
+    #:password => "meriden"
   }
 
 end

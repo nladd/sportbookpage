@@ -79,16 +79,16 @@ CREATE TABLE `position_stats_mappings` (
   `stats_mapping_id` int(11) default NULL
 );
 
+
 CREATE TABLE `invitations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date_sent` DATETIME DEFAULT NOW(),
-  `invitee_email` varchar(255) DEFAULT NULL,
-  `inviter_id` int(11) DEFAULT NULL,
-  `has_joined` boolean DEFAULT false,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `date_sent` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `invitee_email` varchar(255) default NULL,
+  `inviter_id` int(11) default NULL,
+  `has_joined` tinyint(1) default '0',
+  `reminder_sent` tinyint(1) default '0',
+  PRIMARY KEY  (`id`)
 );
-
-
 
 #CREATE TABLE `position_stats_mappings` (
 #  `position_id` int(11) default NULL,

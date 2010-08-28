@@ -8,9 +8,9 @@
     <input name="emails" type="text" />
     <input name="submit" type="submit" class="submit" value="Send" />
     <div class="clear"></div>
+    <p>
+      Include a personal message: <i>(optional)</i><br/>
+      <%= text_area_tag('message', nil, { :size => '38x5', :value => '' }) %>
+    </p>
   <% end %>
-  <p>
-    Include a personal message: <i>(optional)</i><br/>
-    <%= text_area_tag('message', nil, { :size => '38x5', :value => '' }) %>
-  </p>
 </span>
