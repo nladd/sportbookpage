@@ -8,19 +8,15 @@
 	<%
 	  # Get the user's profile info if they've chosed to make it public
 	  
-	  profile = Hash.new
+	  profile_attributes = Hash.new
 	  
-	  path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
-	  parser = XML::Parser.file(path)
-	  xml = parser.parse
-	  
-	  node = xml.find_first("//root/birthday")
-	  profile.store("Birthday", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = xml.find_first("//root/hometown")
-	  profile.store("Hometown", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = xml.find_first("//root/sex")
-	  profile.store("Gender", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = xml.find_first("//root/status")
+	  node = @profile.find_first("//root/birthday")
+	  profile_attributes.store("Birthday", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = @profile.find_first("//root/hometown")
+	  profile_attributes.store("Hometown", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = @profile.find_first("//root/sex")
+	  profile_attributes.store("Gender", CGI.unescape(node.content)) if node["show"].eql?("yes")
+	  node = @profile.find_first("//root/status")
 	  status = CGI.unescape(node.content.to_s)
 		
 	%>
@@ -42,7 +38,7 @@
 	  </h1>
 	  <% end %>
 
-	  <% profile.each_pair  do |key, value| %>
+	  <% profile_attributes.each_pair  do |key, value| %>
 	  <h1 class="clear">
 	    <span name="normal"><%= key %>:</span>
 	    <span class="normal"><%= value %></span>
@@ -67,7 +63,7 @@
 	<!--- Left menu -->
 	<ul>
 	  <%
-		sports = xml.find('//root/sports/sport')
+		sports = @profile.find('//root/sports/sport')
 		sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>
@@ -93,7 +89,7 @@
 	  <% end # close sports loop
 	  
 		 #now loop through the user's college sports
-		 sports = xml.find('//root/sports/collegeSports/sport')
+		 sports = @profile.find('//root/sports/collegeSports/sport')
 		 sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>

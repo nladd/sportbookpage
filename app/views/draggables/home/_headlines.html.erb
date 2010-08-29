@@ -1,6 +1,15 @@
 
 <%= render :partial => "draggables/partials/header" %>
 
+<div class="anchors">
+  <%
+    @leagues.each do |league|
+      abbr = @abbr = (league.abbreviation).gsub(/[\s']/, "_")
+  %>
+    <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= league.abbreviation + " " + @drop_title %>"><%= league.abbreviation %></a>&nbsp;
+  <% end %>
+</div>
+
   <ul id="<%= @drop_id %>_content">
 
 <% if @leagues.size < 1 %>
@@ -11,9 +20,10 @@
 
 <%
     @leagues.size.times do |i|
+      abbr = (@leagues[i].abbreviation).gsub(/[\s']/, "_")
 %>
   
-  <li class="subhead"><%= @leagues[i].abbreviation %> Top Stories</li>
+  <li class="subhead" id="<%= abbr + "_" + @drop_id%>"><%= @leagues[i].abbreviation %> Top Stories</li>
   <% if @articles[i].size < 1 %>
   <li>
     <p>There are no current news stories available for the teams selected in your profile. Try clicking the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>

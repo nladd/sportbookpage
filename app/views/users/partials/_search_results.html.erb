@@ -1,12 +1,14 @@
 
 <% if (@results == "NONE") then %>
   <li class="even">
-    <p style="width: 90%">No results found for query "<%= params['name'] %>"</p>
+    <%= link_to_remote ("", {:url => {:controller => "users", :action => "show_fanclub"}}, {:class => "close" } ) %>
+    <p style="width: 90%; display:inline">No results found for query "<%= params['name'] %>"</p>
     <div class="clear"></div>
   </li>
 <% elsif (@results != nil) then %>
   <li class="odd">
-    <p style="width: 90%">Results for search: "<%= params['name'] %>"</p>
+    <%= link_to_remote ("", {:url => {:controller => "users", :action => "show_fanclub"}}, {:class => "close" } ) %>
+    <p style="width: 90%; display: inline">Results for search: "<%= params['name'] %>"</p>
     <div class="clear"></div>
   </li>
 

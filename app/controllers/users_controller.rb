@@ -24,22 +24,22 @@ class UsersController < ApplicationController
     
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
     @profile = parser.parse
-    drop_1_node = @profile.find_first("//root/#{@level}/target01")
-    @drop_1 = drop_1_node.content
+    node = @profile.find_first("//root/#{@level}/target01")
+    @drop_1 = node.content
     session['drop_1'] = @drop_1
-    drop_2_node = @profile.find_first("//root/#{@level}/target02")
-    @drop_2 = drop_2_node.content
+    node = @profile.find_first("//root/#{@level}/target02")
+    @drop_2 = node.content
     session['drop_2'] = @drop_2
-    drop_3_node = @profile.find_first("//root/#{@level}/target03")
-    @drop_3 = drop_3_node.content
+    node = @profile.find_first("//root/#{@level}/target03")
+    @drop_3 = node.content
     session['drop_3'] = @drop_3
-    drop_4_node = @profile.find_first("//root/#{@level}/target04")
-    @drop_4 = drop_4_node.content
+    node = @profile.find_first("//root/#{@level}/target04")
+    @drop_4 = node.content
     session['drop_4'] = @drop_4
-        
-    #user_path = ["Home"] 
-    #user_path_urls = ["/home"] 
-    #@path_html = build_path(user_path, user_path_urls)
+  
+    user_path = ["Home"] 
+    user_path_urls = ["/home"] 
+    @path_html = build_path(user_path, user_path_urls)
    
    
     respond_to do |format|
@@ -83,9 +83,9 @@ class UsersController < ApplicationController
     @level = "home"
     @drag_n_drop = "home/drag_n_drop"
         
-    #user_path = [@user.first_name + " " + @user.last_name + " Home"] 
-    #user_path_urls = ["/fanatic/#{cgi_name}"] 
-    #@path_html = build_path(user_path, user_path_urls)
+    user_path = [@user.first_name + " " + @user.last_name + " Home"] 
+    user_path_urls = ["/fanatic/#{cgi_name}"] 
+    @path_html = build_path(user_path, user_path_urls)
 
     render :template => "users/index"
 
@@ -128,10 +128,6 @@ class UsersController < ApplicationController
         
       end
     
-      #user_path = ["Search"] 
-      #user_path_urls = ["/search"] 
-      #@path_html = build_path(user_path, user_path_urls)
-    
       render(:update) {|page|
         page.replace_html("fanclub_content", :partial => "/users/partials/search_results")
       }
@@ -140,6 +136,25 @@ class UsersController < ApplicationController
     #TODO: Error handling  
   #  logger.error "Error occurred! friends_controller.search()"
     
+  end
+  
+  #############################################################################
+  # Description:
+  #   Show a user's fanclub. This method is called when a user closes the search
+  #   results box
+  #
+  #############################################################################
+  def show_fanclub
+    
+    @user = User.find(session[:user_id])
+    
+    path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+    parser = XML::Parser.file(path)
+    @profile = parser.parse
+    
+    render(:update) {|page|
+        page.replace_html("fanclub", :partial => "/users/partials/fanclub")
+      }
   end
 
   #############################################################################

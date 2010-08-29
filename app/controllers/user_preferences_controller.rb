@@ -37,8 +37,6 @@ class UserPreferencesController < ApplicationController
   #############################################################################
   def get_security_question
     
-    user = nil
-    
     if params[:email].blank?
       return
     else
@@ -257,9 +255,9 @@ class UserPreferencesController < ApplicationController
     
     
     # define the user path within the site
-    #user_path = ["Home", "Account Settings", "Edit Sports and Teams"] 
-    #user_path_urls = ["/home", "javascript:void(0);", "/edit/sports_and_teams"] 
-    #@path_html = build_path(user_path, user_path_urls)
+    user_path = ["Home", "Preferences"] 
+    user_path_urls = ["/home", "/preferences"] 
+    @path_html = build_path(user_path, user_path_urls)
 
     respond_to do |format|
       format.html #edit_sports_and_teams.html.erb
@@ -350,6 +348,52 @@ class UserPreferencesController < ApplicationController
   
   end
   
+  
+  ############################################################################
+  # Description:
+  #   Change a user's background image
+  #
+  ############################################################################
+  def change_background
+    
+    @user = User.find(session[:user_id])
+    
+    background = params[:background]
+    
+    if background.eql?("grass")
+      image = "/images/css/background-grass.jpg"
+    elsif background.eql?("clay")
+      image = "/images/css/background-clay.jpg"
+    elsif background.eql?("wood")
+      image = "/images/css/background-wood.jpg"
+    elsif background.eql?("ice")
+      image = "/images/css/background-ice.jpg"
+    elsif background.eql?("asphalt")
+      image = "/images/css/background-asphalt.jpg"
+    end
+    
+    if (@user.id != 1)
+      profile_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
+      parser = XML::Parser.file(profile_path)
+      profile = parser.parse
+      root = profile.root
+      
+      # get the background node if it exists
+      node = profile.find('//root/background').first
+      # the node didn't exist so create the node
+      root << node = XML::Node.new("background") if node.blank?
+      node["background"] = background
+      node["image"] = image
+      
+      profile.save(profile_path)
+    end
+    
+    
+    render(:update) {|page|
+      page.call "$('body').setStyle", "background: #000000 url(#{image}) no-repeat top center"
+    }
+    
+  end
   
   
 ############################

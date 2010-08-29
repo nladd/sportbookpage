@@ -25,9 +25,9 @@ class UnregisteredController < ApplicationController
     @drop_4 = "standings"
     session['drop_4'] = @drop_4
         
-    #user_path = ["Home"] 
-    #user_path_urls = ["/home"] 
-    #@path_html = build_path(user_path, user_path_urls)
+    user_path = ["Home"] 
+    user_path_urls = ["/home"] 
+    @path_html = build_path(user_path, user_path_urls)
    
    
     respond_to do |format|

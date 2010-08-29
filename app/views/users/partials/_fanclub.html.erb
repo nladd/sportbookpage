@@ -17,10 +17,7 @@
   
   <ul id="fanclub_content">
     <%
-      xml_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
-      parser = XML::Parser.file(xml_path)
-      profile = parser.parse
-      friends_node = (profile.find('//root/friends')).first
+      friends_node = (@profile.find('//root/friends')).first
       friends = friends_node.children
     
       i = -1

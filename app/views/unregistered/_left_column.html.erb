@@ -11,6 +11,7 @@
 	  <h1>Email:</h1><input name="email" tabindex="1" type="text" />
 	  <h1>Password:</h1><input name="password" tabindex="2" type="password" />
 	  <input name="login" value="Login" tabindex="3" type="submit" class="submit" />
+	  <h1><%= link_to "Forgot your password?", {:controller => "user_preferences", :action => "get_security_question" } %></h1>
 	  <span>
 		<h1>Not a member?</h1>
 		<a href="/login" class="signup">Sign up!</a>

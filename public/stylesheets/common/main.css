@@ -15,7 +15,7 @@ outline:none;
 
 body {
 font-family:Geneva, Arial, Helvetica, sans-serif;
-background:#000000 url(/images/css/background-grass.jpg) no-repeat top center;
+/*background:#000000 url(/images/css/background-grass.jpg) no-repeat top center;*/
 padding:0 0 20px 0;
 }
 
@@ -1336,7 +1336,7 @@ margin:0;
 
 #draggables #target-holder span.collapsed {
 width:301px;
-height:340px;
+height:355px;
 float:left;
 border:#333333 thin solid;
 background:url(/images/css/target-bg-even.jpg) no-repeat bottom right;
@@ -1386,7 +1386,7 @@ margin:0 0 0 0;
 
 #draggables #target-holder span.expanded {
 width:615px;
-height:550px;
+height:565px;
 float:left;
 border:#333333 thin solid;
 background:url(/images/css/target-bg-even.jpg) no-repeat bottom right;
@@ -1412,7 +1412,7 @@ height:auto;
 float:left;
 margin:0 5px 0 0;
 display:inline;
-/*overflow: hidden;*/
+overflow: hidden;
 }
 
 /* collapsed column spans */
@@ -1618,7 +1618,7 @@ height:10px;
 background:#CCCCCC;
 color:#000000;
 font-size:.7em;
-line-height:.6em;
+line-height:.7em;
 text-align:center;
 }
 
@@ -1664,6 +1664,21 @@ color:#FFFFFF;
 color:#000000;
 }
 
+#draggables #target-holder div.anchors {
+width:100%;
+height:15px;
+border-bottom:#CCCCCC thin solid;
+font-weight: bold;
+text-align: center;
+line-height: .6em;
+/*background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;*/
+}
+
+#draggables #target-holder div.anchors a {
+top: 0;
+color: #000000;
+font-size: .6em;
+}
 
 /* target scrolls */
 
@@ -1686,13 +1701,10 @@ background:url(/images/css/target-scroll-arrow-up.gif) no-repeat center center;
 
 
 #draggables #target-holder .scroll-dwn {
-position: absolute;
-bottom: 0px;
 width:100%;
 height:20px;
 background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;
 z-index:1000;
-
 }
 
 #draggables #target-holder .scroll-dwn a {
@@ -1879,6 +1891,16 @@ width:100%;
 height:100%;
 }
 
+#column-right .fanclub li a.close {
+width:15px;
+height:15px;
+top: 0;
+background:url(/images/css/pop-up-close.jpg) top right no-repeat;
+float:right;
+display:inline;
+cursor:pointer;
+}
+
 #column-right .chalkboard a {
 width:auto;
 height:auto;
@@ -1917,6 +1939,8 @@ border-bottom:#333333 thin solid;
 /*cursor:pointer;
 color:#4696bb;*/
 }
+
+
 #column-right .chalkboard li.even:hover {
 border-bottom:#333333 thin solid;
 cursor:auto;

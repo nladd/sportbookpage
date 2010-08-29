@@ -38,7 +38,7 @@ function expandCollapseTarget(target) {
   if ($(target).hasClassName('expanded')) {
     //shrink the target itself
     new Effect.Morph(target, {
-      style: 'width:301px; height:340px;',
+      style: 'width:301px; height:355px;',
       duration: 1.0
     });
     
@@ -48,7 +48,7 @@ function expandCollapseTarget(target) {
   } else if ($(target).hasClassName('collapsed')) {
     //expand the target itself
     new Effect.Morph(target, {
-      style: 'width:615px; height:550px;',
+      style: 'width:615px; height:565px;',
       duration: 1.0
     });
     //get all the cells within the target so they also can be expanded below
@@ -328,6 +328,11 @@ function jumpToTop(id) {
 
 function jumpToBottom(id) {
     $(id).scrollTop = 100000;
+}
+
+function jumpToAnchor(targetId, anchorId) {
+    offset = $(anchorId).positionedOffset();
+    $(targetId).scrollTop = offset[1];
 }
 
 /******************************************************************************

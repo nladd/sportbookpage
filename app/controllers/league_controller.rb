@@ -32,9 +32,9 @@ class LeagueController < ApplicationController
     @drop_4 = drop_4_node.content
     session['drop_4'] = @drop_4
 
-    #user_path = ["Home", @league.abbreviation] 
-    #user_path_urls = ["/home", "/league/#{@league.entity_id}"] 
-    #@path_html = build_path(user_path, user_path_urls)
+    user_path = ["Home", @league.abbreviation] 
+    user_path_urls = ["/home", "/league/#{@league.entity_id}"] 
+    @path_html = build_path(user_path, user_path_urls)
  
     render :template => 'users/index'
   
