@@ -174,8 +174,8 @@ class UsersController < ApplicationController
     if !(@friend.blank?) then
       path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
       parser = XML::Parser.file(path)
-      profile = parser.parse
-      friends_node = (profile.find('//root/friends')).first
+      @profile = parser.parse
+      friends_node = (@profile.find('//root/friends')).first
       friends = friends_node.children
 
       friends.each do |f|        
@@ -190,7 +190,7 @@ class UsersController < ApplicationController
         new_friend_node['id'] = (@friend.id).to_s
         new_friend_node << @friend.first_name + " " + @friend.last_name
         
-        profile.save(path)
+        @profile.save(path)
         
         add_result = "#{@friend.first_name} was added to your Fanclub!"
       end
@@ -241,7 +241,7 @@ class UsersController < ApplicationController
   #############################################################################
   # Description:
   #   Called when a comment is posted to a user's chalkboard. Writes the comment
-  #   to user_id.profile and renders the partial which will display the comment in
+  #   to user_id.chalkboard and renders the partial which will display the comment in
   #   the chalkboard
   #
   #############################################################################
@@ -257,6 +257,8 @@ class UsersController < ApplicationController
       
       write_comment_xml(@author, @user.id)
       
+      Emailer.deliver_new_chalkboard_comment(@author, @user)
+      
       render(:update) { |page|
         page.replace_html('chalkboard', :partial => '/users/partials/chalkboard')
       }
@@ -266,6 +268,47 @@ class UsersController < ApplicationController
     
   end
   
+  
+  #############################################################################
+  # Description:
+  #   Delete a comment from a user's chalkboard and re-render the chalkboard
+  #
+  #############################################################################
+  def delete_comment
+    
+    @user = User.find(session[:user_id])
+    
+    comment_id = params[:comment]
+    
+    chalkboard_path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard"
+    parser = XML::Parser.file(chalkboard_path)
+    chalkboard = parser.parse
+    
+    comments = chalkboard.find('//root/comment')
+    comments.each do |comment|
+      if comment['id'].to_i == comment_id.to_i
+        comment.remove!
+        break;
+      end
+    end
+    
+    chalkboard.save(chalkboard_path)
+    
+    render(:update) { |page|
+      page.replace_html('chalkboard', :partial => '/users/partials/chalkboard')
+    }
+    
+  end
+  
+  
+  #############################################################################
+  # Description
+  #   Reply to a comment that was posted on a user's chalkboard
+  #
+  #############################################################################
+  def reply_to_comment
+    
+  end
 
 ###################################
 ##############################
@@ -311,8 +354,8 @@ private
     parser = XML::Parser.file(path)
     chalkboard = parser.parse
     #get the most recent comment's id so we can increment it for the new comment being written
-    last_comment = chalkboard.find_first('//root/comment')
-    last_comment.blank? ? comment_id = -1 : comment_id = last_comment['id'].to_i
+    last_comment = chalkboard.find('//root/comment')
+    last_comment.blank? ? comment_id = -1 : comment_id = last_comment[last_comment.length - 1]['id'].to_i
     
     #write the new comment
     chalkboard.root << new_comment = XML::Node.new('comment')

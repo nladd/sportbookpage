@@ -331,45 +331,6 @@ function toggleTabs(selectedHash, tabsHash) {
 }
 
 
-interval = null;
-
-function openProgressBar() {
-  /* generate random progress-id */
-  uuid = "";
-  for (i = 0; i < 32; i++) {
-    uuid += Math.floor(Math.random() * 16).toString(16);
-  }
-
-  /* call the progress-updater every 250ms */
-  interval = window.setInterval( function () {  fetch(uuid);  }, 1000 );
-}
-
-function fetch(uuid) {
-  req = new XMLHttpRequest();
-  req.open("GET", "/progress", 1);
-  req.setRequestHeader("X-Progress-ID", uuid);
-  req.onreadystatechange = function () {
-    if (req.readyState == 4) {
-      if (req.status == 200) {
-        /* poor-man JSON parser */
-        var upload = eval(req.responseText);
-  
-        $('progress_bar').innerHTML = upload.state;
-  
-        /* we are done, stop the interval */
-        if (upload.state == 'done') {
-          window.clearTimeout(interval);
-        }
-      }
-    }
-  }
-  
-  req.send(null);
-}
-
-
-
-
 /******************************************************************************
  * Functions defined by Brett for the design
  * ****************************************************************************/

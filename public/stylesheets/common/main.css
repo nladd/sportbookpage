@@ -1701,6 +1701,7 @@ background:url(/images/css/target-scroll-arrow-up.gif) no-repeat center center;
 
 
 #draggables #target-holder .scroll-dwn {
+position: absolute;
 width:100%;
 height:20px;
 background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;

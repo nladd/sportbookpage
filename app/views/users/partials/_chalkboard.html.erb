@@ -20,8 +20,10 @@
 <div id="chalkboard_scroll-up" class="scroll-up" onmouseout="stopScroll();" onclick="jumpToTop('chalkboard_content')" title="Click to jump to top"><a name="chalkboard-scroll-up"></a></div>
 
 <ul id="chalkboard_content">
-  <%   
-   comments = @profile.find('//root/comment')
+  <%
+   parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard")
+   @chalkboard = parser.parse
+   comments = @chalkboard.find('//root/comment')
    (comments.length - 1).downto(0) do |i|
      comment = comments[i]
      img_path = "/users/#{comment.find('from').first['id']}/#{comment.find('from').first['id']}_thumbnail.png"
@@ -32,7 +34,9 @@
      <a href="javascript:void(0);" name="headshot"><img src="<%= img_path %>" class="headshot" /></a>
      <p><%= text.gsub(/\n/, '<br/>') %></p>
      <em>Posted by <a href="*" name="friend"><%= CGI.unescape(comment.find('from').first.content) %></a> on<br /><%= CGI.unescape(comment.find('date').first.content) + " @ " + CGI.unescape(comment.find('time').first.content) %>.
-     <br /><a href="*" name="reply">Reply</a> | <a href="*" name="edit">Delete</a></em>
+     <% if (session[:visiting_id].blank?) %>
+     <br /><a href="*" name="reply">Reply</a> | <%= link_to_remote "Delete", {:url =>  { :controller => "users", :action => "delete_comment" }, :with => "'comment=#{comment['id']}'" } %></em>
+     <% end %>
      <div class="clear"></div>
    </li>
    

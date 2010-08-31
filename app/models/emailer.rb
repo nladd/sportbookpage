@@ -123,4 +123,23 @@ class Emailer < ActionMailer::Base
     
   end
 
+
+  #############################################################################
+  # Description:
+  #   Send an e-mail instructing a user a new comment has been posted on their chalkboard
+  #
+  #############################################################################
+  def new_chalkboard_comment(sender, recipient)
+    
+    @sender = sender
+    
+    @recipients = recipient.email
+    @from = "no-reply@sportbookpage.com"
+    @subject = "SportbookPage.com: #{@sender.first_name} #{@sender.last_name} wrote on your chalkboard"
+    @sent_on = Time.now
+    @content_type = "text/html"
+    
+    
+  end
+
 end

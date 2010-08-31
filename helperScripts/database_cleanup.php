@@ -4,7 +4,7 @@
 $archive_path = "/home/{$_ENV['USER']}/FeedFetcherDeluxe/archive/";
 
 $conn = mysql_connect('localhost', 'root', $argv[1]);
-mysql_select_db("sportboo_testdev);
+mysql_select_db("sportboo_testdev");
 
 
 $time = time() - (45 * 24 * 60 * 60); #subtract 45 days
