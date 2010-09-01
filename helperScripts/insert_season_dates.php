@@ -152,13 +152,18 @@ if (mysql_num_rows($result)) {
 }
 
 
-$qry = "SELECT id FROM affiliations WHERE affiliation_key='l.ncaa.org.mfoot'";
+$qry = "SELECT id FROM affiliations WHERE affiliation_key='l.ncaa.org.mfoot' OR affiliation_key='l.ncaa.org.mfoot.div1.aa' OR affiliation_key='l.ncaa.org.mfoot.div2' OR affiliation_key='l.ncaa.org.mfoot.div3'";
 $result = mysql_query($qry);
+
 if (mysql_num_rows($result)) {
-        $league_id = mysql_result($result, 0, 0);
+while($league = mysql_fetch_array($result)) {
+
+        $league_id = $league['id'];
 
         $qry = "SELECT id, season_key FROM seasons WHERE league_id = {$league_id}";
         $seasons = mysql_query($qry);
+
+echo $qry;
 
         while ($row = mysql_fetch_array($seasons)) {
 
@@ -174,6 +179,7 @@ if (mysql_num_rows($result)) {
                 mysql_query($qry);
 
         }
+}
 }
 
 mysql_close($conn);

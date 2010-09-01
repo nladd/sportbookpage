@@ -1,29 +1,35 @@
--site performance.optimization
+-site performance/optimization
 -auto-login
 -invite reminder
--chalkboard delete/reply-to comments, send e-mail on chalkboard post
--delete someone from fanclub
--counter for number of fans in fanclub
 -help page
--email when added to a user's fanclub
 -remove extra spacing with banner ad
 -goole analytics
 -golf
 -nascar
 -tennis
+-bottom menu, colleges and divisions
+
 -advanced fanclub search
+-delete someone from fanclub
+-counter for number of fans in fanclub
+-email when added to a user's fanclub
+
 -smarter news articles
 -"all" only show all teams, not all leagues
 -qualified urls
 -all/tagged header only on home page
+-jump to links for home page
 -roster spacing
 
 -error message for bad password
 -forgot password?
 -college names, not mascots names
+-add beta to logo
+-draggables height
 
 
--gender radio buttons
 -IE search fanclub button
 -IE custom question
+
+-login pop-up too big
 

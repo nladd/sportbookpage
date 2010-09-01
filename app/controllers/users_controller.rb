@@ -54,40 +54,46 @@ class UsersController < ApplicationController
   #############################################################################
   def friend_home
 
-    if ((session[:visiting_id].blank?))
-      @user = User.find(params['friend_id'].to_i)
-      session[:visiting_id] = @user.id
+    if params['friend_id'].to_i == session[:user_id]
+      redirect_to home_url
     else
-      if (params['friend_id'].to_i != session[:visiting_id])
+
+      if ((session[:visiting_id].blank?))
         @user = User.find(params['friend_id'].to_i)
         session[:visiting_id] = @user.id
       else
-        @user = User.find(session[:visiting_id])
+        if (params['friend_id'].to_i != session[:visiting_id])
+          @user = User.find(params['friend_id'].to_i)
+          session[:visiting_id] = @user.id
+        else
+          @user = User.find(session[:visiting_id])
+        end
       end
+      
+      parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
+      @profile = parser.parse
+      drop_1_node = @profile.find_first('//root/home/target01')
+      @drop_1 = drop_1_node.content
+      drop_2_node = @profile.find_first('//root/home/target02')
+      @drop_2 = drop_2_node.content
+      drop_3_node = @profile.find_first('//root/home/target03')
+      @drop_3 = drop_3_node.content
+      drop_4_node = @profile.find_first('//root/home/target04')
+      @drop_4 = drop_4_node.content
+      
+      cgi_name = CGI.escape("#{@user.first_name} #{@user.last_name}")
+  
+      session[:level] = "home"
+      @level = "home"
+      @drag_n_drop = "home/drag_n_drop"
+          
+      user_path = [@user.first_name + " " + @user.last_name + " Home"] 
+      user_path_urls = ["/fanatic/#{cgi_name}"] 
+      @path_html = build_path(user_path, user_path_urls)
+  
+      render :template => "users/index"
+      
     end
-    
-    parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
-    @profile = parser.parse
-    drop_1_node = @profile.find_first('//root/home/target01')
-    @drop_1 = drop_1_node.content
-    drop_2_node = @profile.find_first('//root/home/target02')
-    @drop_2 = drop_2_node.content
-    drop_3_node = @profile.find_first('//root/home/target03')
-    @drop_3 = drop_3_node.content
-    drop_4_node = @profile.find_first('//root/home/target04')
-    @drop_4 = drop_4_node.content
-    
-    cgi_name = CGI.escape("#{@user.first_name} #{@user.last_name}")
-
-    session[:level] = "home"
-    @level = "home"
-    @drag_n_drop = "home/drag_n_drop"
-        
-    user_path = [@user.first_name + " " + @user.last_name + " Home"] 
-    user_path_urls = ["/fanatic/#{cgi_name}"] 
-    @path_html = build_path(user_path, user_path_urls)
-
-    render :template => "users/index"
 
   end
 
@@ -307,7 +313,21 @@ class UsersController < ApplicationController
   #
   #############################################################################
   def reply_to_comment
+    #don't accept blank comments
+    if (params[:comment] == "" )
+      return
+    end
+  
     
+    @user = User.find(session[:user_id])
+    @origin = User.find(params[:origin_id])
+    
+    write_comment_xml(@user, @origin.id)
+    
+    Emailer.deliver_new_chalkboard_comment(@user, @origin)
+    
+    return
+
   end
 
 ###################################

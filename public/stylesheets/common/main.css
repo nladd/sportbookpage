@@ -15,7 +15,7 @@ outline:none;
 
 body {
 font-family:Geneva, Arial, Helvetica, sans-serif;
-/*background:#000000 url(/images/css/background-grass.jpg) no-repeat top center;*/
+background:#000000 url(/images/css/background-grass.jpg) no-repeat top center;
 padding:0 0 20px 0;
 }
 
@@ -356,7 +356,6 @@ display:inline;
 }
 
 #home #column-right li input.radio {
-filter: alpha(opacity=0);
 float: right;
 width: 15px;
 }
@@ -647,7 +646,7 @@ font-weight:normal;
 color:#4696bb;
 margin:0 0 0 0;
 padding:0 4px 4px 4px;
-diplay: inline;
+display: inline;
 }
 
 #column-left #left-login h1 a {
@@ -1811,7 +1810,6 @@ font-weight:normal;
 font-size:.45em;
 color:#4696bb;
 margin:7px 4px 0 0;
-
 display:inline;
 }
 
@@ -1821,8 +1819,27 @@ font-weight:normal;
 font-size:.45em;
 color:#4696bb;
 margin:7px 4px 0 0;
-
 display:inline;
+}
+
+#column-right  li.reply h2 {
+float:left;
+font-weight:normal;
+font-size:1em;
+color:#ffffff;
+margin:7px 4px 0 0;
+}
+
+#column-right  li.reply h2 a {
+float:right;
+font-weight:normal;
+font-size:1em;
+color:#ffffff;
+margin:2px 4px 2px 0;
+}
+
+#column-right  li.reply h2 a:hover {
+color:#4696bb;
 }
 
 /* right column list items  */
@@ -1893,6 +1910,16 @@ height:100%;
 }
 
 #column-right .fanclub li a.close {
+width:15px;
+height:15px;
+top: 0;
+background:url(/images/css/pop-up-close.jpg) top right no-repeat;
+float:right;
+display:inline;
+cursor:pointer;
+}
+
+#column-right .chalkboard li a.close {
 width:15px;
 height:15px;
 top: 0;

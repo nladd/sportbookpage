@@ -36,7 +36,7 @@
     %>
       
         <li class="<%= (i % 2) == 0 ? "even" : "odd" %>">
-          <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>">
+          <form id="form_<%= friend_id %>" action="/fanatic/<%= cgi_name %>" method="post">
             <input type="hidden" name="friend_id" value="<%= friend_id %>"/>
               <a href="javascript:void(0);" name="fan-name" style="display: inline" onclick="$('form_<%= friend_id %>').submit();"><img src="<%= img_path %>" class="headshot" /></a>
               <p>
