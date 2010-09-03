@@ -310,7 +310,7 @@ class DraggablesController < ApplicationController
           @leagues[i] = nil
           next
         end
-      
+        
         if (@filter.blank?) then
           if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
             @leagues[i] = nil

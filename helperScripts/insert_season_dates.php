@@ -163,8 +163,6 @@ while($league = mysql_fetch_array($result)) {
         $qry = "SELECT id, season_key FROM seasons WHERE league_id = {$league_id}";
         $seasons = mysql_query($qry);
 
-echo $qry;
-
         while ($row = mysql_fetch_array($seasons)) {
 
 ########################### NCAA Football season dates ##################################################
