@@ -222,8 +222,9 @@ class Affiliation < ActiveRecord::Base
   # Return:
   #   :select => "teams.id AS team_id, teams.team_key, display_names.*"
   #############################################################################
-  def self.get_teams_by_league(league_id, affiliation_key, 
-                                order = "display_names.full_name ASC", 
+  def self.get_teams_by_league(league_id, affiliation_key,
+                                tagged_only = false,
+                                order = "display_names.full_name ASC",
                                 publisher_id = PUBLISHER_ID)
 
     # college football needs to be treated as a special case
@@ -373,6 +374,8 @@ class Affiliation < ActiveRecord::Base
   #   Get all leagues
   #
   # Params:
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
   #   -order - String - sql ORDER statement to format results
   #         Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
   #   -publisher_id - int - id of the publisher to use
@@ -384,33 +387,57 @@ class Affiliation < ActiveRecord::Base
   #               affiliations.publisher_id, display_names.*",
   #
   #############################################################################
-  def self.get_all_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+  def self.get_all_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
 
-    return DisplayName.find_all_by_full_name(
-              ALL_LEAGUES,
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{ALL_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ")"
+
+    return DisplayName.find(
+              :all,
              :select => "affiliations.id AS affiliation_id,
                          affiliations.affiliation_key AS affiliation_key, 
                          affiliations.publisher_id, display_names.*",
               :joins => "INNER JOIN affiliations ON display_names.entity_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}",
+              :conditions => tagged_condition,
               :order => order)
   
   
   end
   
-   
- 
+  
   #############################################################################
   # Description:
-  #  Allows method calls to get_leagues to be forwards compatible
+  #   Get all leagues that are currently in season
+  #
+  # Params:
+  #   -order - String - sql ORDER statement to format results
+  #         Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
+  #   -publisher_id - int - id of the publisher to use
+  #         NOTE: This is an optional parameter. Default: PUBLISHER_ID env variable
+  #
+  # Return:
+  #   :select => "affiliations.id AS affiliation_id,
+  #               affiliations.affiliation_key AS affiliation_key, 
+  #               affiliations.publisher_id, display_names.*",
   #
   #############################################################################
-  def self.get_leagues
-    return get_pro_leagues
+  def self.get_all_in_season_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+
+    time = time_to_datetime(TIME)
+
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{ALL_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ")"
+
+    return Season.find(:all,
+                       :select => "affiliations.id AS affiliation_id,
+                                  affiliations.affiliation_key AS affiliation_key, 
+                                  affiliations.publisher_id, display_names.*",
+                       :joins => "INNER JOIN affiliations ON seasons.league_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}
+                                  INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
+                       :conditions => "#{tagged_condition}
+                                      AND seasons.start_date_time <= '#{time}' AND seasons.end_date_time >= '#{time}'",
+                       :order => order)
   end
 
 
-
- 
   ##############################################################################
   # Description:
   #   Gets a league information
@@ -494,14 +521,10 @@ class Affiliation < ActiveRecord::Base
   #                        events.start_date_time"
   #
   ##############################################################################
-  def self.get_games_by_date_range(affiliation_id, range_start, range_end, order = nil)
+  def self.get_games_by_date_range(affiliation_id, range_start, range_end, order = "events.start_date_time ASC")
   
     start_date = time_to_datetime(range_start)
     end_date = time_to_datetime(range_end)
-
-    if order.blank?
-      order = "events.start_date_time ASC"
-    end
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
@@ -545,14 +568,43 @@ class Affiliation < ActiveRecord::Base
 
   end
   
-  def self.get_last_game_per_team(affiliation_id, order = nil)
+  
+  ##############################################################################
+  # Description:
+  #   Get each team's most recently played game including game date, time,
+  #   location (home/away), opponent id, and opponent score of a single team.
+  #
+  # Params:
+  #   -affiliation_id - int - affiliation for which to get the scheule as specified by the 
+  #             affiliation_id as defined by the id attribute of the 'affiliations' table
+  #   -order - String - sql syntax for an ORDER statement to sort the results 
+  #                     This is an optional field that defaults to "events.start_date_time ASC"
+  #
+  # Return:
+  # -games[] - Array of objects of type AffiliationsEvent
+  #            :select => "d1.abbreviation AS t1_abbr, 
+  #                        d1.entity_id AS t1_id,
+  #                        d1.first_name AS t1_first_name,
+  #                        d1.last_name AS t1_last_name,
+  #                        d1.full_name AS t1_full_name,
+  #                        d1.url AS t1_url,
+  #                        d2.abbreviation AS t1_abbr, 
+  #                        d2.entity_id AS t2_id,
+  #                        d2.first_name AS t2_first_name,
+  #                        d2.last_name AS t2_last_name,
+  #                        d2.full_name AS t2_full_name,
+  #                        d2.url AS t2_url,
+  #                        t1.alignment AS t1_alignment,
+  #                        t1.score AS t1_score,
+  #                        t2.alignment AS t2_alignment,
+  #                        t2.score AS t2_score,
+  #                        events.broadcast_listing,
+  #                        events.start_date_time"
+  #
+  ##############################################################################
+  def self.get_last_game_per_team(affiliation_id, order = "events.start_date_time ASC")
   
     time = time_to_datetime(TIME)
-    
-
-    if order.blank?
-      order = "events.start_date_time ASC"
-    end
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
@@ -606,12 +658,12 @@ class Affiliation < ActiveRecord::Base
   # Params:
   #   -affiliation_id - int - affiliation for which to get the scheule as specified by the 
   #             affiliation_id as defined by the id attribute of the 'affiliations' table
+  #   -limit - int - the number of results to return as determined by the LIMIT SQL statement
+  #                   Note: This is an optional parameter that defaults to 20
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
   #   -range_start - Time - the start date of the range
   #                   Note: This is an optional parameter that defualts to TIME env variable
-  #   -n - int - the number of results to return as determined by the LIMIT SQL statement
-  #                   Note: This is an optional parameter that defaults to 20
-  #   -order - String - sql syntax for an ORDER statement to sort the results 
-  #                     Note: This is an optional field that defaults to "events.start_date_time ASC"
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
@@ -635,10 +687,11 @@ class Affiliation < ActiveRecord::Base
   #                        events.start_date_time"
   #
   ##############################################################################
-  def self.get_next_n_games(affiliation_id, n = 20, range_start = TIME)
+  def self.get_next_n_games(affiliation_id, limit = 20, tagged_teams = nil, range_start = TIME)
   
     start_date = time_to_datetime(range_start)
 
+    tagged_condition = tagged_teams.blank? ? "" : "AND ((t1.participant_id) IN (" + tagged_teams.join(",") + ") OR (t2.participant_id) IN (" + tagged_teams.join(",") + "))"
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
@@ -671,9 +724,9 @@ class Affiliation < ActiveRecord::Base
                           INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
                           INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
                           INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
-              :conditions => "events.start_date_time >= '#{start_date}'",                                    
+              :conditions => "events.start_date_time >= '#{start_date}' #{tagged_condition}",
               :order => "events.start_date_time ASC",
-              :limit => n)
+              :limit => limit)
 
     games.size.times do |i|
       games[i].start_date_time = datetime_to_time(games[i].start_date_time)
@@ -692,12 +745,12 @@ class Affiliation < ActiveRecord::Base
   # Params:
   #   -affiliation_id - int - affiliation for which to get the scheule as specified by the 
   #             affiliation_id as defined by the id attribute of the 'affiliations' table
-  #   -range_end - Time - time from which to get the previous games
-  #                   Note: This is an optional parameter that defualts to TIME env variable
   #   -limit - int - the number of results to return as determined by the LIMIT SQL statement
   #                   Note: This is an optional parameter that defaults to 20
-  #   -order - String - sql syntax for an ORDER statement to sort the results 
-  #                     Note: This is an optional field that defaults to "events.start_date_time DESC"
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
+  #   -range_end - Time - time from which to get the previous games
+  #                   Note: This is an optional parameter that defualts to TIME env variable
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
@@ -721,9 +774,11 @@ class Affiliation < ActiveRecord::Base
   #                        events.start_date_time"
   #
   ##############################################################################
-  def self.get_previous_n_games(affiliation_id, limit = 20, range_end = TIME)
+  def self.get_previous_n_games(affiliation_id, limit = 20, tagged_teams = nil, range_end = TIME)
   
     end_date = time_to_datetime(range_end)
+  
+    tagged_condition = tagged_teams.blank? ? "" : "AND ((t1.participant_id) IN (" + tagged_teams.join(",") + ") OR (t2.participant_id) IN (" + tagged_teams.join(",") + "))"
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
@@ -756,7 +811,7 @@ class Affiliation < ActiveRecord::Base
                           INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
                           INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
                           INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
-              :conditions => "events.start_date_time <= '#{end_date}'",                                    
+              :conditions => "events.start_date_time <= '#{end_date}' #{tagged_condition}",                                    
               :order => "events.start_date_time DESC",
               :limit => limit)
 
@@ -775,7 +830,9 @@ class Affiliation < ActiveRecord::Base
   #
   # Params:
   #   -affiliation_id - int - the id of the affiliation to get the lines for
-  #   -n - int - the number of games you'd like to get the lines for
+  #   -limit - int - the number of games you'd like to get the lines for
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
   #   -range_start - Time - the start date of the range
   #                   Note: This is an optional parameter that defualts to TIME env variable
   #   -bookmaker_id - id of the bookmaker. 
@@ -785,13 +842,12 @@ class Affiliation < ActiveRecord::Base
   #   :select => "wagering_straight_spread_lines.*, display_names.*,  
   #               wagering_straight_spread_lines.line_value AS line",
   #############################################################################
-  def self.get_lines(affiliation_id, n = 20, range_start = TIME, bookmaker_id = BOOKMAKER_ID)
-  
+  def self.get_lines(affiliation_id, limit = 20, tagged_teams = nil, range_start = TIME, bookmaker_id = BOOKMAKER_ID)
   
     start_date = time_to_datetime(range_start)
-
-    ActiveRecord::Base.connection.execute("SET sql_big_selects=1")    
-  
+    
+    tagged_condition = tagged_teams.blank? ? "" : "AND ((t1.participant_id) IN (" + tagged_teams.join(",") + ") OR (t2.participant_id) IN (" + tagged_teams.join(",") + "))"
+ 
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
               :select => "MAX(t1_score_lines.date_time),  
@@ -821,10 +877,10 @@ class Affiliation < ActiveRecord::Base
                         LEFT JOIN wagering_moneylines AS t1_money_lines ON t1_money_lines.event_id = events.id AND t1_money_lines.team_id = t1.participant_id AND t1_money_lines.bookmaker_id = #{bookmaker_id}  LEFT JOIN wagering_moneylines AS t2_money_lines ON t2_money_lines.event_id = events.id AND t2_money_lines.team_id = t2.participant_id AND t2_money_lines.bookmaker_id = #{bookmaker_id}
                         INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
                         INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
-              :conditions => "events.start_date_time >= '#{start_date}'",                                    
+              :conditions => "events.start_date_time >= '#{start_date}' #{tagged_condition}",                                    
               :group => "events.id",
               :order => "start_date_time ASC",
-              :limit => n)
+              :limit => limit)
 
     games.size.times do |i|
       games[i].start_date_time = datetime_to_time(games[i].start_date_time)

@@ -11,7 +11,7 @@
 	  <h1>Email:</h1><input name="email" tabindex="1" type="text" />
 	  <h1>Password:</h1><input name="password" tabindex="2" type="password" />
 	  <input name="login" value="Login" tabindex="3" type="submit" class="submit" />
-	  <h1><%= link_to "Forgot your password?", {:controller => "user_preferences", :action => "get_security_question" } %></h1>
+	  <h1><a href="/user_preferences/get_security_question">Forgot your password?</a></h1>
 	  <span>
 		<h1>Not a member?</h1>
 		<a href="/login" class="signup">Sign up!</a>
@@ -65,7 +65,7 @@
 		 sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>
-<!--		 <span>
+		 <span>
 			
 			<div id="header">
 			  <a id="plus_minus_my_<%= sport_attr %>"  href="javascript:void(0);" class="collapsed" onclick="expand_collapse_menu('my_<%= sport_attr %>');"></a>
@@ -86,7 +86,7 @@
 			  <% end %>
 			  </div>
 			</div>
-		 </span> -->
+		 </span>
 	  <%
 		 end # close sport loop
 	  %>     

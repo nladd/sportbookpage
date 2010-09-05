@@ -14,8 +14,8 @@
 <%  
   path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.chalkboard"
   parser = XML::Parser.file(path)
-  profile = parser.parse
-  comments = profile.find('//root/comment')
+  chalkboard = parser.parse
+  comments = chalkboard.find('//root/comment')
   (comments.length - 1).downto(0) do |i|
     comment = comments[i]
     img_path = "/users/#{comment.find('from').first['id']}/#{comment.find('from').first['id']}_thumbnail.png"

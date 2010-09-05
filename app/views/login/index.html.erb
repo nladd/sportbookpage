@@ -3,7 +3,7 @@
 <div id="column-right">
   <div id="login">
 	<h1>Sign In <i><a href="/password">Trouble signing in?</a></i></h1>
-	<% form_tag do %>
+	<form action="/login" method="post">
 	  <div class="signin">
 		<p>Email</p>
 		<input name="email" tabindex="1" type="text" />
@@ -16,14 +16,13 @@
 		<input name="login" value="Login" tabindex="3" type="submit" class="submit" />
 		<div class="clear"></div>
 	  </div>
-		
-	<% end %>
+	</form>
 
 	<div class="clear"></div>
   </div> <!-- close login div -->
   
   <h1>Sign Up</h1>
-  <% form_tag({:controller => "user_preferences", :action => "signup"}, :multipart => true, :id => 'register_form') do %>
+  <form action="/user_preferences/signup" enctype="multipart/form-data" id="register_form" method="post">
     <ul>
 	  <li>
 		<label>First Name:</label>
@@ -105,8 +104,8 @@
 	  <li>
 		<label>Birthday:</label>
 		<%= select_year((@user.birthday.blank? ? Date.new(Time.now.year-5) : Date.parse(@user.birthday)), {:start_year => Time.now.year - 5, :end_year => Time.now.year - 95}, {:tabindex => "13", :class => "year"}) %>
-		<%= select_day((@user.birthday.blank? ? Date.new(Time.now.year-5) : Date.parse(@user.birthday)), {}, {:tabindex => "12", :class => "date"}) %>
-		<%= select_month((@user.birthday.blank? ? Date.new(Time.now.year-5) : Date.parse(@user.birthday)), {}, {:tabindex => "11", :class => "date"}) %>
+		<select class="date" id="date_day" name="date[day]" tabindex="12"><option selected="selected" value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+		<select class="date" id="date_month" name="date[month]" tabindex="11"><option selected="selected" value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
 		<div class="clear"></div>
 	  </li>
 	  <% if !@user.errors[:birthday].blank? %>
@@ -145,7 +144,7 @@
 		<input name="submit" value="Submit" tabindex="15" type="submit" class="submit" /><div class="clear"></div>
 	  </li>
 	</ul>
-  <% end %>
+  </form>
   <div class="clear"></div>
 </div><!-- close right column -->
 

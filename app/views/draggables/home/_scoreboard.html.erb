@@ -14,7 +14,7 @@
 
 <% if @leagues.size < 1 %>
   <li>
-    <p>There is no current data available for the teams selected in your profile. Try adding teams that are currently in season or click the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+    <p>There is no current data available for the teams selected in your profile. Try adding teams that are currently in season or click the '<a href="#" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'level=<%= @level %>&amp;full_partial=full&amp;drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">All</a>' link above.</p>
   </li>
 <% end %>
 
@@ -36,7 +36,7 @@
 
     <% if @games[@i].size < 1 %>
     <li>
-      <p>There are no current scores available for the teams selected in your profile. Try clicking the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+      <p>There are no current scores available for the teams selected in your profile. Try clicking the '<a href="#" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'level=<%= @level %>&amp;full_partial=full&amp;drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">All</a>' link above.</p>
     </li>
     <% end %>
   
@@ -50,7 +50,22 @@
       
   %>
 
-  <%= render :partial => "draggables/partials/more_less" %>
+  <% if ( @j == 0 ) then %>
+    <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
+  <% elsif (@j % 12) == 0 %>
+    <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
+      <% if @j != 12 then %>
+      <span class="clps05col">
+        <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
+      </span>
+      <% end %>
+      <span class="clps05col">
+        <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
+      </span>
+    </li>
+    </div> <!-- close <hide_#> -->
+    <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
+  <% end %>
 
     <li>
       <span class="clps06col clps"><%= game.start_date_time.strftime("%m/%d") %></span>
@@ -59,9 +74,8 @@
       <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
       <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><%= game.t2_score %></span>
       <% if game.event_status == "post-event" %>
-        <span class="clps06col clps"><%= link_to_remote "Recap",
-             :url => {:controller => "article", :action => "event_recap"},
-             :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+        <span class="clps06col clps">
+          <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_recap', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Recap</a>
         </span>
       <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
           sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)

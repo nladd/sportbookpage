@@ -22,20 +22,8 @@ class UsersController < ApplicationController
     @level = "home"
     @drag_n_drop = "home/drag_n_drop"
     
-    parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
-    @profile = parser.parse
-    node = @profile.find_first("//root/#{@level}/target01")
-    @drop_1 = node.content
-    session['drop_1'] = @drop_1
-    node = @profile.find_first("//root/#{@level}/target02")
-    @drop_2 = node.content
-    session['drop_2'] = @drop_2
-    node = @profile.find_first("//root/#{@level}/target03")
-    @drop_3 = node.content
-    session['drop_3'] = @drop_3
-    node = @profile.find_first("//root/#{@level}/target04")
-    @drop_4 = node.content
-    session['drop_4'] = @drop_4
+    get_draggables(@user, @level)
+    load_tagged_teams(@user)
   
     user_path = ["Home"] 
     user_path_urls = ["/home"] 
@@ -70,16 +58,8 @@ class UsersController < ApplicationController
         end
       end
       
-      parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
-      @profile = parser.parse
-      drop_1_node = @profile.find_first('//root/home/target01')
-      @drop_1 = drop_1_node.content
-      drop_2_node = @profile.find_first('//root/home/target02')
-      @drop_2 = drop_2_node.content
-      drop_3_node = @profile.find_first('//root/home/target03')
-      @drop_3 = drop_3_node.content
-      drop_4_node = @profile.find_first('//root/home/target04')
-      @drop_4 = drop_4_node.content
+      get_draggables(@user, @level)
+      load_tagged_teams(@user)
       
       cgi_name = CGI.escape("#{@user.first_name} #{@user.last_name}")
   
@@ -394,6 +374,7 @@ private
       
     
   end
+  
   
   
 end

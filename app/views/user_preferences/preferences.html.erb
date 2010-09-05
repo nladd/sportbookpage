@@ -1,5 +1,4 @@
-  
-    
+ 
     <% if flash[:notice] -%>
     <span style="width: 100%; text-align: center">
         <% @saved ? color = "#4696bb" : color = "red" %>
@@ -9,7 +8,7 @@
     <hr/>
     <% end -%>
     
-    <% form_tag('/preferences', :multipart => true, :name => 'teams', :id => "register_form") do %>
+  <form action="/preferences" enctype="multipart/form-data" id="register_form" method="post" name="teams">
     <a href="/home" class="back">Home</a>
     <input name="save" type="submit" class="submit" value="Save" />
     
@@ -19,7 +18,7 @@
     <span>
         <a href="#" name="edit-photo" id="photo_area" onclick="$('file_field').show(); return false;"><img src="/users/<%= @user.id %>/<%= @user.id %>.png" alt="headshot" name="headshot-none" class="headshot" /></a>
         <h1>Photo <i><br /><a href="javascript:void();" onclick="$('file_field').show(); return false;">Change</a> / <%= link_to_remote "Remove", :url => {:controller => "user_preferences", :action => "delete_photo"} %></i></h1>
-        <%= file_field_tag 'photo', :size => 20, :id => 'file_field', :style => "display: none"%>
+        <input id="file_field" name="photo" size="20" style="display: none" type="file" />
     </span>
     
     <span>
@@ -45,8 +44,7 @@
                 <br /><em style="color: red"><%= @user.errors[:birthday] %></em>
             </li>
             <li>
-                Hometown: <%= text_field_tag( "hometown", @user.hometown, :size => 11, :maxlength => 50 ) %><%= select("state", "state", [['AL', 'AL'], ['AK', 'AK'],['AZ', 'AZ'],['AR', 'AR'], ['CA', 'CA'], ['CO', 'CO'], ['CT', 'CT'], ['DE', 'DE'], ['DC', 'DC'], ['FL', 'FL'],['GA', 'GA'],['HI', 'HI'], ['ID', 'ID'], ['IL', 'IL'], ['IN', 'IN'], ['IA', 'IA'], ['KS', 'KS'], ['KY', 'KY'], ['LA', 'LA'], ['ME', 'ME'], ['MD', 'MD'], ['MA', 'MA'], ['MI', 'MI'], ['MN', 'MN'],['MS', 'MS'], ['MO', 'MO'], ['MT', 'MT'], ['NE', 'NE'], ['NV', 'NV'], ['NH', 'NH'], ['NJ', 'NJ'], ['NM', 'NM'], ['NY', 'NY'], ['NC', 'NC'], ['ND', 'ND'], ['OH', 'OH'], ['OK', 'OK'], ['OR', 'OR'], ['PA', 'PA'], ['RI', 'RI'], ['SC', 'SC'], ['SD', 'SD'], ['TN', 'TN'], ['TX', 'TX'], ['UT', 'UT'], ['VT', 'VT'], ['VA', 'VA'], ['WA', 'WA'], ['WV', 'WV'], ['WI', 'WI'], ['WY', 'WY']], {:selected => @user.state}) %>
-                <!--<select name="profile[state]" value="<%= @user.state %>"><option value="AK" selected="selected">AK</option><option value="AL">AL</option><option value="AR">AR</option><option value="AZ">AZ</option><option value="CA">CA</option><option value="CO">CO</option><option value="CT">CT</option><option value="DC">DC</option><option value="DE">DE</option><option value="FL">FL</option><option value="GA">GA</option><option value="HI">HI</option><option value="IA">IA</option><option value="ID">ID</option><option value="IL">IL</option><option value="IN">IN</option><option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option><option value="MA">MA</option><option value="MD">MD</option><option value="ME">ME</option><option value="MI">MI</option><option value="MN">MN</option><option value="MO">MO</option><option value="MS">MS</option><option value="MT">MT</option><option value="NC">NC</option><option value="ND">ND</option><option value="NE">NE</option><option value="NH">NH</option><option value="NJ">NJ</option><option value="NM">NM</option><option value="NV">NV</option><option value="NY">NY</option><option value="OH">OH</option><option value="OK">OK</option><option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option><option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option><option value="TX">TX</option><option value="UT">UT</option><option value="VA">VA</option><option value="VT">VT</option><option value="WA">WA</option><option value="WI">WI</option><option value="WV">WV</option><option value="WY">WY</option></select>-->
+                Hometown: <input id="hometown" maxlength="50" name="hometown" size="11" type="text" value="<%= @user.hometown %>" /><%= select("state", "state", [['AL', 'AL'], ['AK', 'AK'],['AZ', 'AZ'],['AR', 'AR'], ['CA', 'CA'], ['CO', 'CO'], ['CT', 'CT'], ['DE', 'DE'], ['DC', 'DC'], ['FL', 'FL'],['GA', 'GA'],['HI', 'HI'], ['ID', 'ID'], ['IL', 'IL'], ['IN', 'IN'], ['IA', 'IA'], ['KS', 'KS'], ['KY', 'KY'], ['LA', 'LA'], ['ME', 'ME'], ['MD', 'MD'], ['MA', 'MA'], ['MI', 'MI'], ['MN', 'MN'],['MS', 'MS'], ['MO', 'MO'], ['MT', 'MT'], ['NE', 'NE'], ['NV', 'NV'], ['NH', 'NH'], ['NJ', 'NJ'], ['NM', 'NM'], ['NY', 'NY'], ['NC', 'NC'], ['ND', 'ND'], ['OH', 'OH'], ['OK', 'OK'], ['OR', 'OR'], ['PA', 'PA'], ['RI', 'RI'], ['SC', 'SC'], ['SD', 'SD'], ['TN', 'TN'], ['TX', 'TX'], ['UT', 'UT'], ['VT', 'VT'], ['VA', 'VA'], ['WA', 'WA'], ['WV', 'WV'], ['WI', 'WI'], ['WY', 'WY']], {:selected => @user.state}) %>
                 <br /><em style="color: red"><%= @user.errors[:hometown] %></em>
             </li>
             <li>
@@ -72,23 +70,24 @@
         </ul>
         <ul id="edit-settings" name="user-info" <%= if @saved then "style=\"display: none\"" end %>>
             <li>
-                E-mail: <%= text_field_tag( "email", @user.email, :size => 20, :maxlength => 50, :align => "right" ) %>
+                E-mail: <input align="right" id="email" maxlength="50" name="email" size="20" type="text" value="<%= @user.email %>" />
+
                 <br /><em style="color: red"><%= @user.errors[:email] %></em>
             </li>
             <li>
-                Security Question: <%= text_field_tag( "question_1", @user.question_1, :size => 30, :maxlength => 70, :align => "right" ) %>
+                Security Question: <input align="right" id="question_1" maxlength="70" name="question_1" size="30" type="text" value="<%= @user.question_1 %>" />
                 <br /><em style="color: red"><%= @user.errors[:question_1] %></em>
             </li>
             <li>
-                Answer: <%= text_field_tag( "answer_1", @user.answer_1, :size => 20, :maxlength => 50, :align => "right" ) %>
+                Answer: <input align="right" id="answer_1" maxlength="50" name="answer_1" size="20" type="text" value="<%= @user.answer_1 %>" />
                 <br /><em style="color: red"><%= @user.errors[:answer_1] %></em>
             </li>
             <li>
-                Password: <%= text_field_tag( "password", "********", :size => 20, :maxlength => 50, :align => "right" ) %>
+                Password: <input align="right" id="password" maxlength="50" name="password" size="20" type="text" value="********" />
                 <br /><em style="color: red"><%= @user.errors[:password] %></em>
             </li>
             <li>
-                Confirm Password: <%= text_field_tag( "password_confirmation", "********", :size => 20, :maxlength => 50, :align => "right" ) %>
+                Confirm Password: <input align="right" id="password_confirmation" maxlength="50" name="password_confirmation" size="20" type="text" value="********" />
                 <br /><em style="color: red"><%= @user.errors[:password_confirmation] %></em>
             </li>
             <div class="clear"></div>
@@ -107,15 +106,18 @@
 
   <div id="pro">
 
-<%  
+<%
+  tagged_teams = session[:tagged_teams]
+
   @pro_leagues.size.times do |l| 
     abbr = @pro_leagues[l].abbreviation.gsub(/[\s']/, "_")
 %>
     <hr />
     <h2>
-      <%= check_box_tag( 'sports[]', abbr + "," + (@pro_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %>
+      <input id="<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @pro_leagues[l].abbreviation + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
       <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @pro_leagues[l].abbreviation %></a>
     </h2>
+    
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
     @pro_divisions[l].size.times do |d|
@@ -123,7 +125,7 @@
 %>
         <span>
             <h3>
-              <input type="checkbox" checked="false" onclick="toggleHeaderCheckbox('<%= div_abbr %>'); return true;" id="<%= div_abbr %>_checkbox" />
+              <input type="checkbox" onclick="toggleHeaderCheckbox('<%= div_abbr %>'); return true;" id="<%= div_abbr %>_checkbox" />
               <a onclick="$('<%= div_abbr + "_checkbox" %>').checked = !$('<%= div_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= div_abbr %>'); return true;"><%= @pro_divisions[l][d].full_name %></a>
             </h3>
             <ul id="<%= div_abbr %>" style="display: none">
@@ -133,16 +135,31 @@
             db_team = Team.find(@pro_teams[l][d][t].team_id)
 %>
                 <li>
-                    <%= check_box_tag( abbr + '[]', @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s, false, :class => team_abbr, :id => team_abbr + "_checkbox" ) %>
+                    <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s %>" />
                     <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @pro_teams[l][d][t].full_name %></label>
                     <em><%= db_team.followers %> fans</em>
                 </li>
+                
+                <%
+                  if tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) && tagged_teams[@pro_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                %>
+
+                  <%= javascript_tag "
+                          $$('input.#{team_abbr}')[0].checked = true; 
+                           
+                          if ($$('input.#{team_abbr}')[0].up(0).up(0).previous('h3').down(0) != undefined) {
+                              $$('input.#{team_abbr}')[0].up(0).up(0).previous('h3').down(0).checked = true;
+                              $$('input.#{team_abbr}')[0].up(0).up(0).show();
+                          }"
+                  %>
+                <% end %>
+                
         <%
             end # close teams loop
         %>
                 <li>
-                    <%= check_box_tag( "check_all_" + div_abbr,  "check_all", false, :onclick => "toggle_all_checkboxes('" + div_abbr + "'); return true;", :id => "check_all_" + div_abbr ) %>
-                    <label id="check_all_<%= div_abbr %>_label" onclick="$('check_all_<%= div_abbr %>').checked = !$('check_all_<%= div_abbr %>').checked; toggle_all_checkboxes('<%= div_abbr %>');">Check All</label><label id="uncheck_all_<%= div_abbr %>_label" style="display: none" onclick="$('check_all_<%= div_abbr %>').checked = !$('check_all_<%= div_abbr %>').checked; toggle_all_checkboxes('<%= div_abbr %>');">Uncheck All</label>
+                  <input id="check_all_<%= div_abbr %>" name="check_all_<%= div_abbr %>" onclick="toggle_all_checkboxes('<%= div_abbr %>'); return true;" type="checkbox" value="check_all" />
+                  <label id="check_all_<%= div_abbr %>_label" onclick="$('check_all_<%= div_abbr %>').checked = !$('check_all_<%= div_abbr %>').checked; toggle_all_checkboxes('<%= div_abbr %>');">Check All</label><label id="uncheck_all_<%= div_abbr %>_label" style="display: none" onclick="$('check_all_<%= div_abbr %>').checked = !$('check_all_<%= div_abbr %>').checked; toggle_all_checkboxes('<%= div_abbr %>');">Uncheck All</label>
                 </li>
                 <div class="clear"></div>
             </ul>
@@ -151,6 +168,11 @@
         end # close divisions loop
     %>
     </div> <!-- close conference div -->
+    
+    <% if tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) %>
+      <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
+    <% end %>
+    
 <%
   end # close leagues loop
 %>
@@ -161,7 +183,7 @@
 %>
     <hr />
     <h2>
-      <%= check_box_tag( 'college[]', @college_leagues[l].abbreviation.to_s + "," + (@college_leagues[l].affiliation_id).to_s, false, {:id => abbr + "_checkbox", :onclick => "toggleHeaderCheckbox('sport_list_" + abbr + "'); return true;" } ) %>
+      <input id="<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s %>" />
       <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @college_leagues[l].full_name %></a>
     </h2>
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
@@ -171,7 +193,7 @@
 %>
         <span>
             <h3>
-              <input type="checkbox" checked="false" onclick="toggleHeaderCheckbox('<%= conf_abbr %>'); return true;" id="<%= conf_abbr %>_checkbox" />
+              <input type="checkbox" onclick="toggleHeaderCheckbox('<%= conf_abbr %>'); return true;" id="<%= conf_abbr %>_checkbox" />
               <a onclick="$('<%= conf_abbr + "_checkbox" %>').checked = !$('<%= conf_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= conf_abbr %>'); return true;"><%= @college_conferences[l][c].full_name %></a>
             
             </h3>
@@ -182,16 +204,30 @@
             db_team = Team.find(@college_teams[l][c][t].team_id)
 %>
                 <li>
-                    <%= check_box_tag( abbr + '[]', @college_teams[l][c][t].last_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s, false, :class => team_abbr, :id => team_abbr + "_checkbox" ) %>
-                    <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
-                    <em><%= db_team.followers %> fans</em>
+                  <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].last_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s %>" />
+                  <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
+                  <em><%= db_team.followers %> fans</em>
                 </li>
+                
+                <%
+                  if tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) && tagged_teams[@college_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                %>
+
+                  <%= javascript_tag "
+                          $$('input.#{team_abbr}')[0].checked = true; 
+                           
+                          if ($$('input.#{team_abbr}')[0].up(0).up(0).previous('h3').down(0) != undefined) {
+                              $$('input.#{team_abbr}')[0].up(0).up(0).previous('h3').down(0).checked = true;
+                              $$('input.#{team_abbr}')[0].up(0).up(0).show();
+                          }"
+                  %>
+                <% end %>
         <%
             end # close teams loop
         %>
                 <li>
-                    <%= check_box_tag( "check_all_" + conf_abbr,  "check_all", false, :onclick => "toggle_all_checkboxes('" + conf_abbr + "'); return true;", :id => "check_all_" + conf_abbr ) %>
-                    <label id="check_all_<%= conf_abbr %>_label" onclick="$('check_all_<%= conf_abbr %>').checked = !$('check_all_<%= conf_abbr %>').checked; toggle_all_checkboxes('<%= conf_abbr %>');">Check All</label><label id="uncheck_all_<%= conf_abbr %>_label" style="display: none" onclick="$('check_all_<%= conf_abbr %>').checked = !$('check_all_<%= conf_abbr %>').checked; toggle_all_checkboxes('<%= conf_abbr %>');">Uncheck All</label>
+                  <input id="check_all_<%= conf_abbr %>" name="check_all_<%= conf_abbr %>" onclick="toggle_all_checkboxes('<%= conf_abbr %>'); return true;" type="checkbox" value="check_all" />
+                  <label id="check_all_<%= conf_abbr %>_label" onclick="$('check_all_<%= conf_abbr %>').checked = !$('check_all_<%= conf_abbr %>').checked; toggle_all_checkboxes('<%= conf_abbr %>');">Check All</label><label id="uncheck_all_<%= conf_abbr %>_label" style="display: none" onclick="$('check_all_<%= conf_abbr %>').checked = !$('check_all_<%= conf_abbr %>').checked; toggle_all_checkboxes('<%= conf_abbr %>');">Uncheck All</label>
                 </li>
                 <div class="clear"></div>
             </ul>
@@ -200,8 +236,13 @@
         end # close conferences loop
     %>
     </div> <!-- close conference div -->
+    
+    <% if tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) %>
+      <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
+    <% end %>
+    
 <%
-  end # close leagues loop
+  end # close college leagues loop
 %>
     <a href="/home" class="back">Home</a>
     <input name="save" type="submit" class="submit" value="Save" />
@@ -209,59 +250,13 @@
   </div> <!-- close pro <div> -->
   
      
-<%
-    end #close form
-%>
- 
+  </form>
   
-
-
-<%= javascript_tag "uncheck_all('register_form');" %>
-
 <%
   
   path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
   parser = XML::Parser.file(path)
   profile = parser.parse
-  
-  pro_sports = profile.find('//root/sports/sport')
-  pro_sports = pro_sports.to_a
-  college_sports = profile.find('//root/sports/collegeSports/sport')
-  college_sports = college_sports.to_a
-  
-  my_sports = pro_sports.concat(college_sports)
-  
-  my_teams = nil
-    
-  if !(my_sports.blank?)
-    
-    my_sports.each do |my_sport|  
-%>
-<%= javascript_tag "$('" + my_sport['sport'] + "_checkbox').checked = true; $('sport_list_" + my_sport['sport'] + "').show();" %>
-<%  
-    my_teams = my_sport.children
-    
-    if !(my_teams.blank?) 
-      my_teams.each do |my_team|
-        team = Team.get_team(my_team['id'])
-        class_name = (team.full_name).gsub(/[\s\.']/, '_')
-%>
-  <%= javascript_tag "
-          $$('input." + class_name + "')[0].checked = true; 
-           
-          if ($$('input." + class_name + "')[0].up(0).up(0).previous('h3').down(0) != undefined) {
-              $$('input." + class_name + "')[0].up(0).up(0).previous('h3').down(0).checked = true;
-              $$('input." + class_name + "')[0].up(0).up(0).show();
-          }"
-  %>
-<%
-        end
-      end
-    end
-  end
-  # if the team is already in the user's profile, check the box
-  checked = false
-  
   
   node = profile.find_first('//root/birthday')      
   if !(node.blank?)

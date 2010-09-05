@@ -1,29 +1,17 @@
-<%
-      if ( @j == 0 ) then
-%>
-        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
-<%    
-      elsif (@j % 12) == 0
-%>
-        
-        
-          <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
-            
-            <% if @j != 12 then %>
-            <span class="clps05col">
-              <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
-            </span>
-            <% end %>
-
-            <span class="clps05col">
-              <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
-            </span>
-            
-          </li>
-        
-        </div> <!-- close <hide_#> -->
-        <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
-<%
-      end
-%>
+<% if ( @j == 0 ) then %>
+  <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
+<% elsif (@j % 12) == 0 %>
+  <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
+    <% if @j != 12 then %>
+    <span class="clps05col">
+      <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
+    </span>
+    <% end %>
+    <span class="clps05col">
+      <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
+    </span>
+  </li>
+  </div> <!-- close <hide_#> -->
+  <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
+<% end %>
     

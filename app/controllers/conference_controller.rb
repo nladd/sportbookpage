@@ -20,10 +20,7 @@ class ConferenceController < ApplicationController
     @level = "league"
     @drag_n_drop = "league/drag_n_drop"
     
-    @drop_1 = "schedule"
-    @drop_2 = "scoreboard"
-    @drop_3 = "standings"
-    @drop_4 = "lines"
+    get_draggables(@user, @level)
 
     user_path = ["Home", @league.abbreviation, @conference.full_name] 
     user_path_urls = ["/home", "/league/#{@league.affiliation_id}", "/league/#{@league.affiliation_id}/conference/#{@conference.affiliation_id}"] 

@@ -7,18 +7,13 @@
 
     <li>
       <h1>
-        <%= link_to_remote @titles[a],
-           :url => {:controller => "article", :action => "article"},
-           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
+        <a href="javascript:void(0);" onclick="new Ajax.Request('/article/article', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;document_id=<%= @articles[a].document_id %>&amp;prev_partial=<%= @partial_path %>&amp;dragged_id=<%= @dragged_id %>'}); return false;"><%= @titles[a] %></a>
         %>
         <em><%= @dates[a].strftime("%m/%d %I:%M%p") %></em>
       </h1>
       <p><%= @abstracts[a] %></p>
       <em>
-        <%= link_to_remote "Read more",
-           :url => {:controller => "article", :action => "article"},
-           :with => "'drop_id=#{@drop_id}&amp;document_id=#{@articles[a].document_id}&amp;prev_partial=#{@partial_path}&amp;dragged_id=#{@dragged_id}'"
-        %>
+        <a href="javascript:void(0);" onclick="new Ajax.Request('/article/article', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;document_id=<%= @articles[a].document_id %>&amp;prev_partial=<%= @partial_path %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">Read more</a>
       </em>
     </li>
 

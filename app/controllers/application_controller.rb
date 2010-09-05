@@ -1,6 +1,7 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
+
 class ApplicationController < ActionController::Base
   before_filter :authorize
   helper :all # include all helpers, all the time
@@ -13,6 +14,7 @@ class ApplicationController < ActionController::Base
   # Uncomment this to filter the contents of submitted sensitive data parameters
   # from your application log (in this case, all fields with names like "password"). 
   filter_parameter_logging :password
+
   
   ##############################################################################
   #  Description:
@@ -58,6 +60,61 @@ protected
   
   def choose_layout
     return session[:user_id] == 1 ? "unregistered" : "users"
+  end
+  
+    #############################################################################
+  # Description:
+  #   Load a current user's saved draggables preferences
+  #
+  #############################################################################
+  def get_draggables(user, level)
+    
+    parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile")
+    profile = parser.parse
+    node = profile.find_first("//root/#{level}/target01")
+    @drop_1 = node.content
+    session['drop_1'] = @drop_1
+    node = profile.find_first("//root/#{level}/target02")
+    @drop_2 = node.content
+    session['drop_2'] = @drop_2
+    node = profile.find_first("//root/#{level}/target03")
+    @drop_3 = node.content
+    session['drop_3'] = @drop_3
+    node = profile.find_first("//root/#{level}/target04")
+    @drop_4 = node.content
+    session['drop_4'] = @drop_4
+  end
+  
+  #############################################################################
+  # Description:
+  #   Load a user's tagged teams into the session hash
+  #
+  #############################################################################
+  def load_tagged_teams(user)
+    
+    parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile")
+    profile = parser.parse
+    
+    tagged_teams = Hash.new
+    
+    pro_sports = profile.find('//root/sports/sport')
+    pro_sports = pro_sports.to_a
+    college_sports = profile.find('//root/sports/collegeSports/sport')
+    college_sports = college_sports.to_a
+    
+    sports = pro_sports.concat(college_sports)
+
+    sports.each do |sport|
+      teams = sport.children
+      ids = Array.new
+	  teams.each do |team|
+        ids.push(team['id'].to_i)
+	  end
+	  tagged_teams.store(sport['id'].to_i, ids)
+	end
+	
+	session[:tagged_teams] = tagged_teams
+	
   end
     
 end

@@ -1,12 +1,9 @@
 
 <div class="marquee" id="ticker">
   <%
-    leagues = Affiliation.get_all_leagues()
+    leagues = Affiliation.get_all_in_season_leagues()
     
     leagues.each do |league|
-      if !(Affiliation.is_in_season(league.affiliation_id))
-        next
-      end
       
       scores = Array.new()
       i = 1

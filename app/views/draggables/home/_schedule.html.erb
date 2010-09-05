@@ -14,7 +14,7 @@
   
 <% if @leagues.size < 1 %>
   <li>
-    <p>There is no current data available for the teams selected in your profile. Try adding teams that are currently in season or click the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+    <p>There is no current data available for the teams selected in your profile. Try adding teams that are currently in season or click the '<a href="#" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'level=<%= @level %>&amp;full_partial=full&amp;drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">All</a>' link above.</p>
   </li>
 <% end %>
   
@@ -36,7 +36,7 @@
     
     <% if @games[@i].size < 1 %>
     <li>
-      <p>There are no current games available for the teams selected in your profile. Try clicking the '<%= link_to_remote "All", {:url => { :controller => 'draggables', :action => 'route_action' }, :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" } %>' link above.</p>
+      <p>There are no current games available for the teams selected in your profile. Try clicking the '<a href="#" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'level=<%= @level %>&amp;full_partial=full&amp;drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">All</a>' link above.</p>
     </li>
     <% end %>
   
@@ -49,18 +49,31 @@
       
       @j += 1
 %>
-    
-    <%# render :partial => "draggables/partials/more_less" %>
-  
+
+    <% if ( @j == 0 ) then %>
+      <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
+    <% elsif (@j % 12) == 0 %>
+        <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
+          <% if @j != 12 then %>
+          <span class="clps05col">
+            <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
+          </span>
+          <% end %>
+          <span class="clps05col">
+            <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
+          </span>
+        </li>
+      </div> <!-- close <hide_#> -->
+      <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
+    <% end %> 
+   
     <li>
       <span class="clps05col clps"><%= game.start_date_time.strftime("%a, %m/%d") %><br/><%= game.start_date_time.strftime("%I:%M%P") %></span>
       <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
       <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
       <% if game.event_status == "pre-event" %>
         <span class="clps05col clps">
-          <%= link_to_remote "Preview",
-           :url => {:controller => "article", :action => "event_preview"},
-           :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+          <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_preview', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Preview</a>
         </span>
       <% else %>
         <span class="clps05col clps">&nbsp;</span>
@@ -73,16 +86,16 @@
     end # close games loop
     if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
 %>
-    <!--<div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
+    <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
      <li style="height: 20px">
         <span class="clps05col">
           <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
         </span>
       </li>
-    </div>-->
+    </div>
 <% end %>
     <% if @j != -1 %>
-    <!--</div>  close last <hide_#> -->
+    </div>  <!-- close last <hide_#> -->
     <% end %>
 <%
   end #close leagues loop

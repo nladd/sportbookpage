@@ -10,10 +10,7 @@
           :stats_name, :stats_name, 
           {:include_blank => "Select Stat...."})
       %>&nbsp;&nbsp;
-      <%= button_to_remote("Go", 
-                      {:url => {:controller => "draggables", :action => "route_action"},
-                      :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;stat_name=' + $('stat_stats_name').value"} )
-      %>
+      <input onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;stat_name=' + $('stat_stats_name').value});" type="button" value="Go" />
     </span>
     <div class="clear"></div>
   </li>

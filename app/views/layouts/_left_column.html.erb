@@ -7,16 +7,17 @@
 	
 	<%
 	  # Get the user's profile info if they've chosed to make it public
-	  
+	  parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile")
+	  profile = parser.parse
 	  profile_attributes = Hash.new
 	  
-	  node = @profile.find_first("//root/birthday")
+	  node = profile.find_first("//root/birthday")
 	  profile_attributes.store("Birthday", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = @profile.find_first("//root/hometown")
+	  node = profile.find_first("//root/hometown")
 	  profile_attributes.store("Hometown", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = @profile.find_first("//root/sex")
+	  node = profile.find_first("//root/sex")
 	  profile_attributes.store("Gender", CGI.unescape(node.content)) if node["show"].eql?("yes")
-	  node = @profile.find_first("//root/status")
+	  node = profile.find_first("//root/status")
 	  status = CGI.unescape(node.content.to_s)
 		
 	%>
@@ -33,8 +34,8 @@
 	  </h1>
 	  <% if (session[:visiting_id].blank?) %>
 	  <h1 id="update_status" class="clear" style="display: none">
-		<%= text_area_tag ("status", status, {:size => "18x3", :maxLength => 80, :id=>"status" } ) %>
-		<%= link_to_remote "Save", {:url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status').value", :complete => "$('static_status').show(); $('update_status').hide();"}, { :style => "text-decoration: underline" } %>
+		<textarea cols="18" id="status" maxLength="80" name="status" rows="3">Pimp as shit</textarea>
+		<a href="javascript:void(0);" onclick="new Ajax.Request('/user_preferences/save_status', {asynchronous:true, evalScripts:true, onComplete:function(request){$('static_status').show(); $('update_status').hide();}, parameters:'status=' + $('status').value}); return false;" style="text-decoration: underline">Save</a>
 	  </h1>
 	  <% end %>
 
@@ -63,7 +64,7 @@
 	<!--- Left menu -->
 	<ul>
 	  <%
-		sports = @profile.find('//root/sports/sport')
+		sports = profile.find('//root/sports/sport')
 		sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>
@@ -89,7 +90,7 @@
 	  <% end # close sports loop
 	  
 		 #now loop through the user's college sports
-		 sports = @profile.find('//root/sports/collegeSports/sport')
+		 sports = profile.find('//root/sports/collegeSports/sport')
 		 sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>

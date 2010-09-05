@@ -13,16 +13,8 @@
 
   
   <%
-    @abbr = (@league.abbreviation).gsub(/[\s']/, "_")
-    @size = @games.size
-    @j = -1
     @games.each do |game|
-    
-      @j += 1
-      
   %>
-
-  <%= render :partial => "draggables/partials/more_less" %>
 
     <li>
       <span class="clps06col clps"><%= game.start_date_time.strftime("%m/%d") %></span>
@@ -31,9 +23,8 @@
       <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
       <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><%= game.t2_score %></span>
       <% if game.event_status == "post-event" %>
-        <span class="clps06col clps"><%= link_to_remote "Recap",
-             :url => {:controller => "article", :action => "event_recap"},
-             :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}&amp;event_id=#{game.event_id}&amp;prev_partial=#{@partial_path}'" %>
+        <span class="clps06col clps">
+          <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_recap', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Recap</a>
         </span>
       <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
         sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)
@@ -49,19 +40,7 @@
 
 <%    
     end # close games loop
-    if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
 %>
-    <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
-     <li style="height: 20px">
-        <span class="clps05col">
-          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
-        </span>
-      </li>
-    </div>
-<% end %>
-    <% if @j != -1 %>
-    </div> <!-- close last <hide_#> -->
-    <% end %>
   
   </ul>
 

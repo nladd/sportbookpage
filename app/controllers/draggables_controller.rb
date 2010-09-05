@@ -168,29 +168,12 @@ class DraggablesController < ApplicationController
   
     if (@level == 'home')
       #get all the leagues availables
-      @leagues = Affiliation.get_all_leagues()
-      
-      # remove leagues that are not in season
-      @leagues.size.times do |i|
-        if (!Affiliation.is_in_season(@leagues[i].affiliation_id)) then
-          @leagues[i] = nil
-        end
-      end
-      #compact the leagues array to remove nil references
-      @leagues = @leagues.compact
-      
-      # unless we want to see all leagues, remove the leagues that 
-      # are not in the users profile
       if (@filter.blank?) then
-        @leagues.size.times do |i|      
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-            @leagues[i] = nil
-          end
-        end
+        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_leagues
       end
-      #compact the leagues array to remove nil references
-      @leagues = @leagues.compact
-
+      
       # create new arrays to hold the sub_affiliations for each league and 
       # the standings for each division
       @sub_affiliations = Array.new(@leagues.size)
@@ -212,7 +195,6 @@ class DraggablesController < ApplicationController
 
         #create a sub-array to hold the standings for each division in the league
         @standings[l] = Array.new(@sub_affiliations[l].size)
-        
         
         @sub_affiliations[l].size.times do |d|
           #for each division in the league, get the standings
@@ -301,63 +283,34 @@ class DraggablesController < ApplicationController
     @filter = params['full_partial']
   
     if (@level == 'home')
-      @leagues = Affiliation.get_all_leagues()
-      @games = Array.new(@leagues.size)
-
-      @leagues.size.times do |i|
       
-        if (!Affiliation.is_in_season(@leagues[i].affiliation_id)) then
-          @leagues[i] = nil
-          next
-        end
+      if (@filter.blank?) then
+        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_leagues
+      end
+      
+      @games = Array.new(@leagues.size)
+      @leagues.size.times do |i|
         
         if (@filter.blank?) then
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-            @leagues[i] = nil
-            next
-          end
-        end
-        
-        @games[i] = Affiliation.get_next_n_games(
-                                  @leagues[i].affiliation_id,
-                                  200)
-        
-        if (@filter.blank?) then                          
-          @games[i].size.times do |j|
-            if( !(Team.team_is_in_profile(@leagues[i].affiliation_id, @games[i][j].t1_id, @user.id) ||
-              Team.team_is_in_profile(@leagues[i].affiliation_id, @games[i][j].t2_id, @user.id)) ) then
-              @games[i][j] = nil
-            end
-          end
-        
-          @games[i] = @games[i].compact
+          @games[i] = Affiliation.get_next_n_games(
+                                  @leagues[i].affiliation_id, 96,
+                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+        else
+          @games[i] = Affiliation.get_next_n_games(
+                                  @leagues[i].affiliation_id, 96)
         end
         
       end
       
-      # compact the leagues and games to remove nil references
-      @leagues = @leagues.compact
-      @games = @games.compact
-      
-      
-      @drop_title = "Schedules"        
+      @drop_title = "Schedules"
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
       @games = Affiliation.get_next_n_games(
-                                  @league.affiliation_id, 
-                                  200)
-     
-#      if (@filter.blank?) then                          
-#        @games.size.times do |i|
-#          if( !(Team.team_is_in_profile(@league.affiliation_id, @games[i].t1_id, @user.id) ||
-#            Team.team_is_in_profile(@league.affiliation_id, @games[i].t2_id, @user.id)) ) then
-#            @games[i] = nil
-#          end
-#        end
-#      end
-#     
-#      @games = @games.compact
+                                  @league.affiliation_id,
+                                  96)
      
       @drop_title = "#{@league.abbreviation} Schedule"
             
@@ -391,60 +344,35 @@ class DraggablesController < ApplicationController
     @filter = params['full_partial']
     
     if (@level == 'home')
-      @leagues = Affiliation.get_all_leagues()
+      
+      if (@filter.blank?) then
+        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_leagues
+      end
+      
       @games = Array.new(@leagues.size)
       
       @leagues.size.times do |i|
       
-        if (!Affiliation.is_in_season(@leagues[i].affiliation_id)) then
-          @leagues[i] = nil
-          next
-        end
-       
         if (@filter.blank?) then
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-            @leagues[i] = nil
-            next
-          end
+          @games[i] = Affiliation.get_next_n_games(
+                                  @leagues[i].affiliation_id, 96,
+                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+        else
+          @games[i] = Affiliation.get_next_n_games(
+                                  @leagues[i].affiliation_id, 96)
         end
-      
-        @games[i] = Affiliation.get_previous_n_games(@leagues[i].affiliation_id, 200)
-        
-        
-        if (@filter.blank?) then                          
-          @games[i].size.times do |j|
-            if( !(Team.team_is_in_profile(@leagues[i].affiliation_id, @games[i][j].t1_id, @user.id) ||
-              Team.team_is_in_profile(@leagues[i].affiliation_id, @games[i][j].t2_id, @user.id)) ) then
-              @games[i][j] = nil
-            end
-          end
-          @games[i] = @games[i].compact
-        end      
         
       end
-      
-      # compact the leagues and games to remove nil references
-      @leagues = @leagues.compact
-      @games = @games.compact
-      
-      
+
       @drop_title = "Scoreboard"
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
       @games = Affiliation.get_previous_n_games(
                                   @league.affiliation_id, 
-                                  200)                          
-      
-#      if (@filter.blank?) then                          
-#        @games.size.times do |i|
-#          if( !(Team.team_is_in_profile(@league.affiliation_id, @games[i].t1_id, @user.id) ||
-#            Team.team_is_in_profile(@league.affiliation_id, @games[i].t2_id, @user.id)) ) then
-#            @games[i] = nil
-#          end
-#        end
-#        @games = @games.compact
-#      end
+                                  96)                          
                 
       @drop_title = "#{@league.abbreviation} Scoreboard"
       
@@ -474,13 +402,17 @@ class DraggablesController < ApplicationController
   #
   #############################################################################
   def load_playoffs()
-  
-    side_bar = "/draggables/partials/blank"
+
     @filter = params['full_partial']
   
     if (@level == "home")
         
-      @leagues = Affiliation.get_all_leagues()
+      if (@filter.blank?) then
+        @leagues = Affiliation.get_all_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_leagues
+      end
+      
       @series = Array.new(@leagues.size)
       @conferences = Array.new(@leagues.size)
       @max_rounds = Array.new(@leagues.size)
@@ -491,13 +423,6 @@ class DraggablesController < ApplicationController
         if (!Affiliation.is_in_post_season(@leagues[i].affiliation_id)) then
           @leagues[i] = nil
           next
-        end
-       
-        if (@filter.blank?) then
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-            @leagues[i] = nil
-            next
-          end
         end
         
         @conferences[i] = Affiliation.get_conferences_by_league(@leagues[i].affiliation_id)
@@ -542,8 +467,6 @@ class DraggablesController < ApplicationController
       @rounds = @rounds.compact
       
       
-      side_bar = "draggables/partials/vertical_tabs"
-            
     elsif (@level == "league")
         
         @league = Affiliation.get_league(session[:league_id])
@@ -568,8 +491,7 @@ class DraggablesController < ApplicationController
         else
             @round = params[:round].to_i
         end
-        
-        
+
         @series = Professional.get_playoff_series(@league.affiliation_id, @round)
         
         if (@series.size == 1)
@@ -605,7 +527,7 @@ class DraggablesController < ApplicationController
 
     @drop_title = "Challenges"
 
-    @partial_path = "draggables/home/" + choose_template + "challenges"
+    @partial_path = "draggables/home/challenges"
 
     render(:update) {|page| 
                 page.replace_html(@drop_id, :partial => @partial_path)
@@ -625,22 +547,11 @@ class DraggablesController < ApplicationController
   
     if (@level == 'home')
     
-      @leagues = Affiliation.get_all_leagues()
-      @leagues.size.times do |i|
-      
-        if (!Affiliation.is_in_season(@leagues[i].affiliation_id)) then
-          @leagues[i] = nil
-          next
-        end
-        
-        if(@filter.blank?) then
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-              @leagues[i] = nil
-          end
-        end
+      if (@filter.blank?) then
+        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_leagues
       end
-      
-      @leagues = @leagues.compact
               
       @articles = Array.new(@leagues.size)
       @titles = Array.new(@leagues.size)
@@ -772,41 +683,26 @@ class DraggablesController < ApplicationController
     @filter = params['full_partial']
 
     if (@level == 'home')
-      @leagues = Affiliation.get_all_leagues()
+      if (@filter.blank?) then
+        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_leagues
+      end
       @lines = Array.new(@leagues.size)
       
       @leagues.size.times do |i|
-        
-        if (!Affiliation.is_in_season(@leagues[i].affiliation_id) ) then
-          @leagues[i] = nil
-          next
-        end
-      
+              
         if (@filter.blank?) then
-          if ( !Affiliation.league_is_in_profile(@leagues[i].affiliation_id.to_i, @user.id) ) then
-            @leagues[i] = nil
-            next
-          end
-        end
-      
-        @lines[i] = Affiliation.get_lines(
+          @lines[i] = Affiliation.get_lines(
+                                  @leagues[i].affiliation_id, 24,
+                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+        else
+          @lines[i] = Affiliation.get_lines(
                                   @leagues[i].affiliation_id,
-                                  48)
-                                  
-        @lines[i].size.times do |j|
-          if( !(Team.team_is_in_profile(@leagues[i].affiliation_id, @lines[i][j].t1_id, @user.id) ||
-            Team.team_is_in_profile(@leagues[i].affiliation_id, @lines[i][j].t2_id, @user.id)) ) then
-            @lines[i][j] = nil
-          end
+                                  24)
         end
-      
-        @lines[i] = @lines[i].compact
-        
+
       end
-      
-      # compact the leagues and games to remove nil references
-      @leagues = @leagues.compact
-      @lines = @lines.compact
 
       @drop_title = "Lines"
       
@@ -815,16 +711,6 @@ class DraggablesController < ApplicationController
       @lines = Affiliation.get_lines(
                                   @league.affiliation_id, 
                                   48)                                  
-    
-#       @lines.size.times do |i|
-#        if( !(Team.team_is_in_profile(@league.affiliation_id, @lines[i].t1_id, @user.id) ||
-#          Team.team_is_in_profile(@league.affiliation_id, @lines[i].t2_id, @user.id)) ) then
-#          @lines[i] = nil
-#        end
-#      end
-      
-#        @lines = @lines.compact
-    
     
       @drop_title = "#{@league.abbreviation} Lines"
       

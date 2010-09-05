@@ -9,7 +9,7 @@
      <span class="clps08col clps">Pos</span>
      <span class="clps08col clps">HT</span>
      <span class="clps08col clps">WT</span>
-     <span class="clps08col clps">DOB</span>
+     <span class="clps06col clps">DOB</span>
      <div class="clear"></div>
    </li>
     
@@ -20,7 +20,7 @@
       <span class="clps08col clps"><%= player.position %></span>
       <span class="clps08col clps"><%= player.height %></span>
       <span class="clps08col clps"><%= player.weight %></span>
-      <span class="clps08col clps"><%= datetime_to_time(player.birth_date).strftime("%m/%d/%y") %></span>
+      <span class="clps06col clps"><%= datetime_to_time(player.birth_date).strftime("%m/%d/%y") %></span>
       <div class="clear"></div>
     </li>
   <% end %>

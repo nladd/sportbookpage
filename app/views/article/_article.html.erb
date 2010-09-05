@@ -5,10 +5,7 @@
 <ul id="<%= @drop_id %>_content">
   
   <li>
-    <%= link_to_remote "Back", 
-            :url => {:controller => 'draggables', :action => 'route_action'},
-            :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
-    %>
+    <a href="javascript:void(0);" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">Back</a>
   </li>
   <li>
     <h1><%= @title %></h1>
@@ -17,10 +14,7 @@
   </li>
 
   <li>
-    <%= link_to_remote "Back", 
-            :url => {:controller => 'draggables', :action => 'route_action'},
-            :with => "'drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'"
-    %>
+    <a href="javascript:void(0);" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">Back</a>
   </li>
 </ul>
 

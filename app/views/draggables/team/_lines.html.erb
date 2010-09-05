@@ -12,17 +12,9 @@
    </li>
  
 <%
-    @abbr = (@league.abbreviation).gsub(/[\s']/, "_")
-    @size = @lines.size
-    @j = -1
-    
     @lines.each do |line|
-  
-      @j += 1
 %>
-  
-    <%= render :partial => "draggables/partials/more_less" %>
-     
+   
     <li>
       <span class="clps05col clps">
         <%= line.start_date_time.strftime("%a, %m/%d") %>
@@ -55,19 +47,7 @@
   
   <%
       end # close lines loop
-      if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
   %>
-    <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
-    <li style="height: 20px">
-       <span class="clps05col">
-         <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
-       </span>
-     </li>
-    </div>
-  <% end %>
-    <% if @j != -1 %>
-    </div> <!-- close last <hide_#> -->
-    <% end %>
     
   </ul>
 

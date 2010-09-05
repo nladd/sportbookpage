@@ -24,10 +24,7 @@ class TeamController < ApplicationController
     @level = "team"
     @drag_n_drop = "team/drag_n_drop"
     
-    @drop_1 = "headlines"
-    @drop_2 = "schedule"
-    @drop_3 = "scoreboard"
-    @drop_4 = "roster"
+    get_draggables(@user, @level)
 
     user_path = ["Home", @league.abbreviation, @team.full_name]
     user_path_urls = ["/home", "/league/#{@league.entity_id}", "/team/#{@team.entity_id}"]

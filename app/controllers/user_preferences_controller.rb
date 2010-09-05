@@ -180,6 +180,7 @@ class UserPreferencesController < ApplicationController
     #if it's not a post request the user just wants to view their profile
     if request.post?
       write_sports_and_teams(@user)
+      load_tagged_teams(@user)
       
       #clear any errors so they don't show up as false positives
       @user.errors.clear
@@ -260,7 +261,7 @@ class UserPreferencesController < ApplicationController
     @path_html = build_path(user_path, user_path_urls)
 
     respond_to do |format|
-      format.html #edit_sports_and_teams.html.erb
+      format.html #preferences.html.erb
     end
     
   end

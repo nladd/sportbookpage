@@ -70,18 +70,11 @@ This Notice Must Remain for Legal Use
         <ul>
           <li class="home"><a href="/home" name="home"></a></li>
           <li class="main">
-            <%= link_to_remote "Invite Fans",
-                        {:url => {:controller => "users", :action => "invite_friend"},
-                        :complete => "Effect.toggle('pop-up', 'appear', {duration: .5})" },
-                        {:name => "invite-friends"}
-              %>
+            <a href="javascript:void(0);" name="invite-friends" onclick="new Ajax.Request('/users/invite_friend', {asynchronous:true, evalScripts:true, onComplete:function(request){Effect.toggle('pop-up', 'appear', {duration: .5})}}); return false;">Invite Fans</a>
           </li>
           <li class="main"><a href="/preferences" name="change-teams">Change Teams</a></li>
           <li class="main">
-            <%= link_to_remote "Save Layout", 
-                        {:url => { :controller => "user_preferences", :action => "save_drag_n_drop"}},
-                        {:name => "save-layout"}
-            %>
+            <a href="javascript:void(0);" name="save-layout" onclick="new Ajax.Request('/user_preferences/save_drag_n_drop', {asynchronous:true, evalScripts:true}); return false;">Save Layout</a>
           </li>
           <li class="main"><a href="/preferences" name="change-teams">Settings</a></li>
           <li class="main"><a href="/logout">Logout</a></li>

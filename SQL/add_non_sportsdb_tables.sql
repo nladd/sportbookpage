@@ -1,6 +1,6 @@
 
 
-CREATE TABLE `sessions` (
+CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `session_id` varchar(255) NOT NULL,
   `data` text,
@@ -11,7 +11,7 @@ CREATE TABLE `sessions` (
   KEY `index_sessions_on_updated_at` (`updated_at`)
 );
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL auto_increment,
   `hashed_password` varchar(255) default NULL,
   `salt` varchar(255) default NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `users` (
   KEY `middle_name` (`middle_name`)
 );
 
-CREATE TABLE `challenges` (
+CREATE TABLE IF NOT EXISTS `challenges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `challengee_id` int(11) DEFAULT NULL,
   `challenger_id` int(11) DEFAULT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE `challenges` (
 );
 
 
-CREATE TABLE `stats_mappings` (
+CREATE TABLE IF NOT EXISTS `stats_mappings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `stats_table` varchar(255) DEFAULT NULL,
   `stats_type` varchar(255) DEFAULT NULL,
@@ -74,13 +74,13 @@ CREATE TABLE `stats_mappings` (
 );
 
 
-CREATE TABLE `position_stats_mappings` (
+CREATE TABLE IF NOT EXISTS `position_stats_mappings` (
   `position_id` int(11) default NULL,
   `stats_mapping_id` int(11) default NULL
 );
 
 
-CREATE TABLE `invitations` (
+CREATE TABLE IF NOT EXISTS `invitations` (
   `id` int(11) NOT NULL auto_increment,
   `date_sent` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `invitee_email` varchar(255) default NULL,
@@ -94,6 +94,78 @@ CREATE TABLE `invitations` (
 #  `position_id` int(11) default NULL,
 #  `stats_mapping_id` int(11) default NULL
 #);
+
+
+CREATE TABLE IF NOT EXISTS `documents_archive` (
+  `id` int(11) NOT NULL auto_increment,
+  `doc_id` varchar(75) NOT NULL,
+  `publisher_id` int(11) NOT NULL,
+  `date_time` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `language` varchar(100) default NULL,
+  `priority` varchar(100) default NULL,
+  `revision_id` varchar(255) default NULL,
+  `stats_coverage` varchar(100) default NULL,
+  `document_fixture_id` int(11) NOT NULL,
+  `source_id` int(11) default NULL,
+  `db_loading_date_time` datetime default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `IDX_documents_1` (`doc_id`),
+  KEY `IDX_documents_3` (`date_time`),
+  KEY `IDX_documents_4` (`priority`),
+  KEY `IDX_documents_5` (`revision_id`),
+  KEY `IDX_FK_doc_doc_fix_id__doc_fix_id` (`document_fixture_id`),
+  KEY `IDX_FK_doc_pub_id__pub_id` (`publisher_id`),
+  KEY `IDX_FK_doc_sou_id__pub_id` (`source_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `document_contents_archive` (
+  `id` int(11) NOT NULL auto_increment,
+  `document_id` int(11) NOT NULL,
+  `sportsml` varchar(200) default NULL,
+  `sportsml_blob` text,
+  `abstract` text,
+  `abstract_blob` text,
+  PRIMARY KEY  (`id`),
+  KEY `IDX_FK_doc_con_doc_id__doc_id` (`document_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `events_documents_archive` (
+  `event_id` int(11) NOT NULL,
+  `document_id` int(11) NOT NULL,
+  KEY `FK_eve_doc_doc_id__doc_id` (`document_id`),
+  KEY `FK_eve_doc_eve_id__eve_id` (`event_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `affiliations_documents_archive` (
+  `affiliation_id` int(11) NOT NULL,
+  `document_id` int(11) NOT NULL,
+  KEY `FK_aff_doc_aff_id__aff_id` (`affiliation_id`),
+  KEY `FK_aff_doc_doc_id__doc_id` (`document_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `teams_documents_archive` (
+  `team_id` int(11) NOT NULL,
+  `document_id` int(11) NOT NULL,
+  KEY `FK_tea_doc_tea_id__tea_id` (`team_id`),
+  KEY `FK_tea_doc_doc_id__doc_id` (`document_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `persons_documents_archive` (
+  `person_id` int(11) NOT NULL,
+  `document_id` int(11) NOT NULL,
+  KEY `FK_per_doc_per_id__per_id` (`person_id`),
+  KEY `FK_per_doc_doc_id__doc_id` (`document_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `latest_revisions_archive` (
+  `id` int(11) NOT NULL auto_increment,
+  `revision_id` varchar(255) NOT NULL,
+  `latest_document_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `IDX_FK_lat_rev_lat_doc_id__doc_id` (`latest_document_id`),
+  KEY `IDX_latest_revisions_1` (`revision_id`)
+);
 
 
 ALTER TABLE display_names ADD COLUMN url VARCHAR(255);

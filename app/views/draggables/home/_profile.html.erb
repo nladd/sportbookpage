@@ -21,8 +21,8 @@
       </div>
       <% if (session[:visiting_id].blank?) %>
       <div id="update_status_intarget" style="display: none">
-        <%= text_area_tag ("status", @status, {:size => "18x3", :maxLength => 80, :id=>"status_intarget" } ) %>
-        <%= link_to_remote "Save", {:url => {:controller => "user_preferences", :action => "save_status"}, :with => "'status=' + $('status_intarget').value", :complete => "$('static_status_intarget').show(); $('update_status_intarget').hide(); $('status_text_intarget').innerHTML = $('status_intarget').value;"}, { :style => "text-decoration: underline" } %>
+        <textarea cols="18" id="status_intarget" maxLength="80" name="status" rows="3"><%= @status %></textarea>
+        <a href="javascript:void(0);" onclick="new Ajax.Request('/user_preferences/save_status', {asynchronous:true, evalScripts:true, onComplete:function(request){$('static_status_intarget').show(); $('update_status_intarget').hide(); $('status_text_intarget').innerHTML = $('status_intarget').value;}, parameters:'status=' + $('status_intarget').value}); return false;" style="text-decoration: underline">Save</a>
       </div>
       <% end %>
       
