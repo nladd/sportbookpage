@@ -17,7 +17,7 @@ require 'digest/sha1'
 class UserPreferencesController < ApplicationController
  
   layout "users"
-  skip_before_filter :authorize, :only => [:reset_password, :get_security_question, :verify_security_answer, :signup]
+  skip_before_filter :authorize, :only => [:reset_password, :get_security_question, :verify_security_answer, :signup, :preferences]
 
 
   #############################################################################
