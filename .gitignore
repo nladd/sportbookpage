@@ -1,5 +1,3 @@
 config/database.yml
 log/*.log
 public/users/*
-!public/users/1
-!public/users/1/*
