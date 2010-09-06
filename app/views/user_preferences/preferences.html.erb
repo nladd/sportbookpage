@@ -198,7 +198,7 @@
             <ul id="<%= conf_abbr %>" style="display: none">
 <%
         @college_teams[l][c].size.times do |t|
-            team_abbr = (@college_teams[l][c][t].full_name).gsub(/[\s\.']/, '_')
+            team_abbr = (@college_teams[l][c][t].full_name).gsub(/[\s\.'\(\)&,-]/, '_') + abbr
             db_team = Team.find(@college_teams[l][c][t].team_id)
 %>
                 <li>

@@ -35,7 +35,7 @@
 		path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
 		parser = XML::Parser.file(path)
 		profile = parser.parse
-		sports = profile.find('//root/sports/sport')
+		sports = profile.find('//root/proSports/sport')
 		sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>
@@ -61,7 +61,7 @@
 	  <% end # close sports loop
 	  
 		 #now loop through the user's college sports
-		 sports = profile.find('//root/sports/collegeSports/sport')
+		 sports = profile.find('//root/collegeSports/sport')
 		 sports.each do |sport| 
 		  sport_attr = sport.attributes['sport']
 	  %>

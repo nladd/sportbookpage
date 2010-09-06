@@ -180,7 +180,6 @@ class UserPreferencesController < ApplicationController
     #if it's not a post request the user just wants to view their profile
     if request.post?
       write_sports_and_teams(@user)
-      load_tagged_teams(@user)
       
       #clear any errors so they don't show up as false positives
       @user.errors.clear
@@ -254,6 +253,7 @@ class UserPreferencesController < ApplicationController
       
     end
     
+    load_tagged_teams(@user)
     @tagged_teams = @@tagged_teams
     
     # define the user path within the site
@@ -697,17 +697,18 @@ private
   # -nil
   ###############################################
   def write_sports_and_teams(user)
+    
     profile_path = RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile"
     parser = XML::Parser.file(profile_path)
     profile = parser.parse
     root = profile.root
   
-    sports_node = profile.find('//root/sports').first
+    sports_node = profile.find('//root/proSports').first
   
     if sports_node != nil
-      
+
       #before nulling out a user's selected teams (they'll be added again later) decrement the team followers count
-      xml_sports = profile.find('//root/sports/sport')
+      xml_sports = profile.find('//root/proSports/sport')
       xml_sports.each do |sport| 
         sport.each_element do |xml_team|
           team = Team.find(xml_team['id'])
@@ -715,20 +716,12 @@ private
           team.save
         end
       end
-      xml_college_sports = profile.find('//root/sports/collegeSports/sport')
-      xml_college_sports.each do |sport| 
-        sport.each_element do |xml_team|
-          team = Team.find(xml_team['id'])
-          team.followers = team.followers - 1
-          team.save
-        end
-      end
       
-      sports_node.content = ""
-    else
-      root << sports_node = XML::Node.new('sports')
+      sports_node.remove!
     end
-            
+    
+    root << sports_node = XML::Node.new('proSports')
+
     sports = params[:sports]
     # write the xml for a user's selected pro sports and teams. Pro sports and teams come in a name/id
     # pair from a post request. The name/id pair must be split prior to writing the node
@@ -762,16 +755,33 @@ private
       end
     end
     
+    
+    sports_node = profile.find('//root/collegeSports').first
+  
+    if sports_node != nil
+      xml_college_sports = profile.find('//root/collegeSports/sport')
+      xml_college_sports.each do |sport| 
+        sport.each_element do |xml_team|
+          team = Team.find(xml_team['id'])
+          team.followers = team.followers - 1
+          team.save
+        end
+      end
+      
+      sports_node.remove!
+    end
+    
+    root << sports_node = XML::Node.new('collegeSports')
+    
     college_sports = params[:college]
     # write the xml for a user's selected college sports and teams. sports and teams come in a name/id
     # pair from a post request. The name/id pair must be split prior to writing the node
     if !(college_sports.blank?) then
-      sports_node << college_sports_node = XML::Node.new('collegeSports')
       college_sports = college_sports.sort
       college_sports.each do |sport|
         
         sport_name_id_pair = sport.split(',')
-        college_sports_node << sport_node = XML::Node.new('sport')
+        sports_node << sport_node = XML::Node.new('sport')
         
         sport_node['sport'] = sport_name_id_pair[0].gsub(/[\s\.']/, "_")
         sport_node['sport_name'] = sport_name_id_pair[0]
