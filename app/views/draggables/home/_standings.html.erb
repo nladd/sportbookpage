@@ -4,7 +4,7 @@
 <div class="anchors">
   <%
     @leagues.each do |league|
-      abbr = @abbr = (league.abbreviation).gsub(/[\s']/, "_")
+      abbr = (league.abbreviation).gsub(/[\s']/, "_")
   %>
     <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= league.abbreviation + " " + @drop_title %>"><%= league.abbreviation %></a>&nbsp;
   <% end %>
@@ -46,8 +46,8 @@
 	  <span class="clps10col clps">W - L</span>
 	  <span class="clps10col clps">GB</span>
 	  <span class="clps10col clps">STRK</span>
-	  <span class="clps10col clps">Home</span>
-	  <span class="clps10col clps">Road</span>
+	  <!--<span class="clps10col clps">Home</span>
+	  <span class="clps10col clps">Road</span>-->
 	  <div class="clear"></div>
 	</li>
 	
@@ -66,7 +66,6 @@
         elsif standing.streak_type.to_s == 'win'
           streak_type = "W"
         end
-
 %>
 
 	<li style="text-align: center" class="show clps">
@@ -85,8 +84,8 @@
 	  <span class="clps10col clps"><%= standing.wins.to_s + " - " + standing.losses.to_s %></span>
 	  <span class="clps10col clps"><%= standing.games_back.to_s %></span>
 	  <span class="clps10col clps"><%= streak_type + standing.streak_total.to_s %></span>
-	  <span class="clps10col clps"><%= standing.home_wins.to_s + "-" + standing.home_losses.to_s %></span>
-	  <span class="clps10col clps"><%= standing.away_wins.to_s + "-" + standing.away_losses.to_s %></span>
+	  <!--<span class="clps10col clps"><%# standing.home_wins.to_s + "-" + standing.home_losses.to_s %></span>
+	  <span class="clps10col clps"><%# standing.away_wins.to_s + "-" + standing.away_losses.to_s %></span>-->
 	  <div class="clear"></div>
 	</li>
 	

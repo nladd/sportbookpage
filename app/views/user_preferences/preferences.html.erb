@@ -107,8 +107,6 @@
   <div id="pro">
 
 <%
-  tagged_teams = session[:tagged_teams]
-
   @pro_leagues.size.times do |l| 
     abbr = @pro_leagues[l].abbreviation.gsub(/[\s']/, "_")
 %>
@@ -141,7 +139,7 @@
                 </li>
                 
                 <%
-                  if tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) && tagged_teams[@pro_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                  if @tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) && @tagged_teams[@pro_leagues[l].affiliation_id.to_i].include?(db_team.id)
                 %>
 
                   <%= javascript_tag "
@@ -169,7 +167,7 @@
     %>
     </div> <!-- close conference div -->
     
-    <% if tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) %>
+    <% if @tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) %>
       <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
     <% end %>
     
@@ -210,7 +208,7 @@
                 </li>
                 
                 <%
-                  if tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) && tagged_teams[@college_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                  if @tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) && @tagged_teams[@college_leagues[l].affiliation_id.to_i].include?(db_team.id)
                 %>
 
                   <%= javascript_tag "
@@ -237,7 +235,7 @@
     %>
     </div> <!-- close conference div -->
     
-    <% if tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) %>
+    <% if @tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) %>
       <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
     <% end %>
     

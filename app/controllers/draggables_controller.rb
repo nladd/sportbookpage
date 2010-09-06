@@ -169,7 +169,7 @@ class DraggablesController < ApplicationController
     if (@level == 'home')
       #get all the leagues availables
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_in_season_leagues
       end
@@ -285,7 +285,7 @@ class DraggablesController < ApplicationController
     if (@level == 'home')
       
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_in_season_leagues
       end
@@ -296,7 +296,7 @@ class DraggablesController < ApplicationController
         if (@filter.blank?) then
           @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id, 96,
-                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+                                  @@tagged_teams[@leagues[i].affiliation_id.to_i])
         else
           @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id, 96)
@@ -346,7 +346,7 @@ class DraggablesController < ApplicationController
     if (@level == 'home')
       
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_in_season_leagues
       end
@@ -358,7 +358,7 @@ class DraggablesController < ApplicationController
         if (@filter.blank?) then
           @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id, 96,
-                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+                                  @@tagged_teams[@leagues[i].affiliation_id.to_i])
         else
           @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id, 96)
@@ -408,7 +408,7 @@ class DraggablesController < ApplicationController
     if (@level == "home")
         
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_leagues
       end
@@ -548,7 +548,7 @@ class DraggablesController < ApplicationController
     if (@level == 'home')
     
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_in_season_leagues
       end
@@ -684,7 +684,7 @@ class DraggablesController < ApplicationController
 
     if (@level == 'home')
       if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
+        @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
       else
         @leagues = Affiliation.get_all_in_season_leagues
       end
@@ -695,7 +695,7 @@ class DraggablesController < ApplicationController
         if (@filter.blank?) then
           @lines[i] = Affiliation.get_lines(
                                   @leagues[i].affiliation_id, 24,
-                                  session[:tagged_teams][@leagues[i].affiliation_id.to_i])
+                                  @@tagged_teams[@leagues[i].affiliation_id.to_i])
         else
           @lines[i] = Affiliation.get_lines(
                                   @leagues[i].affiliation_id,

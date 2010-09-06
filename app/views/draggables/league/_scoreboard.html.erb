@@ -27,9 +27,8 @@
           <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_recap', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Recap</a>
         </span>
       <% elsif game.event_status == "mid-event" || game.event_status == "intermission" 
-        sport = Affiliation.get_sport_by_league_id(@leagues[@i].affiliation_id)
+        sport = Affiliation.get_sport_by_league_id(@league.affiliation_id)
         state = Event.get_event_state(game.event_id, sport.full_name)
-    
       %>
         <span class="clps06col clps">
           <%= state %>

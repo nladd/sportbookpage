@@ -17,7 +17,7 @@ require 'digest/sha1'
 class UserPreferencesController < ApplicationController
  
   layout "users"
-  skip_before_filter :authorize, :only => [:reset_password, :get_security_question, :verify_security_answer, :signup, :preferences]
+  skip_before_filter :authorize, :only => [:reset_password, :get_security_question, :verify_security_answer, :signup]
 
 
   #############################################################################
@@ -254,6 +254,7 @@ class UserPreferencesController < ApplicationController
       
     end
     
+    @tagged_teams = @@tagged_teams
     
     # define the user path within the site
     user_path = ["Home", "Preferences"] 

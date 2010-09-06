@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   filter_parameter_logging :password
 
+  @@tagged_teams = Hash.new
   
   ##############################################################################
   #  Description:
@@ -96,25 +97,22 @@ protected
     parser = XML::Parser.file(RAILS_ROOT + "/public/users/#{user.id}/#{user.id}.profile")
     profile = parser.parse
     
-    tagged_teams = Hash.new
-    
     pro_sports = profile.find('//root/sports/sport')
     pro_sports = pro_sports.to_a
     college_sports = profile.find('//root/sports/collegeSports/sport')
     college_sports = college_sports.to_a
-    
     sports = pro_sports.concat(college_sports)
-
+    
+    @@tagged_teams.clear
     sports.each do |sport|
       teams = sport.children
       ids = Array.new
 	  teams.each do |team|
         ids.push(team['id'].to_i)
 	  end
-	  tagged_teams.store(sport['id'].to_i, ids)
+	  @@tagged_teams.store(sport['id'].to_i, ids)
 	end
-	
-	session[:tagged_teams] = tagged_teams
+
 	
   end
     
