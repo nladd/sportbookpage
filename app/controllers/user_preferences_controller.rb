@@ -171,98 +171,102 @@ class UserPreferencesController < ApplicationController
   #############################################################################
   def preferences
     
-    @user = User.find(session[:user_id])
-      
-    #will be set to false if a user's profile fails to save successfully due to validation errors
-    @saved = true
-  
-    #if this is a post request, then the user wants to save their profile
-    #if it's not a post request the user just wants to view their profile
-    if request.post?
-      write_sports_and_teams(@user)
-      
-      #clear any errors so they don't show up as false positives
-      @user.errors.clear
- 
-      #if a password hasn't been entered don't save the password
-      if (params[:password] == "********")
-        @saved = save_user(false)
-      else
-        #if a password was entered verify that is matches the password confirmation
-        if params[:password] == params[:password_confirmation] then
-          @saved = save_user(true)
+    if session[:user_id] == 1
+      redirect_to :controller => "unregistered"
+    else
+      @user = User.find(session[:user_id])
+        
+      #will be set to false if a user's profile fails to save successfully due to validation errors
+      @saved = true
+    
+      #if this is a post request, then the user wants to save their profile
+      #if it's not a post request the user just wants to view their profile
+      if request.post?
+        write_sports_and_teams(@user)
+        
+        #clear any errors so they don't show up as false positives
+        @user.errors.clear
+   
+        #if a password hasn't been entered don't save the password
+        if (params[:password] == "********")
+          @saved = save_user(false)
         else
-          @saved = false
-          @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
-          #save the user anyway so validation errors will show
-          save_user(false)
+          #if a password was entered verify that is matches the password confirmation
+          if params[:password] == params[:password_confirmation] then
+            @saved = save_user(true)
+          else
+            @saved = false
+            @user.errors.add(:password_confirmation, "Password and password confirmation did not match")
+            #save the user anyway so validation errors will show
+            save_user(false)
+          end
         end
-      end
+        
+        if @saved
+          write_profile(@user)
+          if params[:photo] != nil then
+            save_profile_photo(params[:photo])
+          end
+  
+          flash[:notice] = "Profile settings saved!"
+        else
+          flash[:notice] = "Unable to save profile"
+        end  
+  
+      end    
+  
+          
+      #get the professional leagues covered
+      @pro_leagues = Affiliation.get_pro_leagues()
       
-      if @saved
-        write_profile(@user)
-        if params[:photo] != nil then
-          save_profile_photo(params[:photo])
+      #allocate new arrays to store the divisions and teams for each league
+      @pro_divisions = Array.new(@pro_leagues.size)
+      @pro_teams = Array.new(@pro_leagues.size)
+      
+      @pro_leagues.size.times do |i|
+        #for each league, get the divisions of that league
+        @pro_divisions[i] = Affiliation.get_divisions_by_league(@pro_leagues[i].affiliation_id)
+        
+        #allocate an array to store the teams of a division
+        @pro_teams[i] = Array.new(@pro_divisions[i].size)
+        
+        @pro_divisions[i].size.times do |d|
+          #for each division in a league, get the teams of that division
+          @pro_teams[i][d] = Affiliation.get_teams_by_division(@pro_divisions[i][d].affiliation_id, @pro_leagues[i].affiliation_key)
         end
-
-        flash[:notice] = "Profile settings saved!"
-      else
-        flash[:notice] = "Unable to save profile"
-      end  
-
-    end    
-
         
-    #get the professional leagues covered
-    @pro_leagues = Affiliation.get_pro_leagues()
-    
-    #allocate new arrays to store the divisions and teams for each league
-    @pro_divisions = Array.new(@pro_leagues.size)
-    @pro_teams = Array.new(@pro_leagues.size)
-    
-    @pro_leagues.size.times do |i|
-      #for each league, get the divisions of that league
-      @pro_divisions[i] = Affiliation.get_divisions_by_league(@pro_leagues[i].affiliation_id)
-      
-      #allocate an array to store the teams of a division
-      @pro_teams[i] = Array.new(@pro_divisions[i].size)
-      
-      @pro_divisions[i].size.times do |d|
-        #for each division in a league, get the teams of that division
-        @pro_teams[i][d] = Affiliation.get_teams_by_division(@pro_divisions[i][d].affiliation_id, @pro_leagues[i].affiliation_key)
       end
       
-    end
-    
-    
-    @college_leagues = Affiliation.get_college_leagues()
-     
-    @college_conferences = Array.new(@college_leagues.size)
-    @college_teams = Array.new(@college_leagues.size)
-    
-    @college_conferences.size.times do |i|
-      @college_conferences[i] = Affiliation.get_conferences_by_league(@college_leagues[i].affiliation_id)
       
-      @college_teams[i] = Array.new(@college_conferences[i].size)
+      @college_leagues = Affiliation.get_college_leagues()
+       
+      @college_conferences = Array.new(@college_leagues.size)
+      @college_teams = Array.new(@college_leagues.size)
       
-      @college_conferences[i].size.times do |j|
+      @college_conferences.size.times do |i|
+        @college_conferences[i] = Affiliation.get_conferences_by_league(@college_leagues[i].affiliation_id)
         
-        @college_teams[i][j] = Affiliation.get_teams_by_conference(@college_conferences[i][j].affiliation_id, @college_leagues[i].affiliation_key)
-      
+        @college_teams[i] = Array.new(@college_conferences[i].size)
+        
+        @college_conferences[i].size.times do |j|
+          
+          @college_teams[i][j] = Affiliation.get_teams_by_conference(@college_conferences[i][j].affiliation_id, @college_leagues[i].affiliation_key)
+        
+        end
+        
       end
       
-    end
-    
-    load_tagged_teams(@user)
-    @tagged_teams = @@tagged_teams
-    
-    # define the user path within the site
-    user_path = ["Home", "Preferences"] 
-    user_path_urls = ["/home", "/preferences"] 
-    @path_html = build_path(user_path, user_path_urls)
-
-    respond_to do |format|
-      format.html #preferences.html.erb
+      load_tagged_teams(@user)
+      @tagged_teams = @@tagged_teams
+      
+      # define the user path within the site
+      user_path = ["Home", "Preferences"] 
+      user_path_urls = ["/home", "/preferences"] 
+      @path_html = build_path(user_path, user_path_urls)
+  
+      respond_to do |format|
+        format.html #preferences.html.erb
+      end
     end
     
   end

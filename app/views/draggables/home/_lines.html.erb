@@ -1,14 +1,5 @@
 
-<%= render :partial => "draggables/partials/header" %>
-
-<div class="anchors">
-  <%
-    @leagues.each do |league|
-      abbr = @abbr = (league.abbreviation).gsub(/[\s']/, "_")
-  %>
-    <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= league.abbreviation + " " + @drop_title %>"><%= league.abbreviation %></a>&nbsp;
-  <% end %>
-</div>
+<%= render :partial => "draggables/partials/home_header" %>
 
  <ul id="<%= @drop_id %>_content">
 

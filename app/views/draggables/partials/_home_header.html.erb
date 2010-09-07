@@ -1,0 +1,28 @@
+
+<div class="head">
+  <h1 name="section-title"><%= @drop_title %></h1>
+  <h2><%= link_to_remote "All",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;full_partial=full&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+  %>&nbsp;/&nbsp;
+  <%= link_to_remote "Tagged",
+          {:url => { :controller => 'draggables', :action => 'route_action' },
+          :with => "'level=#{@level}&amp;drop_id=#{@drop_id}&amp;dragged_id=#{@dragged_id}'" }
+  %>&nbsp;/&nbsp;
+  <a href="javascript:void(0);" id="<%= @drop_id %>ToggleText" name="Expand" onclick="expandCollapseTarget('<%= @drop_id %>');">Expand</a></h2>
+</div>
+
+<div class="anchors">
+  <%
+    @leagues.each do |league|
+      abbr = @abbr = (league.abbreviation).gsub(/[\s']/, "_")
+  %>
+    <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= league.abbreviation + " " + @drop_title %>"><%= league.abbreviation %></a>&nbsp;
+  <% end %>
+</div>
+
+<div id="<%= @drop_id %>_scroll-up" class="scroll-up" onmouseout="stopScroll();">
+  <a href="javascript:void(0);" name="scroll-up" class="up" onclick="jumpToTop('<%= @drop_id %>_content')" title="Click to jump to top"></a>
+</div>
+
+

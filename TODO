@@ -3,7 +3,6 @@
 -invite reminder
 -help page
 -remove extra spacing with banner ad
--goole analytics
 -golf
 -nascar
 -tennis
@@ -17,15 +16,13 @@
 -smarter news articles
 -"all" only show all teams, not all leagues
 -qualified urls
--all/tagged header only on home page
--jump to links for home page
+
 -roster spacing
 
 -error message for bad password
 -forgot password?
 -college names, not mascots names
 -add beta to logo
--draggables height
 
 
 -IE search fanclub button
@@ -34,11 +31,12 @@
 -login pop-up too big
 
 -startup scripts for nginx, postfix, and dovecot
--update unregistered user profile
 -time on posted comments
 -update status text box too big
 -lower sports menus
 -link cursor when hovering over all/tagged/expand
 -invite fan link on preferences page
 -leaders board
--site path span width
+-college rankings
+-separate out college sports
+-college home/away records

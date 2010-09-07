@@ -1246,10 +1246,15 @@ letter-spacing:.02em;
 margin:5px 0 0 5px;
 float:left;
 color:#666666;
-
 display:inline;
 *margin:-12px 0 0 3px;
 _margin:-12px 0 0 3px;
+}
+
+#draggables #header #site_path {
+height: 1em;
+float: right;
+overflow: hidden;
 }
 
 #draggables #header li.head em {
@@ -1342,7 +1347,7 @@ margin:0;
 
 #draggables #target-holder span.collapsed {
 width:301px;
-height:355px;
+height:340px;
 float:left;
 border:#333333 thin solid;
 background:url(/images/css/target-bg-even.jpg) no-repeat bottom right;
@@ -1392,7 +1397,7 @@ margin:0 0 0 0;
 
 #draggables #target-holder span.expanded {
 width:615px;
-height:565px;
+height:550px;
 float:left;
 border:#333333 thin solid;
 background:url(/images/css/target-bg-even.jpg) no-repeat bottom right;
@@ -1633,10 +1638,10 @@ text-align:center;
 
 #draggables #target-holder .head {
 width:100%;
-height:30px;
+height:20px;
 text-align:center;
 background:url(/images/css/target-head-bg.jpg) no-repeat top center;
-border-bottom:#CCCCCC thin solid;
+border-bottom:#ffffff thin solid;
 }
 
 #draggables #target-holder .head h1 {
@@ -1671,19 +1676,20 @@ color:#000000;
 }
 
 #draggables #target-holder div.anchors {
+display: block;
 width:100%;
 height:15px;
 border-bottom:#CCCCCC thin solid;
 font-weight: bold;
 text-align: center;
 line-height: .6em;
-/*background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;*/
+background:url(/images/css/target-head-bg.jpg) no-repeat top center;
 }
 
 #draggables #target-holder div.anchors a {
 top: 0;
-color: #000000;
-font-size: .6em;
+color: #ffffff;
+font-size: .6em; 
 }
 
 /* target scrolls */
@@ -1708,6 +1714,7 @@ background:url(/images/css/target-scroll-arrow-up.gif) no-repeat center center;
 
 #draggables #target-holder .scroll-dwn {
 position: absolute;
+bottom: 0px;
 width:100%;
 height:20px;
 background:url(/images/css/target-scroll-bg.jpg) no-repeat top center;

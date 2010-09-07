@@ -282,7 +282,7 @@ class DraggablesController < ApplicationController
   
     @filter = params['full_partial']
   
-    if (@level == 'home')
+    if (@level.eql?("home"))
       
       if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(@@tagged_teams.keys)
@@ -301,7 +301,6 @@ class DraggablesController < ApplicationController
           @games[i] = Affiliation.get_next_n_games(
                                   @leagues[i].affiliation_id, 96)
         end
-        
       end
       
       @drop_title = "Schedules"
@@ -321,7 +320,7 @@ class DraggablesController < ApplicationController
       @games = Team.get_next_n_games(@team.team_id, 200)
       
       @drop_title = "#{@team.last_name} Schedule"
-      
+
     end
     
     @partial_path = "/draggables/#{@level}/schedule"
@@ -356,11 +355,11 @@ class DraggablesController < ApplicationController
       @leagues.size.times do |i|
       
         if (@filter.blank?) then
-          @games[i] = Affiliation.get_next_n_games(
+          @games[i] = Affiliation.get_previous_n_games(
                                   @leagues[i].affiliation_id, 96,
                                   @@tagged_teams[@leagues[i].affiliation_id.to_i])
         else
-          @games[i] = Affiliation.get_next_n_games(
+          @games[i] = Affiliation.get_previous_n_games(
                                   @leagues[i].affiliation_id, 96)
         end
         
@@ -369,7 +368,7 @@ class DraggablesController < ApplicationController
       @drop_title = "Scoreboard"
       
     elsif (@level == 'league')
-      @league = Affiliation.get_league(session[:league_id])
+      @leagues = Affiliation.get_league(session[:league_id])
       @games = Affiliation.get_previous_n_games(
                                   @league.affiliation_id, 
                                   96)                          

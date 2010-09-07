@@ -8,6 +8,9 @@
     <hr/>
     <% end -%>
     
+  <!-- container for pop-up box to invite friends -->
+  <div id="pop-up" style="position:fixed; display: none"></div>
+    
   <form action="/preferences" enctype="multipart/form-data" id="register_form" method="post" name="teams">
     <a href="/home" class="back">Home</a>
     <input name="save" type="submit" class="submit" value="Save" />
@@ -202,7 +205,7 @@
             db_team = Team.find(@college_teams[l][c][t].team_id)
 %>
                 <li>
-                  <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].last_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s %>" />
+                  <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].first_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s %>" />
                   <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
                   <em><%= db_team.followers %> fans</em>
                 </li>
