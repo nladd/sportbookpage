@@ -15,6 +15,10 @@ class UnregisteredController < ApplicationController
     get_draggables(@user, @level)
     load_tagged_teams(@user)   
    
+    user_path = ["Home"] 
+    user_path_urls = ["/home"] 
+    @path_html = build_path(user_path, user_path_urls)
+   
     respond_to do |format|
       format.html # index.html.erb
     end
