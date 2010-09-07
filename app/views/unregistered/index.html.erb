@@ -40,7 +40,7 @@
         
       <!-- target 01 -->
       <span id="target01" class="collapsed" name="target01">
-          <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_1}&drop_id=target01&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+          <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_1}&drop_id=target01&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
       </span>
             
             
@@ -75,7 +75,7 @@
       
       <!-- target 03 -->
       <span id="target03" class="collapsed" name="target03">                     
-        <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_3}&drop_id=target03&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+        <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_3}&drop_id=target03&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
       </span>
   
       <%= drop_receiving_element('target03',
@@ -92,7 +92,7 @@
             
       <!-- target 04 -->
       <span id="target04" class="collapsed" name="target04">                
-        <%# javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_4}&drop_id=target04&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
+        <%= javascript_tag "new Ajax.Request('/draggables/route_action', {asynchronous:true, evalScripts:true, parameters:'dragged_id=#{@drop_4}&drop_id=target04&level=home&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}')});" %>
       </span>
                 
       <%= drop_receiving_element('target04',
