@@ -121,6 +121,8 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 
+  # Set to one of [:active_record_store, :drb_store, :mem_cache_store, :cookie_store]
+  config.action_controller.session_store = :active_record_store
 
 
   config.action_mailer.delivery_method = :smtp
@@ -140,10 +142,6 @@ Rails::Initializer.run do |config|
     :address => "localhost",
     :port => 25,
     :domain => "www.sportbookpage.com",
-    #:enable_starttls_auto => true,
-    #:authentication => :plain,
-    #:user_name => "NathanALadd@gmail.com",
-    #:password => "meriden"
   }
 
 end

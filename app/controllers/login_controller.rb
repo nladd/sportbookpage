@@ -32,6 +32,8 @@ class LoginController < ApplicationController
     reset_session
     flash[:notice] = "Logout successful!"
     
+    session[:user_id] = nil
+    
     redirect_to :login
   
   end

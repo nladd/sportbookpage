@@ -257,7 +257,7 @@ class UserPreferencesController < ApplicationController
       end
       
       load_tagged_teams(@user)
-      @tagged_teams = @@tagged_teams
+      @tagged_teams = session[:tagged_teams]
       
       # define the user path within the site
       user_path = ["Home", "Preferences"] 
