@@ -46,10 +46,7 @@
         <em>Posted by <a href="javascript:void(0);" onclick="$('form_<%= comment['id'] %>').submit();"><%= CGI.unescape(origin_name) %></a> on<br /><%= CGI.unescape(comment.find('date').first.content) + " @ " + CGI.unescape(comment.find('time').first.content) %>.</em>
         <% if (session[:visiting_id].blank?) %>
         <br /><em><a href="javascript:void(0);" onclick="$('comment_<%= comment['id'] %>_reply').toggle();">Reply</a> | <%= link_to_remote "Delete", {:url =>  { :controller => "users", :action => "delete_comment" }, :with => "'comment=#{comment['id']}'" } %></em>
-        
-        <%# link_to_remote "Reply", {:url =>  { :controller => "users", :action => "friend_home" }, :with => "'origin=#{origin_id}'" } %>
-        
-        
+
         
         <% end %>
       </form>

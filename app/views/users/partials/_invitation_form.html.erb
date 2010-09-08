@@ -5,12 +5,13 @@
       Enter the e-mail address of the fan you'd like to invite. Multiple addresses can be separated with a comma (e.g. Tom.Sawyer@hotmail.com, HuckFinnWins@aol.com, ...)<br/><br/>
       Email Address <i>(Separate by commas)</i>
     </label>
-    <input name="emails" type="text" />
-    <input name="submit" type="submit" class="submit" value="Send" />
+    <input name="emails" type="text" style="width: 95%" />
     <div class="clear"></div>
     <p>
       Include a personal message: <i>(optional)</i><br/>
-      <%= text_area_tag('message', nil, { :size => '38x5', :value => '' }) %>
+      <%= text_area_tag('message', nil, { :rows => '5', :value => '', :style => "width: 95%" }) %>
     </p>
+    <div class="clear"></div>
+    <input name="submit" type="submit" class="submit" value="Send" />
   <% end %>
 </span>

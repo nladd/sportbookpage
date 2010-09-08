@@ -2,21 +2,24 @@
 -auto-login
 -invite reminder
 -help page
--remove extra spacing with banner ad
 -golf
 -nascar
 -tennis
 -bottom menu, colleges and divisions
+-hotstreak, e-mail hotstreak game of the day
+-lower sports menus
+
 
 -advanced fanclub search
 -delete someone from fanclub
 -counter for number of fans in fanclub
 -email when added to a user's fanclub
 
+
 -smarter news articles
 -"all" only show all teams, not all leagues
 -qualified urls
-
+-remove extra spacing with banner ad
 -roster spacing
 
 -error message for bad password
@@ -24,19 +27,23 @@
 -college names, not mascots names
 -add beta to logo
 
-
 -IE search fanclub button
 -IE custom question
 
 -login pop-up too big
-
 -startup scripts for nginx, postfix, and dovecot
 -time on posted comments
--update status text box too big
--lower sports menus
--link cursor when hovering over all/tagged/expand
--invite fan link on preferences page
+
+
 -leaders board
 -college rankings
--separate out college sports
+-separate out college sports and have separate draggables for college sports
 -college home/away records
+
+
+-D1 baseball teams
+-Save draggables
+-refresh chalkboard on post
+-link /fanatic/<name> is broken
+-profile photo/home always linked to home
+-proper log out

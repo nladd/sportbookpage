@@ -962,7 +962,7 @@ color:#FFFFFF;
 
 
 
-/* center column secondary page */
+/* center column preferences page */
 
 #column-center h1 {
 padding:10px;
@@ -994,6 +994,14 @@ font-weight:bold;
 
 #column-center h2 a {
 color:#000000;
+cursor: default;
+}
+
+#column-center h2 a.check {
+color:#4696bb;
+font-size: .7em;
+font-style: italic;
+font-weight: normal;
 cursor: default;
 }
 
@@ -1252,8 +1260,7 @@ _margin:-12px 0 0 3px;
 }
 
 #draggables #header #site_path {
-height: 1em;
-float: right;
+height: 1.2em;
 overflow: hidden;
 }
 
@@ -1652,8 +1659,8 @@ text-shadow:#000000 0 -1px 0;
 color:#FFFFFF;
 font-size:.85em;
 font-weight:normal;
-
 display:inline;
+cursor: default;
 }
 
 #draggables #target-holder .head h2 {
@@ -1663,12 +1670,12 @@ font-weight:normal;
 color:#FFFFFF;
 margin:6px 5px 0 0;
 padding:0;
-
 display:inline;
 }
 
 #draggables #target-holder .head h2 a {
 color:#FFFFFF;
+cursor: pointer;
 }
 
 #draggables #target-holder .head h2 a:hover {
@@ -2110,8 +2117,9 @@ display:inline;
 /* pop up */
 
 #pop-up {
-width:325px;
+min-width:325px;
 min-height:325px;
+max-height: 600px;
 background:url(/images/css/pop-up-bg.png) top left repeat;
 border:#FFFFFF thin solid;
 font-size:.9em;
@@ -2123,7 +2131,7 @@ left:25%;
 }
 
 #pop-up span {
-padding:0 15px 15px 15px;
+padding: 15px;
 }
 
 #pop-up .signup {

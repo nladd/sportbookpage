@@ -34,6 +34,55 @@ function uncheck_all(form) {
 }
 
 /*
+ * Check all league checkboxes
+ */
+function checkAllLeague(league) {
+  
+  Effect.SlideDown(league, {duration: .5});
+  
+  $(league + '_checkbox').checked = true;
+  
+  lists = $(league).getElementsBySelector('ul');
+  for(var i = 0; i < lists.length; i++) {
+    lists[i].show();
+  }
+  
+  checkboxes = $(league).getElementsBySelector('input');
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = true;
+  }
+    
+  $('check_all_' + league).hide();
+  $('uncheck_all_' + league).show();
+  
+}
+
+
+/*
+ * Uncheck all league checkboxes
+ */
+function uncheckAllLeague(league) {
+  
+  checkboxes = $(league).getElementsBySelector('input');
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = false;
+  }
+  
+  lists = $(league).getElementsBySelector('ul');
+  for(var i = 0; i < lists.length; i++) {
+    lists[i].hide();
+  }
+  
+  Effect.SlideUp(league, {duration: .5});
+  $(league + '_checkbox').checked = false;
+    
+  $('check_all_' + league).show();
+  $('uncheck_all_' + league).hide();
+  
+}
+
+
+/*
  * Check all checkboxes in a form
  */
 function toggle_all_checkboxes(form) {

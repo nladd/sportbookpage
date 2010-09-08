@@ -115,8 +115,9 @@
 %>
     <hr />
     <h2>
-      <input id="<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @pro_leagues[l].abbreviation + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
+      <input id="sport_list_<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @pro_leagues[l].abbreviation + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
       <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @pro_leagues[l].abbreviation %></a>
+      <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
@@ -138,7 +139,7 @@
                 <li>
                     <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s %>" />
                     <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @pro_teams[l][d][t].full_name %></label>
-                    <em><%= db_team.followers %> fans</em>
+                    <em style="font-size: .73em"><%= db_team.followers %> fans</em>
                 </li>
                 
                 <%
@@ -171,7 +172,7 @@
     </div> <!-- close conference div -->
     
     <% if @tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) %>
-      <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
+      <%= javascript_tag "$('sport_list_#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
     <% end %>
     
 <%
@@ -184,8 +185,9 @@
 %>
     <hr />
     <h2>
-      <input id="<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s %>" />
+      <input id="sport_list_<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s %>" />
       <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @college_leagues[l].full_name %></a>
+      <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
@@ -207,7 +209,7 @@
                 <li>
                   <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].first_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s %>" />
                   <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
-                  <em><%= db_team.followers %> fans</em>
+                  <em style="font-size: .8em"><%= db_team.followers %> fans</em>
                 </li>
                 
                 <%
@@ -239,7 +241,7 @@
     </div> <!-- close conference div -->
     
     <% if @tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) %>
-      <%= javascript_tag "$('#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
+      <%= javascript_tag "$('sport_list_#{abbr}_checkbox').checked = true; $('sport_list_#{abbr}').show();" %>
     <% end %>
     
 <%

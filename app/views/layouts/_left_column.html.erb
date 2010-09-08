@@ -34,7 +34,7 @@
 	  </h1>
 	  <% if (session[:visiting_id].blank?) %>
 	  <h1 id="update_status" class="clear" style="display: none">
-		<textarea cols="18" id="status" maxLength="80" name="status" rows="3">Pimp as shit</textarea>
+		<textarea style="width: 95%" id="status" maxLength="80" name="status" rows="3"></textarea>
 		<a href="javascript:void(0);" onclick="new Ajax.Request('/user_preferences/save_status', {asynchronous:true, evalScripts:true, onComplete:function(request){$('static_status').show(); $('update_status').hide();}, parameters:'status=' + $('status').value}); return false;" style="text-decoration: underline">Save</a>
 	  </h1>
 	  <% end %>
