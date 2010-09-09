@@ -23,7 +23,7 @@ class Professional
   #               outcome_totals.*,
   #               display_names.*",
   #############################################################################
-  def self.get_standings(affiliation_id, sub_affiliation_id, time, publisher_id)
+  def self.get_standings(affiliation_id, sub_affiliation_id, time = TIME, publisher_id = PUBLISHER_ID)
 
     league = Affiliation.get_league(affiliation_id)
     scope = Affiliation.find(sub_affiliation_id).affiliation_type == 'division' ? STANDINGS_SCOPE[league.full_name] : "league"

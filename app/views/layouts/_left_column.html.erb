@@ -34,7 +34,7 @@
 	  </h1>
 	  <% if (session[:visiting_id].blank?) %>
 	  <h1 id="update_status" class="clear" style="display: none">
-		<textarea style="width: 95%" id="status" maxLength="80" name="status" rows="3"></textarea>
+		<textarea style="width: 95%" id="status" maxLength="80" name="status" rows="3"><%= status %></textarea>
 		<a href="javascript:void(0);" onclick="new Ajax.Request('/user_preferences/save_status', {asynchronous:true, evalScripts:true, onComplete:function(request){$('static_status').show(); $('update_status').hide();}, parameters:'status=' + $('status').value}); return false;" style="text-decoration: underline">Save</a>
 	  </h1>
 	  <% end %>
@@ -53,7 +53,7 @@
 	  <div class="clear"></div>
 	</div>
 	
-	<%= draggable_element ("profile", {:revert => true, :ghosting => true}) %>
+	<%= draggable_element("profile", {:revert => true, :ghosting => true}) %>
 	  
 	<!-- My Tagged Teams -->        
 	<div id="header">

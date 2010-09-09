@@ -234,7 +234,7 @@ class Affiliation < ActiveRecord::Base
     
     return Affiliation.find_all_by_affiliation_type(
                         "league",
-                        :select => "teams.id AS team_id, teams.team_key, display_names.*",
+                        :select => "teams.id AS team_id, teams.team_key, teams.followers, display_names.*",
                         :joins => "INNER JOIN teams
                                   INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{league_id.to_s} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
@@ -270,7 +270,7 @@ class Affiliation < ActiveRecord::Base
     
     return Affiliation.find_all_by_affiliation_type(
                         "conference",
-                        :select => "teams.id AS team_id, teams.team_key, display_names.*",
+                        :select => "teams.id AS team_id, teams.team_key, teams.followers, display_names.*",
                         :joins => "INNER JOIN teams
                                   INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{conference_id} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
@@ -305,7 +305,7 @@ class Affiliation < ActiveRecord::Base
     
     return Affiliation.find_all_by_affiliation_type(
                         "division",
-                        :select => "teams.id AS team_id, teams.team_key, display_names.*",
+                        :select => "teams.id AS team_id, teams.team_key, teams.followers, display_names.*",
                         :joins => "INNER JOIN teams
                                   INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{division_id} 
                                   INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",

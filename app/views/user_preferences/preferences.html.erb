@@ -65,7 +65,7 @@
     <span style="width: 100%">
         <h1>Account Settings <i><a href="javascript:void(0);" name="edit" onclick="$('static-settings').toggle(); $('edit-settings').toggle();">Edit</a></i></h1>
         <ul id="static-settings" name="user-info" <%= if !@saved then "style=\"display: none\"" end %> >
-            <li><%= @user.email %></li>
+            <li>Email: <%= @user.email %></li>
             <li>Security Question: <%= @user.question_1 %></li>
             <li>Answer: ********</li>
             <li>Password: ********</li>
@@ -116,7 +116,7 @@
     <hr />
     <h2>
       <input id="sport_list_<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @pro_leagues[l].abbreviation + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
-      <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @pro_leagues[l].abbreviation %></a>
+      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @pro_leagues[l].abbreviation %></a>
       <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     
@@ -134,16 +134,15 @@
 <%
         @pro_teams[l][d].size.times do |t|
             team_abbr = (@pro_teams[l][d][t].full_name).gsub(/[\s\.']/, '_')
-            db_team = Team.find(@pro_teams[l][d][t].team_id)
 %>
                 <li>
                     <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s %>" />
                     <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @pro_teams[l][d][t].full_name %></label>
-                    <em style="font-size: .73em"><%= db_team.followers %> fans</em>
+                    <em style="font-size: .73em"><%= @pro_teams[l][d][t].followers %> fans</em>
                 </li>
                 
                 <%
-                  if @tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) && @tagged_teams[@pro_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                  if @tagged_teams.has_key?(@pro_leagues[l].affiliation_id.to_i) && @tagged_teams[@pro_leagues[l].affiliation_id.to_i].include?(@pro_teams[l][d][t].team_id.to_i)
                 %>
 
                   <%= javascript_tag "
@@ -186,7 +185,7 @@
     <hr />
     <h2>
       <input id="sport_list_<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s %>" />
-      <a onclick="$('<%= abbr + "_checkbox" %>').checked = !$('<%= abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @college_leagues[l].full_name %></a>
+      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @college_leagues[l].full_name %></a>
       <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
@@ -204,16 +203,15 @@
 <%
         @college_teams[l][c].size.times do |t|
             team_abbr = (@college_teams[l][c][t].full_name).gsub(/[\s\.'\(\)&,-]/, '_') + abbr
-            db_team = Team.find(@college_teams[l][c][t].team_id)
 %>
                 <li>
                   <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].first_name.to_s + "," + (@college_teams[l][c][t].team_id).to_s %>" />
                   <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
-                  <em style="font-size: .8em"><%= db_team.followers %> fans</em>
+                  <em style="font-size: .8em"><%= @college_teams[l][c][t].followers %> fans</em>
                 </li>
                 
                 <%
-                  if @tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) && @tagged_teams[@college_leagues[l].affiliation_id.to_i].include?(db_team.id)
+                  if @tagged_teams.has_key?(@college_leagues[l].affiliation_id.to_i) && @tagged_teams[@college_leagues[l].affiliation_id.to_i].include?(@college_teams[l][c][t].team_id.to_i)
                 %>
 
                   <%= javascript_tag "

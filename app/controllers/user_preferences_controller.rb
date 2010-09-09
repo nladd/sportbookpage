@@ -303,7 +303,7 @@ class UserPreferencesController < ApplicationController
   
     @status = params[:status]
     
-    path = RAILS_ROOT + "/public/users/" + (@user.id).to_s + "/" + (@user.id).to_s + ".profile"
+    path = RAILS_ROOT + "/public/users/#{@user.id}/#{@user.id}.profile"
     parser = XML::Parser.file(path)
     profile = parser.parse
     
@@ -335,13 +335,13 @@ class UserPreferencesController < ApplicationController
     profile = parser.parse
     
     # on a drop, the session variable get populated with the drop name
-    node = profile.find_first('//root/#{level}/target01')
+    node = profile.find_first("//root/#{level}/target01")
     node.content = session['target01'].to_s
-    node = profile.find_first('//root/#{level}/target02')
+    node = profile.find_first("//root/#{level}/target02")
     node.content = session['target02'].to_s
-    node = profile.find_first('//root/#{level}/target03')
+    node = profile.find_first("//root/#{level}/target03")
     node.content = session['target03'].to_s
-    node = profile.find_first('//root/#{level}/target04')
+    node = profile.find_first("//root/#{level}/target04")
     node.content = session['target04'].to_s
   
     profile.save(profile_path)

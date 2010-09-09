@@ -168,11 +168,11 @@ class DraggablesController < ApplicationController
   
     if (@level == 'home')
       #get all the leagues availables
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_in_season_leagues
-      end
+      #else
+        #@leagues = Affiliation.get_all_in_season_leagues
+      #end
       
       # create new arrays to hold the sub_affiliations for each league and 
       # the standings for each division
@@ -284,11 +284,11 @@ class DraggablesController < ApplicationController
   
     if (@level.eql?("home"))
       
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_in_season_leagues
-      end
+      #else
+      #  @leagues = Affiliation.get_all_in_season_leagues
+      #end
       
       @games = Array.new(@leagues.size)
       @leagues.size.times do |i|
@@ -344,11 +344,11 @@ class DraggablesController < ApplicationController
     
     if (@level == 'home')
       
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_in_season_leagues
-      end
+      #else
+      #  @leagues = Affiliation.get_all_in_season_leagues
+      #end
       
       @games = Array.new(@leagues.size)
       
@@ -406,11 +406,11 @@ class DraggablesController < ApplicationController
   
     if (@level == "home")
         
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_leagues
-      end
+      #else
+      #  @leagues = Affiliation.get_all_leagues
+      #end
       
       @series = Array.new(@leagues.size)
       @conferences = Array.new(@leagues.size)
@@ -546,11 +546,11 @@ class DraggablesController < ApplicationController
   
     if (@level == 'home')
     
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_in_season_leagues
-      end
+      #else
+      #  @leagues = Affiliation.get_all_in_season_leagues
+      #end
               
       @articles = Array.new(@leagues.size)
       @titles = Array.new(@leagues.size)
@@ -594,21 +594,7 @@ class DraggablesController < ApplicationController
       @titles = Array.new(@articles.size)
       @abstracts = Array.new(@articles.size)
       @dates = Array.new(@articles.size) 
-      
-      @articles.size.times do |a|
-        
-        parser = XML::Parser.file(FEEDFETCHER_ARCHIVE + @articles[a].sportsml)
-        article_xml = parser.parse
-        @titles[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
-        #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
-        @abstracts[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
-        if @abstracts[a].length > 200
-          @abstracts[a] = @abstracts[a][0, 200] + "..."
-        end
-        
-        @dates[a] = datetime_to_time(@articles[a].date_time)
 
-      end
 
     elsif (@level == 'team')
       @league = Affiliation.get_league(session[:league_id])
@@ -619,21 +605,7 @@ class DraggablesController < ApplicationController
       @titles = Array.new(@articles.size)
       @abstracts = Array.new(@articles.size)
       @dates = Array.new(@articles.size) 
-      
-      @articles.size.times do |a|
-        
-        parser = XML::Parser.file(FEEDFETCHER_ARCHIVE + @articles[a].sportsml)
-        article_xml = parser.parse
-        @titles[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
-        #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
-        @abstracts[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
-        if @abstracts[a].length > 200
-          @abstracts[a] = @abstracts[a][0, 200] + "..."
-        end
-        
-        @dates[a] = datetime_to_time(@articles[a].date_time)
 
-      end
     elsif (@level.eql?("person"))
       @league = Affiliation.get_league(session[:league_id])
       @team = Team.get_team(session[:team_id])
@@ -644,21 +616,22 @@ class DraggablesController < ApplicationController
       @abstracts = Array.new(@articles.size)
       @dates = Array.new(@articles.size) 
       
+    end
+    
+    if (@level.eql?("person") || @level.eql?("team") || @level.eql?("league"))
       @articles.size.times do |a|
-        
-        parser = XML::Parser.file(FEEDFETCHER_ARCHIVE + @articles[a].sportsml)
-        article_xml = parser.parse
-        @titles[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
-        #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
-        @abstracts[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
-        if @abstracts[a].length > 200
-          @abstracts[a] = @abstracts[a][0, 200] + "..."
-        end
-        
-        @dates[a] = datetime_to_time(@articles[a].date_time)
-
+          
+          parser = XML::Parser.file(FEEDFETCHER_ARCHIVE + @articles[a].sportsml)
+          article_xml = parser.parse
+          @titles[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/hedline/hl1').content
+          #author = article_xml.find_first('//sports-content/article/nitf/body/body.head/byline/person').content
+          @abstracts[a] = article_xml.find_first('//sports-content/article/nitf/body/body.head/abstract').content
+          if @abstracts[a].length > 200
+            @abstracts[a] = @abstracts[a][0, 200] + "..."
+          end
+          @dates[a] = datetime_to_time(@articles[a].date_time)
+          
       end
-      
     end
     
     @partial_path = "draggables/#{@level}/headlines"
@@ -682,11 +655,11 @@ class DraggablesController < ApplicationController
     @filter = params['full_partial']
 
     if (@level == 'home')
-      if (@filter.blank?) then
+      #if (@filter.blank?) then
         @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      else
-        @leagues = Affiliation.get_all_in_season_leagues
-      end
+      #else
+      #  @leagues = Affiliation.get_all_in_season_leagues
+      #end
       @lines = Array.new(@leagues.size)
       
       @leagues.size.times do |i|
@@ -827,22 +800,7 @@ class DraggablesController < ApplicationController
 
 
   end
-
-
-private
-
-  def choose_template
-  
-     String ret = ""
-  
-     if (@drop_id == 'drop_2' || @drop_id == 'drop_3')
-      ret = "tall_"
-    end
-    
-    return ret
-
-  end
-  
+ 
   
 
 end

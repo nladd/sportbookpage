@@ -2118,6 +2118,7 @@ display:inline;
 
 #pop-up {
 min-width:325px;
+max-width: 600px;
 min-height:325px;
 max-height: 600px;
 background:url(/images/css/pop-up-bg.png) top left repeat;

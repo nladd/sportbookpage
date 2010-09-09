@@ -1,4 +1,5 @@
 -site performance/optimization
+-cache queries
 -auto-login
 -invite reminder
 -help page
@@ -8,43 +9,40 @@
 -bottom menu, colleges and divisions
 -hotstreak, e-mail hotstreak game of the day
 -lower sports menus
-
+-metatags
 
 -advanced fanclub search
 -delete someone from fanclub
--counter for number of fans in fanclub
 -email when added to a user's fanclub
 
-
+-leaders board
 -smarter news articles
--"all" only show all teams, not all leagues
 -qualified urls
 -remove extra spacing with banner ad
 -roster spacing
 
 -error message for bad password
 -forgot password?
--college names, not mascots names
 -add beta to logo
 
--IE search fanclub button
--IE custom question
 
--login pop-up too big
 -startup scripts for nginx, postfix, and dovecot
--time on posted comments
+-set system time to EST
 
-
--leaders board
 -college rankings
 -separate out college sports and have separate draggables for college sports
 -college home/away records
-
+-college names, not mascots names
 
 -D1 baseball teams
--Save draggables
--refresh chalkboard on post
 -link /fanatic/<name> is broken
 -profile photo/home always linked to home
 -proper log out
 -session table clean up
+
+-refresh chalkboard on post, (don't use cache)
+
+-IE search fanclub button
+-IE custom question
+-IE login popup too wide
+-IE chalkboard comment text area mis-aligned
