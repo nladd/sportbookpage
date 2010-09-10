@@ -33,9 +33,7 @@ class DraggablesController < ApplicationController
     if ((@dragged_id =~ /college/) != nil)
       isCollege = true
     end
-    
-    logger.info "isCollege = " + isCollege.to_s
-    
+ 
     if ((@dragged_id =~ /schedule/) != nil )
       load_schedule(isCollege)
     elsif (@dragged_id == "fanclub")
