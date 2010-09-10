@@ -29,9 +29,15 @@ class DraggablesController < ApplicationController
       @level = 'home'
     end
  
+    isCollege = false
+    if ((@dragged_id =~ /college/) != nil)
+      isCollege = true
+    end
     
-    if (@dragged_id == "schedule" )
-      load_schedule()
+    logger.info "isCollege = " + isCollege.to_s
+    
+    if ((@dragged_id =~ /schedule/) != nil )
+      load_schedule(isCollege)
     elsif (@dragged_id == "fanclub")
       load_fanclub()
     elsif (@dragged_id == "profile")
@@ -40,19 +46,17 @@ class DraggablesController < ApplicationController
       load_chalkboard()
     elsif (@dragged_id == "roster")
       load_roster()
-    elsif (@dragged_id == "standings")
-      load_standings()
-    elsif (@dragged_id == "scoreboard")
-      load_scoreboard()
+    elsif (@dragged_id =~ /standings/) != nil
+      load_standings(isCollege)
+    elsif (@dragged_id =~ /scoreboard/) != nil
+      load_scoreboard(isCollege)
     elsif (@dragged_id == "playoffs")
         load_playoffs()
-    elsif (@dragged_id == "challenges")
-      load_challenges()
-    elsif (@dragged_id == "headlines")
-      load_headlines()
-    elsif (@dragged_id == "lines")
-      load_lines()
-    elsif (@dragged_id == "leaders") 
+    elsif (@dragged_id =~ /headlines/) != nil
+      load_headlines(isCollege)
+    elsif (@dragged_id =~ /lines/) != nil
+      load_lines(isCollege)
+    elsif (@dragged_id == "leaders")
       load_leaders()
     elsif (@dragged_id == "player_card")
       load_player_card()
@@ -162,17 +166,17 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render a leagues standings
   #
   #############################################################################
-  def load_standings()
+  def load_standings(isCollege)
 
     @filter = params['full_partial']
   
     if (@level == 'home')
-      #get all the leagues availables
-      #if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      #else
-        #@leagues = Affiliation.get_all_in_season_leagues
-      #end
+
+      if isCollege
+        @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
+      end
       
       # create new arrays to hold the sub_affiliations for each league and 
       # the standings for each division
@@ -278,17 +282,17 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the schedule
   #
   #############################################################################
-  def load_schedule()
+  def load_schedule(isCollege)
   
     @filter = params['full_partial']
   
     if (@level.eql?("home"))
       
-      #if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      #else
-      #  @leagues = Affiliation.get_all_in_season_leagues
-      #end
+      if isCollege
+        @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
+      end
       
       @games = Array.new(@leagues.size)
       @leagues.size.times do |i|
@@ -338,17 +342,17 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render scores from recently played games
   #
   #############################################################################
-  def load_scoreboard()
+  def load_scoreboard(isCollege)
 
     @filter = params['full_partial']
     
     if (@level == 'home')
       
-      #if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      #else
-      #  @leagues = Affiliation.get_all_in_season_leagues
-      #end
+      if isCollege
+        @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
+      end
       
       @games = Array.new(@leagues.size)
       
@@ -540,17 +544,17 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the headlines partial
   #
   #############################################################################
-  def load_headlines()
+  def load_headlines(isCollege)
 
     @filter = params['full_partial']
   
     if (@level == 'home')
     
-      #if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      #else
-      #  @leagues = Affiliation.get_all_in_season_leagues
-      #end
+      if isCollege
+        @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
+      end
               
       @articles = Array.new(@leagues.size)
       @titles = Array.new(@leagues.size)
@@ -650,16 +654,18 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the lines partial
   #
   #############################################################################
-  def load_lines()
+  def load_lines(isCollege)
 
     @filter = params['full_partial']
 
     if (@level == 'home')
-      #if (@filter.blank?) then
-        @leagues = Affiliation.get_all_in_season_leagues(session[:tagged_teams].keys)
-      #else
-      #  @leagues = Affiliation.get_all_in_season_leagues
-      #end
+      
+      if isCollege
+        @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
+      else
+        @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
+      end
+      
       @lines = Array.new(@leagues.size)
       
       @leagues.size.times do |i|

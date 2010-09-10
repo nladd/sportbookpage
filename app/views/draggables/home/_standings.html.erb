@@ -17,9 +17,7 @@
 	<li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= @leagues[l].abbreviation %> Standings</li>
 
 <%
-   
     @sub_affiliations[l].size.times do |d|
-    
 %>
 	<li class="colHead show clps">
 	  <span class="clps03col clps" style="text-align: left"><%= @sub_affiliations[l][d].full_name %></span>
@@ -51,6 +49,7 @@
 <%
      j = 0 
      @standings[l][d].each do |standing|
+		
         streak_type = ""
         if standing.streak_type.to_s == 'loss' then
           streak_type = "L"

@@ -492,7 +492,7 @@ class Team < ActiveRecord::Base
 
     pro_sports = profile.find('//root/sports/sport')
     pro_sports = pro_sports.to_a
-    college_sports = profile.find('//root/sports/collegeSports/sport')
+    college_sports = profile.find('//root/collegeSports/sport')
     college_sports = college_sports.to_a
     
     sports = pro_sports.concat(college_sports)

@@ -322,18 +322,23 @@ class Affiliation < ActiveRecord::Base
   # Params:
   #   -order - String - sql ORDER statement to format results
   #                     This is an optional parameter that defaults to "display_names.abbreviation ASC"
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
   #   -publisher_id - int - id of the publisher to use
   #
   # Return:
   #   :select => affiliations.id AS affiliation_id, affiliations.affiliation_key AS affiliation_key,
   #              affiliations.publisher_id, display_names.*
   ##############################################################################
-  def self.get_pro_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+  def self.get_pro_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+    
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{PROFESSIONAL_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ") AND affiliation_key LIKE 'l.%.com'"
 
-    return DisplayName.find_all_by_full_name(
-              PROFESSIONAL_LEAGUES,
+    return DisplayName.find(
+              :all,
               :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key AS affiliation_key, affiliations.publisher_id, display_names.*",
               :joins => "INNER JOIN affiliations ON display_names.entity_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}",
+              :conditions => "#{tagged_condition} AND display_names.entity_type = 'affiliations'",
               :order => order)
   
   end
@@ -346,6 +351,8 @@ class Affiliation < ActiveRecord::Base
   # Params:
   #   -order - String - sql ORDER statement to format results
   #         Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
+  #   -tagged_teams - array - an array of team_ids for all the teams a user has tagged in their profile
+  #                   Note: This is an optional parameter, that if omitted with give all teams in the affiliation
   #   -publisher_id - int - id of the publisher to use
   #         NOTE: This is an optional parameter. Default: PUBLISHER_ID env variable
   #
@@ -355,14 +362,17 @@ class Affiliation < ActiveRecord::Base
   #               affiliations.publisher_id, display_names.*",
   #
   #############################################################################
-  def self.get_college_leagues(order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
-   
-    return DisplayName.find_all_by_full_name(
-              COLLEGE_LEAGUES,
+  def self.get_college_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+    
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{COLLEGE_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ") AND affiliation_key LIKE 'l.ncaa%'"
+       
+    return DisplayName.find(
+              :all,
              :select => "affiliations.id AS affiliation_id,
                          affiliations.affiliation_key AS affiliation_key, 
                          affiliations.publisher_id, display_names.*",
               :joins => "INNER JOIN affiliations ON display_names.entity_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}",
+              :conditions => "#{tagged_condition} AND display_names.entity_type = 'affiliations'",
               :order => order)
   
   
@@ -425,6 +435,73 @@ class Affiliation < ActiveRecord::Base
     time = time_to_datetime(TIME)
 
     tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{ALL_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ")"
+
+    return Season.find(:all,
+                       :select => "affiliations.id AS affiliation_id,
+                                  affiliations.affiliation_key AS affiliation_key, 
+                                  affiliations.publisher_id, display_names.*",
+                       :joins => "INNER JOIN affiliations ON seasons.league_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}
+                                  INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
+                       :conditions => "#{tagged_condition}
+                                      AND seasons.start_date_time <= '#{time}' AND seasons.end_date_time >= '#{time}'",
+                       :order => order)
+  end
+  
+  #############################################################################
+  # Description:
+  #   Get all professional leagues that are currently in season
+  #
+  # Params:
+  #   -order - String - sql ORDER statement to format results
+  #         Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
+  #   -publisher_id - int - id of the publisher to use
+  #         NOTE: This is an optional parameter. Default: PUBLISHER_ID env variable
+  #
+  # Return:
+  #   :select => "affiliations.id AS affiliation_id,
+  #               affiliations.affiliation_key AS affiliation_key, 
+  #               affiliations.publisher_id, display_names.*",
+  #
+  #############################################################################
+  def self.get_all_in_season_pro_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+
+    time = time_to_datetime(TIME)
+
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{PROFESSIONAL_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ") AND affiliation_key LIKE 'l.%.com'"
+
+    return Season.find(:all,
+                       :select => "affiliations.id AS affiliation_id,
+                                  affiliations.affiliation_key AS affiliation_key, 
+                                  affiliations.publisher_id, display_names.*",
+                       :joins => "INNER JOIN affiliations ON seasons.league_id = affiliations.id AND affiliations.publisher_id = #{publisher_id}
+                                  INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
+                       :conditions => "#{tagged_condition}
+                                      AND seasons.start_date_time <= '#{time}' AND seasons.end_date_time >= '#{time}'",
+                       :order => order)
+  end
+  
+  
+  #############################################################################
+  # Description:
+  #   Get all college leagues that are currently in season
+  #
+  # Params:
+  #   -order - String - sql ORDER statement to format results
+  #         Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
+  #   -publisher_id - int - id of the publisher to use
+  #         NOTE: This is an optional parameter. Default: PUBLISHER_ID env variable
+  #
+  # Return:
+  #   :select => "affiliations.id AS affiliation_id,
+  #               affiliations.affiliation_key AS affiliation_key, 
+  #               affiliations.publisher_id, display_names.*",
+  #
+  #############################################################################
+  def self.get_all_in_season_college_leagues(tagged_teams = nil, order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+
+    time = time_to_datetime(TIME)
+
+    tagged_condition = tagged_teams.blank? ? "display_names.full_name IN (\"#{COLLEGE_LEAGUES.join('","')}\")" : "affiliations.id IN (" + tagged_teams.join(",") + ") AND affiliation_key LIKE 'l.ncaa%'"
 
     return Season.find(:all,
                        :select => "affiliations.id AS affiliation_id,
