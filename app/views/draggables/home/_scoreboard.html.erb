@@ -60,9 +60,9 @@
 
     <li>
       <span class="clps06col clps"><%= game.start_date_time.strftime("%m/%d") %></span>
-      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t1_outcome.eql?("win") %>"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
+      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t1_outcome.eql?("win") %>"><a href="/team/<%= game.t1_id %>"><%= @isCollege ? game.t1_first_name : game.t1_last_name %></a></span>
       <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t1_outcome.eql?("win") %>"><%= game.t1_score %></span>
-      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
+      <span class="clps06col clps" style="<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><a href="/team/<%= game.t2_id %>"><%= @isCollege ? game.t2_first_name : game.t2_last_name %></a></span>
       <span class="clps08col clps" style="text-align:center;<%= "font-size: 1.05em; font-weight:bold" if game.t2_outcome.eql?("win") %>"><%= game.t2_score %></span>
       <% if game.event_status == "post-event" %>
         <span class="clps06col clps">

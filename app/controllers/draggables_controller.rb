@@ -29,13 +29,13 @@ class DraggablesController < ApplicationController
       @level = 'home'
     end
  
-    isCollege = false
+    @isCollege = false
     if ((@dragged_id =~ /college/) != nil)
-      isCollege = true
+      @isCollege = true
     end
  
     if ((@dragged_id =~ /schedule/) != nil )
-      load_schedule(isCollege)
+      load_schedule()
     elsif (@dragged_id == "fanclub")
       load_fanclub()
     elsif (@dragged_id == "profile")
@@ -45,15 +45,15 @@ class DraggablesController < ApplicationController
     elsif (@dragged_id == "roster")
       load_roster()
     elsif (@dragged_id =~ /standings/) != nil
-      load_standings(isCollege)
+      load_standings()
     elsif (@dragged_id =~ /scoreboard/) != nil
-      load_scoreboard(isCollege)
+      load_scoreboard()
     elsif (@dragged_id == "playoffs")
         load_playoffs()
     elsif (@dragged_id =~ /headlines/) != nil
-      load_headlines(isCollege)
+      load_headlines()
     elsif (@dragged_id =~ /lines/) != nil
-      load_lines(isCollege)
+      load_lines()
     elsif (@dragged_id == "leaders")
       load_leaders()
     elsif (@dragged_id == "player_card")
@@ -164,13 +164,13 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render a leagues standings
   #
   #############################################################################
-  def load_standings(isCollege)
+  def load_standings()
 
     @filter = params['full_partial']
   
     if (@level == 'home')
 
-      if isCollege
+      if @isCollege
         @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
       else
         @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
@@ -240,6 +240,8 @@ class DraggablesController < ApplicationController
     elsif (@level == 'league' || @level == 'team')
     
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       #get the type of standings we want to see division vs conference
       if (params['standings_type'] == 'conference' || @league.affiliation_key =~ /ncaa/) then
         @sub_affiliations = Affiliation.get_conferences_by_league(
@@ -280,13 +282,13 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the schedule
   #
   #############################################################################
-  def load_schedule(isCollege)
+  def load_schedule()
   
     @filter = params['full_partial']
   
     if (@level.eql?("home"))
       
-      if isCollege
+      if @isCollege
         @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
       else
         @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
@@ -309,6 +311,8 @@ class DraggablesController < ApplicationController
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @games = Affiliation.get_next_n_games(
                                   @league.affiliation_id,
                                   96)
@@ -317,6 +321,8 @@ class DraggablesController < ApplicationController
             
     elsif (@level == 'team' || @level.eql?("person"))
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @team = Team.get_team(session[:team_id]) 
       
       @games = Team.get_next_n_games(@team.team_id, 200)
@@ -340,13 +346,13 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render scores from recently played games
   #
   #############################################################################
-  def load_scoreboard(isCollege)
+  def load_scoreboard()
 
     @filter = params['full_partial']
     
     if (@level == 'home')
       
-      if isCollege
+      if @isCollege
         @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
       else
         @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
@@ -370,7 +376,9 @@ class DraggablesController < ApplicationController
       @drop_title = "Scoreboard"
       
     elsif (@level == 'league')
-      @leagues = Affiliation.get_league(session[:league_id])
+      @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @games = Affiliation.get_previous_n_games(
                                   @league.affiliation_id, 
                                   96)                          
@@ -379,6 +387,8 @@ class DraggablesController < ApplicationController
       
     elsif (@level == 'team' || @level.eql?("person"))
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @team = Team.get_team(session[:team_id])
       
       @games = Team.get_previous_n_games(@team.team_id, 200)
@@ -471,6 +481,8 @@ class DraggablesController < ApplicationController
     elsif (@level == "league")
         
         @league = Affiliation.get_league(session[:league_id])
+        @isCollege = true if @league.affiliation_key =~ /ncaa/
+        
         @conferences = Affiliation.get_conferences_by_league(@league.affiliation_id)
         
         #get the season key
@@ -542,13 +554,13 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the headlines partial
   #
   #############################################################################
-  def load_headlines(isCollege)
+  def load_headlines()
 
     @filter = params['full_partial']
   
     if (@level == 'home')
     
-      if isCollege
+      if @isCollege
         @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
       else
         @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
@@ -588,6 +600,7 @@ class DraggablesController < ApplicationController
     elsif (@level == 'league')
       
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
       
       @articles = Document.get_league_docs_by_fixture_key(
                                     @league.affiliation_id,
@@ -600,6 +613,8 @@ class DraggablesController < ApplicationController
 
     elsif (@level == 'team')
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @team = Team.get_team(session[:team_id])
       
       @articles = Document.get_team_docs_by_fixture_key(@team.team_id, "general-news", 5)
@@ -652,13 +667,13 @@ class DraggablesController < ApplicationController
   #   Load the variables needed to render the lines partial
   #
   #############################################################################
-  def load_lines(isCollege)
+  def load_lines()
 
     @filter = params['full_partial']
 
     if (@level == 'home')
       
-      if isCollege
+      if @isCollege
         @leagues = Affiliation.get_all_in_season_college_leagues(session[:tagged_teams].keys)
       else
         @leagues = Affiliation.get_all_in_season_pro_leagues(session[:tagged_teams].keys)
@@ -684,6 +699,8 @@ class DraggablesController < ApplicationController
       
     elsif (@level == 'league')
       @league = Affiliation.get_league(session[:league_id])
+      @isCollege = true if @league.affiliation_key =~ /ncaa/
+      
       @lines = Affiliation.get_lines(
                                   @league.affiliation_id, 
                                   48)                                  
@@ -734,6 +751,7 @@ class DraggablesController < ApplicationController
     end
     
     @league = Affiliation.get_league(session[:league_id])
+    @isCollege = true if @league.affiliation_key =~ /ncaa/
       
     @stat = StatsMapping.find_by_stats_name_and_sport(@stat_name, sport_name)
     @stats_fields = StatsMapping.get_stats_fields(@stat.stats_type, sport_name, "AND stats_name <> '#{@stat_name}' AND priority = 1")

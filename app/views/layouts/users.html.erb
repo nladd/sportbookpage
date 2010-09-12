@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta name="keywords" content="sportbookpage, sportbookpage.com, sports scores, sports news, MLB scores, NFL scores, NBA scores, NHL scores, College Football scores, College Basketball scores, sports information" />
   <title>sportbookpage.com - Home</title>
   
   <%= javascript_include_tag :defaults %>
@@ -22,10 +23,7 @@ This Notice Must Remain for Legal Use
     onComplete: function(){ document.body.style.cursor = 'default' }
   });"
   %>
-  
-  <meta name="keywords" CONTENT="sportbookpage, sportbookpage.com, sports scores, sports news, MLB scores, NFL scores, NBA scores, NHL scores, College Football scores, College Basketball scores, sports information" />
-
-  
+    
 </head>
   
 <%
@@ -102,140 +100,7 @@ This Notice Must Remain for Legal Use
     
   </div><!-- End Body Columns -->
      
-  <!-- Pop up for professional team menus -->
-  <%
-    #get the professional leagues covered
-    @pro_leagues = Affiliation.get_pro_leagues()
-    
-    #allocate new arrays to store the divisions and teams for each league
-    pro_divisions = Array.new(@pro_leagues.size)
-    teams = Array.new(@pro_leagues.size)
-    
-    @pro_leagues.size.times do |l| 
-      abbr = @pro_leagues[l].abbreviation.gsub(/[\s']/, "_")
-      #for each league, get the divisions of that league
-      pro_divisions[l] = Affiliation.get_divisions_by_league(@pro_leagues[l].affiliation_id)
-      
-      #allocate an array to store the teams of a division
-      teams[l] = Array.new(pro_divisions[l].size)
-  %>
-  <div id="<%= abbr %>" class="drop-up" style="display:none;" onmouseover="StopParentTimer(); StopTimer();" onmouseout="StartTimer('<%= abbr %>')">
-  	<div class="content">
-      <%
-        pro_divisions[l].size.times do |d|
-          #for each division in a league, get the teams of that division
-          teams[l][d] = Affiliation.get_teams_by_division(pro_divisions[l][d].affiliation_id, @pro_leagues[l].affiliation_key)
-      %>
-      <ul>
-        <h1><%= pro_divisions[l][d].first_name %></h1>
-        <%
-          teams[l][d].size.times do |t|
-        %>
-        <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %></a></li>
-        <%
-          end # close teams loop
-        %>
-      </ul>
-      <%
-        end # close pro_divisions loop
-      %>
-      <div class="clear"></div>    
-    </div>
-  </div> <!-- close professional pop up menus-->
-  <%
-    end # close pro_leagues loop
-  %>
-  
-  <!-- Pop up for college team menus -->
-  <%
-    #get the college leagues covered
-    @college_leagues = Affiliation.get_college_leagues()
-    
-    #allocate new arrays to store the conferences and teams for each sport
-    college_conferences = Array.new(@college_leagues.size)
-    teams = Array.new(@college_leagues.size)
-    
-    @college_leagues.size.times do |l| 
-      abbr = @college_leagues[l].abbreviation.gsub(/[\s']/, "_")
-      #for each league, get the divisions of that league
-      college_conferences[l] = Affiliation.get_conferences_by_league(@college_leagues[l].affiliation_id)
-      
-      #allocate an array to store the teams of a division
-      teams[l] = Array.new(college_conferences[l].size)
-  %>
-  <div id="<%= abbr %>" class="drop-up" style="display:none;" onmouseover="StopParentTimer(); StopTimer();" onmouseout="StartTimer('<%= abbr %>')">
-  	<div class="content">
-      <%
-        college_conferences[l].size.times do |d|
-          c_abbr = college_conferences[l][d].full_name.gsub(/[\s']/, "_")
-          #for each division in a league, get the teams of that division
-          teams[l][d] = Affiliation.get_teams_by_division(college_conferences[l][d].affiliation_id, @college_leagues[l].affiliation_key)
-      %>
-      
-      <%# "<div class='clear'></div>" if d % 8 == 0 %>
-      
-      <ul id="<%= c_abbr %>">
-        <li><h1 onclick="toggleCollegeTeams('<%= c_abbr %>'); $('minus').toggle(); $('plus').toggle();"><span id="minus">-</span><span id="plus" style="display:none">+</span> <%= college_conferences[l][d].abbreviation %></h1></li>
-        <%
-          teams[l][d].size.times do |t|
-        %>
-        <li class="<%= c_abbr %>" style="display:none"><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %><a/></li>
-        <%
-          end # close teams loop
-        %>
-      </ul>
-      <%
-        end # close college_conferences loop
-      %>
-      <div class="clear"></div>    
-    </div>
-  </div> <!-- close college pop up menus-->
-  <%
-    end # close pro_leagues loop
-  %>
-  
-  <!-- Navigation low -->  
-  <div id="nav-low">
-  	<ul>
-        <li><a name="sport01"></a></li>
-        <%
-          @pro_leagues.each do |league|
-            abbr = league.abbreviation.gsub(/[\s']/, "_")
-        %>
-    	<li onmouseover="ShowNestedMenu('<%= abbr %>');" onmouseout="StartTimer('<%= abbr %>');">
-          <a href="/league/<%= league.affiliation_id %>"><%= league.abbreviation %></a>
-        </li>
-        <%
-          end
-
-          @college_leagues.each do |league|
-            abbr = (league.abbreviation).gsub(/[\s']/, "_")
-        %>
-        <li onmouseover="ShowNestedMenu('<%= abbr %>');" onmouseout="StartTimer('<%= abbr %>');">
-          <a href="/league/<%= league.affiliation_id %>"><%= league.abbreviation %></a>
-        </li>
-        <% end %>
-      <li><a name="sport01"></a></li>
-      <div class="clear"></div>
-    </ul>
-  </div> <!-- close navigation low -->
-  
-</div> <!-- End main page content -->
-
-<!-- footer -->
-<div id="footer">
-  <ul>
-    <li class="social"><img src="/images/css/footer-links-twitter.jpg" name="twitter" alt="Follow us on Twitter" /></li>
-    <li class="social"><img src="/images/css/footer-links-facebook.jpg" name="facebook" alt="Follow us on Facebook" /></li>
-    <li class="social"><img src="/images/css/footer-links-homepage.jpg" name="homepage" alt="Make us your homepage" /></li>
-    
-    <li class="floatleft">&copy; SportBookPage.com</li>
-    <li class="floatleft"><a href="mailto:*" name="contact-info">info@sportbookpage.com</a></li>
-    <li class="floatleft">Further info if desired</li>
-   
-    <div class="clear"></div>    
-  </ul>
-</div>
+  <%= render :partial => "layouts/footer" %>
     
 </body>
 </html>

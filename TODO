@@ -6,10 +6,10 @@
 -golf
 -nascar
 -tennis
--bottom menu, colleges and divisions
 -hotstreak, e-mail hotstreak game of the day
 -lower sports menus
 -metatags
+-playoffs
 
 -advanced fanclub search
 -delete someone from fanclub
@@ -23,11 +23,10 @@
 
 -error message for bad password
 -forgot password?
--add beta to logo
 
+-footer links, homepage, twitter, facebook
 
 -startup scripts for nginx, postfix, and dovecot
--set system time to EST
 
 -college rankings
 -college home/away records

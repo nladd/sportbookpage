@@ -60,8 +60,8 @@
    
     <li>
       <span class="clps05col clps"><%= game.start_date_time.strftime("%a, %m/%d") %><br/><%= game.start_date_time.strftime("%I:%M%P") %></span>
-      <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= game.t1_last_name %></a></span>
-      <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= game.t2_last_name %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= @isCollege ? game.t1_first_name : game.t1_last_name %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= @isCollege ? game.t2_first_name : game.t2_last_name %></a></span>
       <% if game.event_status == "pre-event" %>
         <span class="clps05col clps">
           <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_preview', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Preview</a>

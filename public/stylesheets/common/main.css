@@ -160,7 +160,7 @@ _height:auto;
 width:232px;
 height:85px;
 border-bottom:#CCCCCC thin solid;
-background:url(/images/css/logo.jpg) no-repeat top center;
+background:url(/images/css/logo_beta.jpg) no-repeat top center;
 }
 
 #hero ul {
@@ -2225,7 +2225,7 @@ border-top:#FFFFFF thin solid;
 height:auto;
 z-index:40000;
 _background:none;
-
+width: 980px;
 /* my edits */
 position: absolute;
 }
@@ -2257,6 +2257,8 @@ color:#4696bb;
 .drop-up li {
 font-size:.7em;
 color:#333333;
+display: block;
+padding: 0 0 3px 0;
 }
 
 .drop-up li:hover {
@@ -2271,6 +2273,70 @@ color:#333333;
 }
 
 .drop-up li a:hover {
+color:#4696bb;
+cursor: pointer;
+_cursor:pointer;
+}
+
+.narrow-drop-up {
+background:url(/images/css/drop-up-bg.jpg) bottom left repeat-x;
+border-top:#FFFFFF thin solid;
+height:auto;
+z-index:40000;
+_background:none;
+/* my edits */
+position: absolute;
+}
+
+.narrow-drop-up .content {
+padding:15px;
+_z-index:4001;
+}
+
+.narrow-drop-up .content div {
+background:url(/images/css/drop-up-bg.jpg) bottom left repeat-x;
+height:auto;
+_background:none;
+position: absolute;
+}
+
+.narrow-drop-up ul {
+display: block;
+float:none;
+margin:0 0 0 0;
+_z-index:4002;
+min-width: 120px;
+}
+
+.narrow-drop-up ul h1 {
+font-size:.8em;
+color:#4696bb;
+}
+
+.narrow-drop-up ul li h1 {
+font-size:1.15em;
+color:#4696bb;
+}
+
+.narrow-drop-up li {
+font-size:.7em;
+color:#333333;
+display: block;
+padding: 0 0 3px 0;
+}
+
+.narrow-drop-up li:hover {
+font-size:.7em;
+color:#4696bb;
+cursor: pointer;
+_cursor:pointer;
+}
+
+.narrow-drop-up li a {
+color:#333333;
+}
+
+.narrow-drop-up li a:hover {
 color:#4696bb;
 cursor: pointer;
 _cursor:pointer;

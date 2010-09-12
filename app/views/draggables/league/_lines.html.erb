@@ -22,9 +22,9 @@
         <%= line.start_date_time.strftime("%I:%M%P") %>
       </span>
       <span class="clps05col clps">
-        <a href="/team/<%= line.t1_id %>"><%= line.t1_last_name %></a>
+        <a href="/team/<%= line.t1_id %>"><%= @isCollege ? line.t1_first_name : line.t1_last_name %></a>
         <br/>
-        <a href="/team/<%= line.t2_id %>"><%= line.t2_last_name %></a>
+        <a href="/team/<%= line.t2_id %>"><%= @isCollege ? line.t2_first_name : line.t2_last_name %></a>
       </span>
       <span class="clps05col clps">
         <%= line.t1_spread_line == nil ? "off" : line.t1_spread_line %>

@@ -45,8 +45,6 @@ class College
                     conference_totals.winning_percentage AS conference_winning_percentage,
                     outcome_totals.events_played,
                     outcome_totals.games_back, outcome_totals.streak_type,
-                    home_wins, home_losses,
-                    away_wins, away_losses,
                     outcome_totals.streak_total, rankings.ranking_value,
                     rankings.ranking_value_previous AS previous_ranking_value",
               :joins => "INNER JOIN standing_subgroups ON standing_subgroups.standing_id = standings.id AND standing_subgroups.competition_scope = 'all'
@@ -102,9 +100,7 @@ class College
     doc_fixture_id = DocumentFixture.find_by_fixture_key('poll-ap').id
 
     season_key = get_season_key(affiliation_id, time)                        
-                 
-    ActiveRecord::Base.connection.execute("SET sql_big_selects=1")
-                        
+               
     return Standing.find(
                 :all,
                 :select => "teams.id AS team_id, display_names.*, 

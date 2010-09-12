@@ -43,18 +43,33 @@ function StopParentTimer()
 	}
 }
 
-function ShowNestedMenu(id)
+/*
+ * Show a nested menu
+ *
+ * Parameters:
+ * 	-id - the id of the menu to show
+ * 	-menuItem - the id of the menuItem being hovered over
+ */
+function ShowNestedMenu(id, menuItem)
 {
   if (openMenu){
     $(openMenu).hide();
   }
-  openMenu = id;
   
   var offset = $('nav-low').cumulativeOffset();
+  
+  var leftOffset = 0;
+  if (menuItem == null) {
+	leftOffset = offset[0];
+  } else {
+	leftOffset = $(menuItem).cumulativeOffset()[0];
+  }
+  
+  openMenu = id;
+  
   $(id).setStyle({
-	left: offset[0] + 'px',
-	top: (offset[1] - $(id).getHeight() - 2) + 'px',
-	width: $('nav-low').getWidth() + 'px'
+	left: leftOffset + 'px',
+	top: (offset[1] - $(id).getHeight() - 2) + 'px'
   });
   
   $(id).show();
@@ -70,13 +85,24 @@ function CloseAllMenus(id)
   }
 }
 
-function toggleCollegeTeams(conference) {
+var openCollegeTeams;
+
+function toggleCollegeTeams(conference, menuItem) {
   
-  var teams = $(conference).getElementsByClassName(conference);
-  
-  for (i = 0; i < teams.length; i++) {
-	$(teams[i]).toggle();
+  if (openCollegeTeams != null) {
+	$(openCollegeTeams + "_sub").hide();
+	$(openCollegeTeams).down(0).down(0).setStyle({color: '#4696bb'});
   }
+  openCollegeTeams = conference;
+  $(openCollegeTeams).down(0).down(0).setStyle({color: '#000000'});
+
+  $(conference + '_sub').toggle();
+  
+  $(conference + '_sub').setStyle({
+	left: $(menuItem).getWidth() + 'px'
+  });
+
+    
 }
 
 //close menu if user clicks outside menu
