@@ -80,8 +80,7 @@ class College
   #   Get the rankings for an NCAA league
   #
   # Params:
-  #   -affiliation_id - int - id of the league to which the sub_affiliation belongs to
-  #   -sub_affiliation_id - int - id of the sub affiliation (conference/division id)
+  #   -affiliation_id - int - id of the league to which to get the rankings
   #   -time - Time - return results for the season that contains time
   #                 NOTE: This is an optional parameter that defaults to the env variable TIME
   #

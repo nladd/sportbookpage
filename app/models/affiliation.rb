@@ -948,7 +948,7 @@ class Affiliation < ActiveRecord::Base
     league = Affiliation.get_league(affiliation_id)
     
     if (league.affiliation_key =~ /ncaa/) then
-      ret = College.get_standings(affiliation_id, sub_affiliation_id, time, publisher_id)
+      ret = College.get_rankings(affiliation_id, time, publisher_id)
     else
       ret = Professional.get_standings(affiliation_id, sub_affiliation_id, time, publisher_id)
     end

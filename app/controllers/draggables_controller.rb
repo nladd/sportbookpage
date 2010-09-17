@@ -235,7 +235,7 @@ class DraggablesController < ApplicationController
   
       end
       
-      @drop_title = "Standings"
+      @isCollege ? @drop_title = "Standings" : @drop_title = "Rankings"
     
     elsif (@level == 'league' || @level == 'team')
     

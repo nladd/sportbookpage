@@ -14,7 +14,7 @@
 	abbr = (names.league_abbreviation(@leagues[l].affiliation_id)).gsub(/[\s']/, "_")
 %>
 
-	<li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= names.league_abbreviation(@leagues[l].affiliation_id) %> Standings</li>
+	<li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= names.league_abbreviation(@leagues[l].affiliation_id) + (@isCollege ? "Rankings" : "Standings" %></li>
 
 <%
     @sub_affiliations[l].size.times do |d|
