@@ -20,7 +20,7 @@
     @sub_affiliations[l].size.times do |d|
 %>
 	<li class="colHead show clps">
-	  <span class="clps03col clps" style="text-align: left"><%= @isCollege ? team.conference_full_name(@sub_affiliations[l][d].affiliation_id) : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %></span>
+	  <span class="clps03col clps" style="text-align: left"><%= @isCollege ? "AP Rankings" : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %>&nbsp;</span>
 	  <span class="clps12col clps">GP</span>
 	  <span class="clps08col clps">%</span>
 	  <span class="clps05col clps">W - L</span>
@@ -29,7 +29,7 @@
 	  <div class="clear"></div>
 	</li>
 	<li class="colHead hidden expn" style="display:none">
-	  <span class="clps05col clps" style="text-align: left"><%= @isCollege ? team.conference_full_name(@sub_affiliations[l][d].affiliation_id) : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %></span>
+	  <span class="clps05col clps" style="text-align: left"><%= @isCollege ? "AP Rankings" : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %>&nbsp;</span>
 	  <span class="clps10col clps">GP</span>
 	  <span class="clps10col clps">%</span>
 	  <span class="clps10col clps">W - L</span>
