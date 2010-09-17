@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   filter_parameter_logging :password
 
-
   ##############################################################################
   #  Description:
   #   Creates the string that display's the user's path location within the site

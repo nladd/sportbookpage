@@ -21,7 +21,6 @@ class Professional
   #               standing_subgroup_affiliations.id as division_id,
   #               teams.id AS team_id,      
   #               outcome_totals.*,
-  #               display_names.*",
   #############################################################################
   def self.get_standings(affiliation_id, sub_affiliation_id, time = TIME, publisher_id = PUBLISHER_ID)
 
@@ -31,7 +30,7 @@ class Professional
     
     return Standing.find(
               :all,
-              :select => "teams.id AS team_id, display_names.*, 
+              :select => "teams.id AS team_id,
                           outcome_totals.rank, overall_totals.wins,
                           overall_totals.losses, overall_totals.ties,
                           overall_totals.winning_percentage, outcome_totals.events_played,
@@ -54,8 +53,7 @@ class Professional
                           INNER JOIN outcome_totals AS overall_totals ON overall_totals.standing_subgroup_id = overall_standing_subgroups.id AND overall_totals.outcome_holder_id = outcome_totals.outcome_holder_id
                           INNER JOIN outcome_totals AS home_totals ON home_totals.standing_subgroup_id = home_standing_subgroups.id AND home_totals.outcome_holder_id = outcome_totals.outcome_holder_id
                           INNER JOIN outcome_totals AS away_totals ON away_totals.standing_subgroup_id = away_standing_subgroups.id AND away_totals.outcome_holder_id = outcome_totals.outcome_holder_id    
-                          INNER JOIN teams ON outcome_totals.outcome_holder_id = teams.id 
-                          INNER JOIN display_names ON (display_names.entity_id = teams.id AND display_names.entity_type = 'teams')",
+                          INNER JOIN teams ON outcome_totals.outcome_holder_id = teams.id",
                 :conditions => "seasons.publisher_id = #{publisher_id} AND
                                sub_seasons.sub_season_type = 'season-regular' AND
                                seasons.season_key = #{season_key} AND
@@ -124,23 +122,11 @@ class Professional
              
         series[c][t] = EventsSubSeason.find(
                         :all,
-                        :select => "d1.abbreviation AS t1_abbr, 
-                                    d1.entity_id AS t1_id,
-                                    d1.first_name AS t1_first_name,
-                                    d1.last_name AS t1_last_name,
-                                    d1.full_name AS t1_full_name,
-                                    d1.alias AS t1_alias,
-                                    d1.url AS t1_url,
-                                    d2.abbreviation AS t2_abbr, 
-                                    d2.entity_id AS t2_id,
-                                    d2.first_name AS t2_first_name,
-                                    d2.last_name AS t2_last_name,
-                                    d2.full_name AS t2_full_name,
-                                    d2.alias AS t2_alias,
-                                    d2.url AS t2_url,
+                        :select => "t1.participant_id AS t1_id,
                                     t1.alignment AS t1_alignment,
                                     t1.score AS t1_score,
                                     t1.event_outcome AS t1_outcome,
+                                    t2.participant_id AS t2_id,
                                     t2.alignment AS t2_alignment,
                                     t2.score AS t2_score, 
                                     t2.event_outcome AS t2_outcome,
@@ -151,9 +137,7 @@ class Professional
                         :joins => "INNER JOIN sub_seasons ON sub_seasons.id = events_sub_seasons.sub_season_id
                                   INNER JOIN events ON events.id = events_sub_seasons.event_id
                                   INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams'
-                                  INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                                  INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                                  INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                                  INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
                         :conditions => "sub_seasons.season_id = #{season.id}
                                         AND sub_seasons.sub_season_type = 'post-season'
                                         AND ((t1.participant_id = #{teams[t].t1_id} AND t2.participant_id = #{teams[t].t2_id} ) OR (t2.participant_id = #{teams[t].t2_id} AND t1.participant_id = #{teams[t].t1_id}))",

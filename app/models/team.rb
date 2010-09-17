@@ -88,10 +88,9 @@ class Team < ActiveRecord::Base
   
     return ParticipantsEvent.find(
                   :all, 
-                  :select => "display_names.abbreviation, display_names.*_name, display_names.url, t2.*, CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
+                  :select => "t2.participant_id AS opponent_id, t2.*, CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                   :from => "participants_events AS t1",
                   :joins => "INNER JOIN participants_events AS t2 ON (t2.participant_id <> t1.participant_id AND t2.event_id = t1.event_id)
-                             INNER JOIN display_names ON display_names.entity_id = t2.participant_id AND display_names.entity_type = 'teams'
                              INNER JOIN events ON events.id = t1.event_id AND events.id = t2.event_id",
                   :conditions => "t1.participant_id = #{team_id} AND events.start_date_time >= '#{start_date}' AND events.start_date_time <= '#{end_date}'",                                    
                   :order => order)
@@ -115,23 +114,16 @@ class Team < ActiveRecord::Base
   #
   # Return:
   #            :select => "
-  #                        display_names.abbreviation AS abbr, 
-  #                        display_names.entity_id AS id,
-  #                        display_names.first_name AS first_name,
-  #                        display_names.last_name AS last_name,
-  #                        display_names.full_name AS full_name,
-  #                        display_names.alias AS alias,
-  #                        display_names.url AS url,
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
-	#		                    t1.event_outcome AS t1_outcome,
+  # 		               t1.event_outcome AS t1_outcome,
   #                        t2.alignment AS t2_alignment,
   #                        t2.score AS t2_score, 
- 	#		                    t2.event_outcome AS t2_outcome,
- 	#		                    events.id AS event_id,
- 	#		                    events.event_status,
- 	#		                    events.broadcast_listing,
- 	#		                    CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
+  #		                   t2.event_outcome AS t2_outcome,
+  #		                   events.id AS event_id,
+  #		                   events.event_status,
+  #		                   events.broadcast_listing,
+  #		                   CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
   #
   ##############################################################################
   def self.get_next_n_games(team_id, limit = 20, range_start = TIME, order = nil)
@@ -145,29 +137,20 @@ class Team < ActiveRecord::Base
                   
     games = ParticipantsEvent.find(
               :all,
-              :select => "
-                          d2.abbreviation AS opponent_abbr, 
-                          d2.entity_id AS opponent_id,
-                          d2.first_name AS opponent_first_name,
-                          d2.last_name AS opponent_last_name,
-                          d2.full_name AS opponent_full_name,
-                          d2.alias AS opponent_alias,
-                          d2.url AS opponent_url,
-                          t1.alignment AS t1_alignment,
+              :select => "t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
-			                    t1.event_outcome AS t1_outcome,
-			                    t2.participant_id AS opponent_id,
+			              t1.event_outcome AS t1_outcome,
+			              t2.participant_id AS opponent_id,
                           t2.alignment AS t2_alignment,
                           t2.score AS t2_score, 
- 			                    t2.event_outcome AS t2_outcome,
- 			                    events.id AS event_id,
- 			                    events.event_status,
- 			                    events.broadcast_listing,
+ 			              t2.event_outcome AS t2_outcome,
+ 			              events.id AS event_id,
+ 			              events.event_status,
+ 			              events.broadcast_listing,
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :from => "participants_events AS t1",
                :joins => "INNER JOIN events ON events.id = t1.event_id
-			 INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                         INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "t1.participant_id = #{team_id} AND events.start_date_time >= '#{range_start}' AND t1.event_id = events.id AND t1.participant_type = 'teams'",                                    
               :order => order,
               :limit => limit)
@@ -199,18 +182,7 @@ class Team < ActiveRecord::Base
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
-  #            :select => "d1.abbreviation AS t1_abbr, 
-  #                        d1.entity_id AS t1_id,
-  #                        d1.first_name AS t1_first_name,
-  #                        d1.last_name AS t1_last_name,
-  #                        d1.full_name AS t1_full_name,
-  #                        d1.url AS t1_url,
-  #                        d2.abbreviation AS t1_abbr, 
-  #                        d2.entity_id AS t2_id,
-  #                        d2.first_name AS t2_first_name,
-  #                        d2.last_name AS t2_last_name,
-  #                        d2.full_name AS t2_full_name,
-  #                        d2.url AS t2_url,
+  #            :select => "
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
   #                        t2.alignment AS t2_alignment,
@@ -229,28 +201,20 @@ class Team < ActiveRecord::Base
   
     games = ParticipantsEvent.find(
               :all,
-              :select => "d2.abbreviation AS opponent_abbr, 
-                          d2.entity_id AS opponent_id,
-                          d2.first_name AS opponent_first_name,
-                          d2.last_name AS opponent_last_name,
-                          d2.full_name AS opponent_full_name,
-                          d2.alias AS opponent_alias,
-                          d2.url AS opponent_url,
-                          t1.alignment AS t1_alignment,
+              :select => "t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
-			                    t1.event_outcome AS t1_outcome,
-			                    t2.participant_id AS opponent_id,
+			              t1.event_outcome AS t1_outcome,
+			              t2.participant_id AS opponent_id,
                           t2.alignment AS t2_alignment,
                           t2.score AS t2_score, 
- 			                    t2.event_outcome AS t2_outcome,
- 			                    events.id AS event_id,
- 			                    events.event_status,
- 			                    events.broadcast_listing,
+                          t2.event_outcome AS t2_outcome,
+                          events.id AS event_id,
+                          events.event_status,
+                          events.broadcast_listing,
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :from => "participants_events AS t1",
                :joins => "INNER JOIN events ON events.id = t1.event_id
-			 INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                         INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "t1.participant_id = #{team_id} AND events.start_date_time <= '#{range_end}' AND t1.event_id = events.id AND t1.participant_type = 'teams'",                                    
               :order => order,
               :limit => limit)

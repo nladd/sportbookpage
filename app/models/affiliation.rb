@@ -91,26 +91,20 @@ class Affiliation < ActiveRecord::Base
   # Paramas:
   #   -sport_id - int - id of the sport to get the leagues for
   #   -order - string - sql ORDER statement to format results
-  #                     Note: This is an optional parameter that defaults to "display_names.abbreviation ASC"
+  #                     Note: This is an optional parameter that defaults to "affiliation_key ASC"
   #   -publisher_id - int - id of the publisher to use
   #                     Note: This is an optional parameter that defaults to 1
   #
   # Return:
-  #   :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, display_names.*_name,    
-  #                           display_names.abbreviation, display_names.url"
+  #   :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key"
   ##############################################################################
-  def self.get_leagues_by_sport(sport_id, order = nil, publisher_id = PUBLISHER_ID)
-    if order.blank?
-      order = "display_names.abbreviation ASC"
-    end
-
-    
+  def self.get_leagues_by_sport(sport_id, order = "affiliation_key ASC", publisher_id = PUBLISHER_ID)
+   
     return Affiliation.find_all_by_affiliation_type(
               "league",
-              :select => "affiliations.id AS affiliation_id,  affiliations.affiliation_type, display_names.*_name, display_names.abbreviation, display_names.url",
-              :joins => "INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'
-                         INNER JOIN affiliation_phases ON affiliation_phases.ancestor_affiliation_id = " + sport_id.to_s + " AND affiliation_phases.affiliation_id = affiliations.id",
-              :conditions => "affiliations.affiliation_type = 'league' AND affiliations.publisher_id = " + publisher_id.to_s,
+              :select => "affiliations.id AS affiliation_id,  affiliations.affiliation_type, affiliations.affiliation_key",
+              :joins => "INNER JOIN affiliation_phases ON affiliation_phases.ancestor_affiliation_id = #{sport_id} AND affiliation_phases.affiliation_id = affiliations.id",
+              :conditions => "affiliations.affiliation_type = 'league' AND affiliations.publisher_id = #{publisher_id}",
               :order => order)
   
   end
@@ -124,25 +118,21 @@ class Affiliation < ActiveRecord::Base
   # Params:
   #   -leauge_id - int - the id of the leauge to get the conferences for
   #   -order - string - sql ORDER statement to format results
-  #        Note: This is an optional parameter. Default: "display_names.abbreviation ASC"
+  #        Note: This is an optional parameter. Default: "affiliation_key ASC"
   #   -publisher_id - int - id of the publisher to use
   #        Note: This is an optional parameter. Default: PUBLISHER_ID env variable
   #
   # Return:
   #   :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, 
-  #               affiliations.affiliation_type, display_names.*_name, display_names.abbreviation"
+  #               affiliations.affiliation_type
   #############################################################################
-  def self.get_conferences_by_league(league_id, order = nil, publisher_id = PUBLISHER_ID)
-    if order.blank?
-      order = "display_names.full_name ASC"
-    end
+  def self.get_conferences_by_league(league_id, order = "affiliation_key ASC", publisher_id = PUBLISHER_ID)
     
     return Affiliation.find_all_by_affiliation_type(
                         "conference",
-                        :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, affiliations.affiliation_type, display_names.*_name, display_names.abbreviation",
-                        :joins => "INNER JOIN affiliation_phases ON affiliation_phases.ancestor_affiliation_id = #{league_id} AND affiliation_phases.affiliation_id = affiliations.id
-                                  INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
-                        :conditions => "affiliations.publisher_id = " + publisher_id.to_s,
+                        :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, affiliations.affiliation_type",
+                        :joins => "INNER JOIN affiliation_phases ON affiliation_phases.ancestor_affiliation_id = #{league_id} AND affiliation_phases.affiliation_id = affiliations.id",
+                        :conditions => "affiliations.publisher_id = #{publisher_id}",
                         :order => order)
   
   end
@@ -154,25 +144,26 @@ class Affiliation < ActiveRecord::Base
   #
   # Params:
   #   -league_id - int - the id of the league to get the divisions for
+  #   -order - string - SQL sytax string speficifying the order of the results
+  #                     Note: This is an optional parameter. Default: "conference_key, division_key ASC"
   #   -publisher_id - int - id of the publisher to use
   #                     Note: This is an optional parameter that defaults to 1
   #
   # Return:
-  #   :select => "divisions.id AS affiliation_id, display_names.*"
+  #   :select => "divisions.id AS affiliation_id, divisions.affiliation_key AS division_key,
+  #               conferences.id AS conference_id, conferences.affiliation_key AS conference_key",
   #
   #############################################################################
-  def self.get_divisions_by_league(league_id, publisher_id = PUBLISHER_ID)   
+  def self.get_divisions_by_league(league_id, order="conference_key, affiliation_key ASC", publisher_id=PUBLISHER_ID)   
   
     return AffiliationPhase.find_all_by_root_id(
                         league_id,
-                        :select => "divisions.id AS affiliation_id, display_names.*, conference_dn.full_name AS conference_name",
+                        :select => "divisions.id AS affiliation_id, divisions.affiliation_key AS affiliation_key, conferences.id AS conference_id, conferences.affiliation_key AS conference_key",
                         :joins => "INNER JOIN affiliations AS divisions ON affiliation_phases.affiliation_id = divisions.id AND divisions.affiliation_type = 'division'  
-                                   INNER JOIN display_names ON (display_names.entity_id = divisions.id) AND display_names.entity_type = 'affiliations'     
                                    INNER JOIN affiliations AS conferences ON conferences.affiliation_type = 'conference'  
-                                   INNER JOIN affiliation_phases AS conference_ap ON conference_ap.root_id = #{league_id} AND conference_ap.ancestor_affiliation_id = conferences.id AND conference_ap.affiliation_id = divisions.id 
-                                   INNER JOIN display_names AS conference_dn ON (conference_dn.entity_id = conferences.id) AND conference_dn.entity_type = 'affiliations'",
+                                   INNER JOIN affiliation_phases AS conference_ap ON conference_ap.root_id = #{league_id} AND conference_ap.ancestor_affiliation_id = conferences.id AND conference_ap.affiliation_id = divisions.id",
                         :conditions => "divisions.publisher_id = #{publisher_id} AND conferences.publisher_id = #{publisher_id} AND affiliation_phases.ancestor_affiliation_id = conferences.id",
-                        :order => "conference_name, display_names.full_name ASC")
+                        :order => order)
                         
 
 
@@ -185,23 +176,21 @@ class Affiliation < ActiveRecord::Base
   #
   # Params:
   #   -conference_id - int - the id of the conference to get the leagues for
-  #   -order - string - sql ORDER statement to format results
-  #                     Note: This is an optional parameter that defaults to "display_names.abbreviation ASC"
+  #   -order - string - SQL ORDER statement to format results
+  #                     Note: This is an optional parameter that defaults to "affiliation_key ASC"
   #   -publisher_id - int - id of the publisher to use
   #                     Note: This is an optional parameter that defaults to 1
   #
   # Return:
   #   :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, 
-  #               affiliations.affiliation_type, display_names.*"
+  #               affiliations.affiliation_type"
   #############################################################################
-  def self.get_divisions_by_conference(conference_id,
-                                       order = "display_names.full_name ASC", publisher_id = PUBLISHER_ID)
+  def self.get_divisions_by_conference(conference_id, order="affiliation_key ASC", publisher_id=PUBLISHER_ID)
         
     return Affiliation.find_all_by_affiliation_type(
                         "division",
-                        :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, affiliations.affiliation_type, display_names.*",
-                        :joins => "INNER JOIN affiliation_phases ON affiliation_phases.affiliation_id = affiliations.id AND affiliation_phases.ancestor_affiliation_id = #{conference_id} 
-                                   INNER JOIN display_names ON display_names.entity_id = affiliations.id AND display_names.entity_type = 'affiliations'",
+                        :select => "affiliations.id AS affiliation_id, affiliations.affiliation_key, affiliations.affiliation_type",
+                        :joins => "INNER JOIN affiliation_phases ON affiliation_phases.affiliation_id = affiliations.id AND affiliation_phases.ancestor_affiliation_id = #{conference_id}",
                         :conditions => "affiliations.publisher_id = #{publisher_id}",
                         :order => order)
   
@@ -224,8 +213,8 @@ class Affiliation < ActiveRecord::Base
   #############################################################################
   def self.get_teams_by_league(league_id, affiliation_key,
                                 tagged_only = false,
-                                order = "display_names.full_name ASC",
-                                publisher_id = PUBLISHER_ID)
+                                order="display_names.full_name ASC",
+                                publisher_id=PUBLISHER_ID)
 
     # college football needs to be treated as a special case
     if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
@@ -236,8 +225,7 @@ class Affiliation < ActiveRecord::Base
                         "league",
                         :select => "teams.id AS team_id, teams.team_key, teams.followers, display_names.*",
                         :joins => "INNER JOIN teams
-                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{league_id.to_s} 
-                                  INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
+                                  INNER JOIN team_phases ON team_phases.team_id = teams.id AND  team_phases.affiliation_id = affiliations.id AND team_phases.affiliation_id = #{league_id}",
                         :conditions => "display_names.full_name NOT LIKE '%All-Stars' AND display_names.full_name <> 'To Be Announced' AND teams.team_key LIKE '#{affiliation_key}%' AND  affiliations.publisher_id = #{publisher_id}",
                         :order => order)
                         
@@ -259,9 +247,8 @@ class Affiliation < ActiveRecord::Base
   # Return:
   #   :select => "teams.id AS team_id, teams.team_key, display_names.*"
   #############################################################################
-  def self.get_teams_by_conference(conference_id, 
-                                   affiliation_key, 
-                                   order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+  def self.get_teams_by_conference(conference_id, affiliation_key, 
+                            order="display_names.abbreviation ASC", publisher_id=PUBLISHER_ID)
  
     # college football needs to be treated as a special case
     if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
@@ -296,7 +283,7 @@ class Affiliation < ActiveRecord::Base
   #   :select => "teams.id AS team_id, teams.team_key, display_names.*",
   #############################################################################
   def self.get_teams_by_division(division_id, affiliation_key,
-                                 order = "display_names.abbreviation ASC", publisher_id = PUBLISHER_ID)
+                                 order="display_names.abbreviation ASC", publisher_id=PUBLISHER_ID)
     
     # college football needs to be treated as a special case
     if (affiliation_key == "l.ncaa.org.mfoot.div1.aa" || affiliation_key == "l.ncaa.org.mfoot.div2" || affiliation_key == "l.ncaa.org.mfoot.div3")
@@ -578,50 +565,30 @@ class Affiliation < ActiveRecord::Base
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
-  #            :select => "d1.abbreviation AS t1_abbr, 
-  #                        d1.entity_id AS t1_id,
-  #                        d1.first_name AS t1_first_name,
-  #                        d1.last_name AS t1_last_name,
-  #                        d1.full_name AS t1_full_name,
-  #                        d1.url AS t1_url,
-  #                        d2.abbreviation AS t1_abbr, 
-  #                        d2.entity_id AS t2_id,
-  #                        d2.first_name AS t2_first_name,
-  #                        d2.last_name AS t2_last_name,
-  #                        d2.full_name AS t2_full_name,
-  #                        d2.url AS t2_url,
+  #            :select => "t1.participant_id AS t1_id,
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
-  #                        t2.alignment AS t2_alignment,
-  #                        t2.score AS t2_score,
+  #	  		               t1.event_outcome AS t1_outcome,
+  #			               t2.participant_id AS t2_id,
+  # 		               t2.alignment AS t2_alignment,
+  #                        t2.score AS t2_score, 
+  #                        t2.event_outcome AS t2_outcome,
   #                        events.broadcast_listing,
   #                        events.start_date_time"
   #
   ##############################################################################
-  def self.get_games_by_date_range(affiliation_id, range_start, range_end, order = "events.start_date_time ASC")
+  def self.get_games_by_date_range(affiliation_id, range_start, range_end, order="events.start_date_time ASC")
   
     start_date = time_to_datetime(range_start)
     end_date = time_to_datetime(range_end)
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
-              :select => "d1.abbreviation AS t1_abbr, 
-                          d1.entity_id AS t1_id,
-                          d1.first_name AS t1_first_name,
-                          d1.last_name AS t1_last_name,
-                          d1.full_name AS t1_full_name,
-                          d1.alias AS t1_alias,
-                          d1.url AS t1_url,
-                          d2.abbreviation AS t2_abbr, 
-                          d2.entity_id AS t2_id,
-                          d2.first_name AS t2_first_name,
-                          d2.last_name AS t2_last_name,
-                          d2.full_name AS t2_full_name,
-                          d2.alias AS t2_alias,
-                          d2.url AS t2_url,
+              :select => "t1.participant_id AS t1_id,
                           t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
 			              t1.event_outcome AS t1_outcome,
+			              t2.participant_id AS t2_id,
 			              t2.alignment AS t2_alignment,
                           t2.score AS t2_score, 
                           t2.event_outcome AS t2_outcome,
@@ -631,9 +598,7 @@ class Affiliation < ActiveRecord::Base
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
                           INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'
-                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "events.start_date_time >= '#{start_date}' AND events.start_date_time <= '#{end_date}'",                                    
               :order => order)
 
@@ -659,20 +624,10 @@ class Affiliation < ActiveRecord::Base
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
-  #            :select => "d1.abbreviation AS t1_abbr, 
-  #                        d1.entity_id AS t1_id,
-  #                        d1.first_name AS t1_first_name,
-  #                        d1.last_name AS t1_last_name,
-  #                        d1.full_name AS t1_full_name,
-  #                        d1.url AS t1_url,
-  #                        d2.abbreviation AS t1_abbr, 
-  #                        d2.entity_id AS t2_id,
-  #                        d2.first_name AS t2_first_name,
-  #                        d2.last_name AS t2_last_name,
-  #                        d2.full_name AS t2_full_name,
-  #                        d2.url AS t2_url,
+  #            :select => "t1.participant_id AS t1_id,
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
+  #                        t2.participant_id AS t2_id,
   #                        t2.alignment AS t2_alignment,
   #                        t2.score AS t2_score,
   #                        events.broadcast_listing,
@@ -685,23 +640,11 @@ class Affiliation < ActiveRecord::Base
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
-              :select => "d1.abbreviation AS t1_abbr, 
-                          d1.entity_id AS t1_id,
-                          d1.first_name AS t1_first_name,
-                          d1.last_name AS t1_last_name,
-                          d1.full_name AS t1_full_name,
-                          d1.alias AS t1_alias,
-                          d1.url AS t1_url,
-                          d2.abbreviation AS t2_abbr, 
-                          d2.entity_id AS t2_id,
-                          d2.first_name AS t2_first_name,
-                          d2.last_name AS t2_last_name,
-                          d2.full_name AS t2_full_name,
-                          d2.alias AS t2_alias,
-                          d2.url AS t2_url,
+              :select => "t1.participant_id AS t1_id,
                           t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
 			              t1.event_outcome AS t1_outcome,
+			              t2.participant_id AS t2_id,
 			              t2.alignment AS t2_alignment,
 			              t2.score AS t2_score, 
                           t2.event_outcome AS t2_outcome,
@@ -711,9 +654,7 @@ class Affiliation < ActiveRecord::Base
                           MAX(CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}')) as start_date_time",
                :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
                           INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams'
-                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "events.start_date_time <= '#{time}'",
               :group => "t1_id",
               :order => order)
@@ -744,20 +685,10 @@ class Affiliation < ActiveRecord::Base
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
-  #            :select => "d1.abbreviation AS t1_abbr, 
-  #                        d1.entity_id AS t1_id,
-  #                        d1.first_name AS t1_first_name,
-  #                        d1.last_name AS t1_last_name,
-  #                        d1.full_name AS t1_full_name,
-  #                        d1.url AS t1_url,
-  #                        d2.abbreviation AS t1_abbr, 
-  #                        d2.entity_id AS t2_id,
-  #                        d2.first_name AS t2_first_name,
-  #                        d2.last_name AS t2_last_name,
-  #                        d2.full_name AS t2_full_name,
-  #                        d2.url AS t2_url,
+  #            :select => "t1.participant_id AS t1_id
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
+  #                        t2.participant_id AS t2_id
   #                        t2.alignment AS t2_alignment,
   #                        t2.score AS t2_score,
   #                        events.broadcast_listing,
@@ -772,23 +703,11 @@ class Affiliation < ActiveRecord::Base
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
-              :select => "d1.abbreviation AS t1_abbr, 
-                          d1.entity_id AS t1_id,
-                          d1.first_name AS t1_first_name,
-                          d1.last_name AS t1_last_name,
-                          d1.full_name AS t1_full_name,
-                          d1.alias AS t1_alias,
-                          d1.url AS t1_url,
-                          d2.abbreviation AS t2_abbr, 
-                          d2.entity_id AS t2_id,
-                          d2.first_name AS t2_first_name,
-                          d2.last_name AS t2_last_name,
-                          d2.full_name AS t2_full_name,
-                          d2.alias AS t2_alias,
-                          d2.url AS t2_url,
+              :select => "t1.participant_id AS t1_id,
                           t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
                           t1.event_outcome AS t1_outcome,
+                          t2.participant_id AS t2_id,
 			              t2.alignment AS t2_alignment,
                           t2.score AS t2_score, 
                           t2.event_outcome AS t2_outcome,
@@ -798,9 +717,7 @@ class Affiliation < ActiveRecord::Base
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
                           INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'
-                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "events.start_date_time >= '#{start_date}' #{tagged_condition}",
               :order => "events.start_date_time ASC",
               :limit => limit)
@@ -831,20 +748,10 @@ class Affiliation < ActiveRecord::Base
   #
   # Return:
   # -games[] - Array of objects of type AffiliationsEvent
-  #            :select => "d1.abbreviation AS t1_abbr, 
-  #                        d1.entity_id AS t1_id,
-  #                        d1.first_name AS t1_first_name,
-  #                        d1.last_name AS t1_last_name,
-  #                        d1.full_name AS t1_full_name,
-  #                        d1.url AS t1_url,
-  #                        d2.abbreviation AS t1_abbr, 
-  #                        d2.entity_id AS t2_id,
-  #                        d2.first_name AS t2_first_name,
-  #                        d2.last_name AS t2_last_name,
-  #                        d2.full_name AS t2_full_name,
-  #                        d2.url AS t2_url,
+  #            :select => "t1.participant_id AS t1_id
   #                        t1.alignment AS t1_alignment,
   #                        t1.score AS t1_score,
+  #                        t2.participant_id AS t2_id
   #                        t2.alignment AS t2_alignment,
   #                        t2.score AS t2_score,
   #                        events.broadcast_listing,
@@ -859,23 +766,11 @@ class Affiliation < ActiveRecord::Base
   
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
-              :select => "d1.abbreviation AS t1_abbr, 
-                          d1.entity_id AS t1_id,
-                          d1.first_name AS t1_first_name,
-                          d1.last_name AS t1_last_name,
-                          d1.full_name AS t1_full_name,
-                          d1.alias AS t1_alias,
-                          d1.url AS t1_url,
-                          d2.abbreviation AS t2_abbr, 
-                          d2.entity_id AS t2_id,
-                          d2.first_name AS t2_first_name,
-                          d2.last_name AS t2_last_name,
-                          d2.full_name AS t2_full_name,
-                          d2.alias AS t2_alias,
-                          d2.url AS t2_url,
+              :select => "t1.participant_id AS t1_id,
                           t1.alignment AS t1_alignment,
                           t1.score AS t1_score,
 			              t1.event_outcome AS t1_outcome,
+			              t2.participant_id AS t2_id,
                           t2.alignment AS t2_alignment,
                           t2.score AS t2_score, 
                           t2.event_outcome AS t2_outcome,
@@ -885,9 +780,7 @@ class Affiliation < ActiveRecord::Base
                           CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') as start_date_time",
                :joins => "INNER JOIN events ON events.id = affiliations_events.event_id
                           INNER JOIN participants_events AS t1 ON t1.event_id = events.id AND t1.participant_type = 'teams' AND t1.alignment='home'
-                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
-                          INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                          INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                          INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'",
               :conditions => "events.start_date_time <= '#{end_date}' #{tagged_condition}",                                    
               :order => "events.start_date_time DESC",
               :limit => limit)
@@ -916,8 +809,24 @@ class Affiliation < ActiveRecord::Base
   #            Note: This is an optional parameter that defaults to BOOKMAKER_ID env variable
   #
   # Return:
-  #   :select => "wagering_straight_spread_lines.*, display_names.*,  
-  #               wagering_straight_spread_lines.line_value AS line",
+  #       :select => "MAX(t1_score_lines.date_time),  
+  #                        t1.participant_id AS t1_id, t2.participant_id AS t2_id
+  #                        t1.alignment AS t1_alignment, t1.score AS t1_score,  t1.event_outcome AS t1_outcome,
+  #                        t2.alignment AS t2_alignment, t2.score AS t2_score, 
+  #                        t2.event_outcome AS t2_outcome,
+  #                        t1_spread_lines.line_value AS t1_spread_line,
+  #                        t2_spread_lines.line_value AS t2_spread_line,
+  #                        t1_money_lines.line AS t1_money_line,
+  #                        t2_money_lines.line AS t2_money_line,
+  #                        t1_score_lines.prediction AS t1_prediction,
+  #                        t2_score_lines.prediction AS t2_prediction,
+  #                        t1_score_lines.total AS t1_line_total,
+  #                        t2_score_lines.total AS t2_line_total,
+  #                        t1_score_lines.line_over AS t1_line_over,
+  #                        t2_score_lines.line_over AS t2_line_over,
+  #                        t1_score_lines.line_under AS t1_line_under,
+  #                        t2_score_lines.line_under AS t2_line_under,
+  #                        events.id AS event_id, events.event_status,  events.broadcast_listing, CONVERT_TZ(events.start_date_time, '+00:00', '#{TIMEZONE}') AS start_date_time",
   #############################################################################
   def self.get_lines(affiliation_id, limit = 20, tagged_teams = nil, range_start = TIME, bookmaker_id = BOOKMAKER_ID)
   
@@ -928,8 +837,7 @@ class Affiliation < ActiveRecord::Base
     games = AffiliationsEvent.find_all_by_affiliation_id(
               affiliation_id, 
               :select => "MAX(t1_score_lines.date_time),  
-                          d1.abbreviation AS t1_abbr, d1.entity_id AS t1_id, d1.first_name AS t1_first_name, d1.last_name AS t1_last_name, d1.full_name AS t1_full_name, d1.alias AS t1_alias, d1.url AS t1_url,
-                          d2.abbreviation AS t2_abbr, d2.entity_id AS t2_id, d2.first_name AS t2_first_name, d2.last_name AS t2_last_name, d2.full_name AS t2_full_name, d2.alias AS t2_alias, d2.url AS t2_url,
+                          t1.participant_id AS t1_id, t2.participant_id AS t2_id,
                           t1.alignment AS t1_alignment, t1.score AS t1_score,  t1.event_outcome AS t1_outcome,
                           t2.alignment AS t2_alignment, t2.score AS t2_score, 
                           t2.event_outcome AS t2_outcome,
@@ -951,9 +859,7 @@ class Affiliation < ActiveRecord::Base
                         INNER JOIN participants_events AS t2 ON t2.event_id = events.id AND t2.participant_id <> t1.participant_id AND t2.participant_type = 'teams'
                         LEFT JOIN wagering_total_score_lines AS t1_score_lines ON t1_score_lines.event_id = events.id AND t1_score_lines.team_id = t1.participant_id AND t1_score_lines.bookmaker_id = #{bookmaker_id}  LEFT JOIN wagering_total_score_lines AS t2_score_lines ON t2_score_lines.event_id = events.id AND t2_score_lines.team_id = t2.participant_id AND t2_score_lines.bookmaker_id = #{bookmaker_id}
                         LEFT JOIN wagering_straight_spread_lines AS t1_spread_lines ON t1_spread_lines.event_id = events.id AND t1_spread_lines.team_id = t1.participant_id AND t1_spread_lines.bookmaker_id = #{bookmaker_id}  LEFT JOIN wagering_straight_spread_lines AS t2_spread_lines ON t2_spread_lines.event_id = events.id AND t2_spread_lines.team_id = t2.participant_id AND t2_spread_lines.bookmaker_id = #{bookmaker_id}
-                        LEFT JOIN wagering_moneylines AS t1_money_lines ON t1_money_lines.event_id = events.id AND t1_money_lines.team_id = t1.participant_id AND t1_money_lines.bookmaker_id = #{bookmaker_id}  LEFT JOIN wagering_moneylines AS t2_money_lines ON t2_money_lines.event_id = events.id AND t2_money_lines.team_id = t2.participant_id AND t2_money_lines.bookmaker_id = #{bookmaker_id}
-                        INNER JOIN display_names AS d1 ON d1.entity_id = t1.participant_id AND d1.entity_type = 'teams'
-                        INNER JOIN display_names AS d2 ON d2.entity_id = t2.participant_id AND d2.entity_type = 'teams'",
+                        LEFT JOIN wagering_moneylines AS t1_money_lines ON t1_money_lines.event_id = events.id AND t1_money_lines.team_id = t1.participant_id AND t1_money_lines.bookmaker_id = #{bookmaker_id}  LEFT JOIN wagering_moneylines AS t2_money_lines ON t2_money_lines.event_id = events.id AND t2_money_lines.team_id = t2.participant_id AND t2_money_lines.bookmaker_id = #{bookmaker_id}",
               :conditions => "events.start_date_time >= '#{start_date}' #{tagged_condition}",                                    
               :group => "events.id",
               :order => "start_date_time ASC",
@@ -1050,9 +956,6 @@ class Affiliation < ActiveRecord::Base
     return ret
   
   end
-  
-  
-  
   
   
   #############################################################################

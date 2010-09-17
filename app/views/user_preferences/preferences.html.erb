@@ -111,33 +111,33 @@
 
 <%
   @pro_leagues.size.times do |l| 
-    abbr = @pro_leagues[l].abbreviation.gsub(/[\s']/, "_")
+    abbr = names.league_abbreviation(@pro_leagues[l].affiliation_id).gsub(/[\s']/, "_")
 %>
     <hr />
     <h2>
-      <input id="sport_list_<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @pro_leagues[l].abbreviation + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
-      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @pro_leagues[l].abbreviation %></a>
+      <input id="sport_list_<%= abbr %>_checkbox" name="sports[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= names.league_abbreviation(@pro_leagues[l].affiliation_id) + "," + (@pro_leagues[l].affiliation_id).to_s %>" />
+      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= names.league_abbreviation(@pro_leagues[l].affiliation_id) %></a>
       <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
     @pro_divisions[l].size.times do |d|
-      div_abbr = abbr + @pro_divisions[l][d].full_name.gsub(/[\s\.']/, '_')
+      div_abbr = abbr + names.division_full_name(@pro_divisions[l][d].affiliation_id).gsub(/[\s\.']/, '_')
 %>
         <span>
             <h3>
               <input type="checkbox" onclick="toggleHeaderCheckbox('<%= div_abbr %>'); return true;" id="<%= div_abbr %>_checkbox" />
-              <a onclick="$('<%= div_abbr + "_checkbox" %>').checked = !$('<%= div_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= div_abbr %>'); return true;"><%= @pro_divisions[l][d].full_name %></a>
+              <a onclick="$('<%= div_abbr + "_checkbox" %>').checked = !$('<%= div_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= div_abbr %>'); return true;"><%= names.division_full_name(@pro_divisions[l][d].affiliation_id) %></a>
             </h3>
             <ul id="<%= div_abbr %>" style="display: none">
 <%
         @pro_teams[l][d].size.times do |t|
-            team_abbr = (@pro_teams[l][d][t].full_name).gsub(/[\s\.']/, '_')
+            team_abbr = (names.team_full_name(@pro_teams[l][d][t].team_id)).gsub(/[\s\.']/, '_')
 %>
                 <li>
-                    <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @pro_teams[l][d][t].last_name + "," + (@pro_teams[l][d][t].team_id).to_s %>" />
-                    <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @pro_teams[l][d][t].full_name %></label>
+                    <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= names.team_last_name(@pro_teams[l][d][t].team_id) + "," + (@pro_teams[l][d][t].team_id).to_s %>" />
+                    <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= names.team_full_name(@pro_teams[l][d][t].team_id) %></label>
                     <em style="font-size: .73em"><%= @pro_teams[l][d][t].followers %> fans</em>
                 </li>
                 
@@ -180,33 +180,33 @@
 
 <%  
   @college_leagues.size.times do |l|
-    abbr = @college_leagues[l].abbreviation.gsub(/[\s']/, "_")
+    abbr = names.league_abbreviation(@college_leagues[l].affiliation_id).gsub(/[\s']/, "_")
 %>
     <hr />
     <h2>
-      <input id="sport_list_<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= @college_leagues[l].abbreviation + "," + (@college_leagues[l].affiliation_id).to_s %>" />
-      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= @college_leagues[l].full_name %></a>
+      <input id="sport_list_<%= abbr %>_checkbox" name="college[]" onclick="toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;" type="checkbox" value="<%= names.league_abbreviation(@college_leagues[l].affiliation_id) + "," + (@college_leagues[l].affiliation_id).to_s %>" />
+      <a onclick="$('sport_list_<%= abbr %>_checkbox').checked = !$('sport_list_<%= abbr %>_checkbox').checked; toggleHeaderCheckbox('sport_list_<%= abbr %>'); return true;"><%= names.league_full_name(@college_leagues[l].affiliation_id) %></a>
       <a class="check" id="check_all_sport_list_<%= abbr %>" onclick="checkAllLeague('sport_list_<%= abbr %>');">Select All</a><a class="check" id="uncheck_all_sport_list_<%= abbr %>" style="display: none" onclick="uncheckAllLeague('sport_list_<%= abbr %>');">Select All</a>
     </h2>
     <div class="conference" id="sport_list_<%= abbr %>" style="display: none">
 <%
     @college_conferences[l].size.times do |c|
-      conf_abbr =  abbr + @college_conferences[l][c].full_name.gsub(/[\s\.']/, '_')
+      conf_abbr =  abbr + names.conference_full_name(@college_conferences[l][c].affiliation_id).gsub(/[\s\.']/, '_')
 %>
         <span>
             <h3>
               <input type="checkbox" onclick="toggleHeaderCheckbox('<%= conf_abbr %>'); return true;" id="<%= conf_abbr %>_checkbox" />
-              <a onclick="$('<%= conf_abbr + "_checkbox" %>').checked = !$('<%= conf_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= conf_abbr %>'); return true;"><%= @college_conferences[l][c].full_name %></a>
+              <a onclick="$('<%= conf_abbr + "_checkbox" %>').checked = !$('<%= conf_abbr + "_checkbox" %>').checked; toggleHeaderCheckbox('<%= conf_abbr %>'); return true;"><%= names.conference_full_name(@college_conferences[l][c].affiliation_id) %></a>
             
             </h3>
             <ul id="<%= conf_abbr %>" style="display: none">
 <%
         @college_teams[l][c].size.times do |t|
-            team_abbr = (@college_teams[l][c][t].full_name).gsub(/[\s\.'\(\)&,-]/, '_') + abbr
+            team_abbr = (names.team_full_name(@college_teams[l][c][t].team_id)).gsub(/[\s\.'\(\)&,-]/, '_') + abbr
 %>
                 <li>
-                  <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= @college_teams[l][c][t].first_name.to_s.gsub(/,/, '') + "," + (@college_teams[l][c][t].team_id).to_s %>" />
-                  <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= @college_teams[l][c][t].full_name %></label>
+                  <input class="<%= team_abbr %>" id="<%= team_abbr %>_checkbox" name="<%= abbr %>[]" type="checkbox" value="<%= names.team_first_name(@college_teams[l][c][t].team_id).to_s.gsub(/,/, '') + "," + (@college_teams[l][c][t].team_id).to_s %>" />
+                  <label onclick="$('<%= team_abbr + "_checkbox" %>').checked = !$('<%= team_abbr + "_checkbox" %>').checked;"><%= names.team_full_name(@college_teams[l][c][t].team_id) %></label>
                   <em style="font-size: .8em"><%= @college_teams[l][c][t].followers %> fans</em>
                 </li>
                 

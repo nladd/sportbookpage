@@ -24,7 +24,6 @@ class College
   #               standing_subgroup_affiliations.id as division_id,
   #               teams.id AS team_id,      
   #               outcome_totals.*,
-  #               display_names.*",
   #############################################################################
   def self.get_standings(affiliation_id, sub_affiliation_id, time, publisher_id)
 
@@ -36,7 +35,7 @@ class College
         
     return Standing.find(
               :all,
-              :select => "teams.id AS team_id, display_names.*,
+              :select => "teams.id AS team_id,
                     outcome_totals.rank,
                     league_totals.losses AS league_losses,
                     league_totals.winning_percentage AS league_winning_percentage,
@@ -60,9 +59,7 @@ class College
                       INNER JOIN affiliations as standing_subgroup_affiliations ON standing_subgroups.affiliation_id = standing_subgroup_affiliations.id  
                       INNER JOIN affiliations as season_affiliations ON seasons.league_id = season_affiliations.id
                       INNER JOIN teams ON outcome_totals.outcome_holder_id = teams.id
-                      LEFT JOIN rankings ON rankings.participant_id = teams.id AND rankings.document_fixture_id = #{doc_fixture_id} AND rankings.date_coverage_id = sub_seasons.id  AND ranking_type = 'rank'
-                      INNER JOIN publishers ON seasons.publisher_id = publishers.id  
-                      INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
+                      LEFT JOIN rankings ON rankings.participant_id = teams.id AND rankings.document_fixture_id = #{doc_fixture_id} AND rankings.date_coverage_id = sub_seasons.id  AND ranking_type = 'rank'",
               :conditions => "league_affiliations.id = #{affiliation_id} AND
                              standing_affiliations.id = #{sub_affiliation_id} AND
                              standing_affiliations.affiliation_type = 'conference' AND
@@ -70,7 +67,7 @@ class College
                              sub_seasons.sub_season_type = 'season-regular' AND
                              outcome_totals.outcome_holder_type = 'teams' AND
                              rankings.document_fixture_id = 120 AND
-                             publishers.id = #{publisher_id}",
+                             seasons.publisher_id = #{publisher_id}",
               :order => "outcome_totals.rank + 0")
         
     
@@ -93,7 +90,6 @@ class College
   #               standing_subgroup_affiliations.id as division_id,
   #               teams.id AS team_id,      
   #               outcome_totals.*,
-  #               display_names.*",
   #############################################################################
   def self.get_rankings(affiliation_id, time, publisher_id)
 
@@ -103,7 +99,7 @@ class College
                
     return Standing.find(
                 :all,
-                :select => "teams.id AS team_id, display_names.*, 
+                :select => "teams.id AS team_id,
                            rankings.ranking_value AS rank, 
                            rankings.ranking_value_previous AS previous_rank, 
                            league_totals.wins AS wins,
@@ -126,14 +122,12 @@ class College
                           INNER JOIN affiliations as standing_subgroup_affiliations ON standing_subgroups.affiliation_id = standing_subgroup_affiliations.id   
                           INNER JOIN affiliations as season_affiliations ON seasons.league_id = season_affiliations.id  
                           INNER JOIN teams ON outcome_totals.outcome_holder_id = teams.id 
-                          INNER JOIN rankings ON rankings.participant_id = teams.id AND rankings.document_fixture_id = #{doc_fixture_id} AND rankings.date_coverage_id = sub_seasons.id  AND ranking_type = 'rank' 
-                          INNER JOIN publishers ON seasons.publisher_id = publishers.id   
-                          INNER JOIN display_names ON display_names.entity_id = teams.id AND display_names.entity_type = 'teams'",
+                          INNER JOIN rankings ON rankings.participant_id = teams.id AND rankings.document_fixture_id = #{doc_fixture_id} AND rankings.date_coverage_id = sub_seasons.id  AND ranking_type = 'rank'",
                 :conditions => "league_affiliations.id = #{affiliation_id} AND
                                seasons.season_key = #{season_key} AND
                                sub_seasons.sub_season_type = 'season-regular' AND
                                outcome_totals.outcome_holder_type = 'teams' AND  
-                               publishers.id = #{publisher_id}",
+                               seasons.publisher_id = #{publisher_id}",
                 :order => "rankings.ranking_value + 0")
     
                         

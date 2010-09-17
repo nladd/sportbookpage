@@ -8,7 +8,7 @@
     teams = Array.new(@pro_leagues.size)
     
     @pro_leagues.size.times do |l| 
-      abbr = @pro_leagues[l].abbreviation.gsub(/[\s']/, "_")
+      abbr = names.league_abbreviation(@pro_leagues[l].affiliation_id).gsub(/[\s']/, "_")
       #for each league, get the divisions of that league
       pro_divisions[l] = Affiliation.get_divisions_by_league(@pro_leagues[l].affiliation_id)
       
@@ -23,11 +23,11 @@
           teams[l][d] = Affiliation.get_teams_by_division(pro_divisions[l][d].affiliation_id, @pro_leagues[l].affiliation_key)
       %>
       <ul>
-        <h1><%= pro_divisions[l][d].first_name %></h1>
+        <h1><%= names.division_full_name(pro_divisions[l][d].affiliation_id) %></h1>
         <%
           teams[l][d].size.times do |t|
         %>
-        <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %></a></li>
+        <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= names.team_first_name(teams[l][d][t].team_id) %></a></li>
         <%
           end # close teams loop
         %>
@@ -52,7 +52,7 @@
     teams = Array.new(@college_leagues.size)
     
     @college_leagues.size.times do |l| 
-      abbr = @college_leagues[l].abbreviation.gsub(/[\s']/, "_")
+      abbr = names.league_abbreviation(@college_leagues[l].affiliation_id).gsub(/[\s']/, "_")
       #for each league, get the divisions of that league
       college_conferences[l] = Affiliation.get_conferences_by_league(@college_leagues[l].affiliation_id)
       
@@ -63,21 +63,21 @@
   	<div class="content">
       <%
         college_conferences[l].size.times do |d|
-          c_abbr = college_conferences[l][d].full_name.gsub(/[\s']/, "_") + abbr
+          c_abbr = names.conference_full_name(college_conferences[l][d].affiliation_id).gsub(/[\s']/, "_") + abbr
           
           #for each division in a league, get the teams of that division
           teams[l][d] = Affiliation.get_teams_by_conference(college_conferences[l][d].affiliation_id, @college_leagues[l].affiliation_key)
       %>
 
       <ul id="<%= c_abbr %>">
-        <li><h1 onmouseover="toggleCollegeTeams('<%= c_abbr %>', '<%= abbr %>');" onmouseout="toggleCollegeTeams('<%= c_abbr %>', '<%= abbr %>');"><%= college_conferences[l][d].first_name %></h1></li>
+        <li><h1 onmouseover="toggleCollegeTeams('<%= c_abbr %>', '<%= abbr %>');" onmouseout="toggleCollegeTeams('<%= c_abbr %>', '<%= abbr %>');"><%= names.conference_first_name(college_conferences[l][d].affiliation_id) %></h1></li>
       </ul>
       <div id="<%= c_abbr %>_sub" style="display:none;">
         <ul>
           <%
             teams[l][d].size.times do |t|
           %>
-          <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= teams[l][d][t].first_name %></a></li>
+          <li><a href="/team/<%= teams[l][d][t].team_id %>"><%= names.team_first_name(teams[l][d][t].team_id) %></a></li>
           <%
             end # close teams loop
           %>

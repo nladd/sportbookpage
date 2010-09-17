@@ -22,7 +22,7 @@
       
   %>
         
-        <span style="color:#4696bb; border:none; font-weight:bold;"><%= league.abbreviation %></span>
+        <span style="color:#4696bb; border:none; font-weight:bold;"><%= names.league_abbreviation(league.affiliation_id) %></span>
   <%
       
       if scores.size != 0 then
@@ -37,7 +37,7 @@
         #  style = "color: blue"
         #end
   %>
-        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{score.t1_abbr} #{score.t1_score} vs #{score.t2_abbr} #{score.t2_score}" %></span>
+        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{names.team_abbreviation(score.t1_id)} #{score.t1_score} vs #{names.team_abbreviation(score.t2_id)} #{score.t2_score}" %></span>
   <%
       end
   %>
@@ -52,7 +52,7 @@
           #  style = "color: blue"
           #end
   %>
-        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{game.t1_abbr} vs #{game.t2_abbr} #{game.start_date_time.strftime('%m/%d %I:%M%P')}" %></span>
+        <span style="padding:0 3px 0 3px; color:#000000; border-right:#FFFFFF thin solid; display:inline;"><%= "#{names.team_abbreviation(game.t1_id)} vs #{names.team_abbreviation(game.t2_id)} #{game.start_date_time.strftime('%m/%d %I:%M%P')}" %></span>
   <%
         end
       end

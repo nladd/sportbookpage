@@ -16,9 +16,9 @@
 <div class="anchors">
   <%
     @leagues.each do |league|
-      abbr = @abbr = (league.abbreviation).gsub(/[\s']/, "_")
+      abbr = (names.league_abbreviation(league.affiliation_id)).gsub(/[\s']/, "_")
   %>
-    <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= league.abbreviation + " " + @drop_title %>"><%= league.abbreviation %></a>&nbsp;
+    <a href="javascript:void(0);" onclick="jumpToAnchor('<%= @drop_id %>_content', '<%= abbr + "_" + @drop_id %>')" title="Jump to <%= names.league_abbreviation(league.affiliation_id) + " " + @drop_title %>"><%= names.league_abbreviation(league.affiliation_id) %></a>&nbsp;
   <% end %>
 </div>
 

@@ -10,11 +10,11 @@
 <% end %>
   
 <%
-  @leagues.size.times do |@i|
-    abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
+  @leagues.size.times do |i|
+    abbr = (names.league_abbreviation(@leagues[i].affiliation_id)).gsub(/[\s']/, "_")
 %>
 
-    <li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= @leagues[@i].abbreviation %> Schedule</li>
+    <li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= names.league_abbreviation(@leagues[i].affiliation_id) %> Schedule</li>
 
     <li>
       <span class="clps05col clps">Date<br/>Time</span>
@@ -25,43 +25,42 @@
       <div class="clear"></div>
     </li>
     
-    <% if @games[@i].size < 1 %>
+    <% if @games[i].size < 1 %>
     <li>
       <p>There are no current games available for the teams selected in your profile. Try clicking the '<a href="#" onclick="new Ajax.Request('/drop', {asynchronous:true, evalScripts:true, parameters:'level=<%= @level %>&amp;full_partial=full&amp;drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>'}); return false;">All</a>' link above.</p>
     </li>
     <% end %>
   
 <%
-    @abbr = (@leagues[@i].abbreviation).gsub(/[\s']/, "_")
-    @size = @games[@i].size
-    @j = -1    
+    size = @games[i].size
+    j = -1    
     
-    @games[@i].each do |game|
+    @games[i].each do |game|
       
-      @j += 1
+      j += 1
 %>
 
-    <% if ( @j == 0 ) then %>
-      <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>">
-    <% elsif (@j % 12) == 0 %>
-        <li style="height: 20px" id="<%= @drop_id %>_more_<%= @abbr + '_' + @j.to_s %>">
-          <% if @j != 12 then %>
+    <% if ( j == 0 ) then %>
+      <div id="<%= @drop_id %>_hide_<%= abbr + '_' + j.to_s %>">
+    <% elsif (j % 12) == 0 %>
+        <li style="height: 20px" id="<%= @drop_id %>_more_<%= abbr + '_' + j.to_s %>">
+          <% if j != 12 then %>
           <span class="clps05col">
-            <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{@abbr}', #{@j}" %>);">Less...</a>
+            <a href="javascript:void(0);" onclick="showLess(<%= "'#{@drop_id}', '#{abbr}', #{j}" %>);">Less...</a>
           </span>
           <% end %>
           <span class="clps05col">
-            <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{@abbr}', #{@size}, #{@j}" %>);">More...</a>
+            <a href="javascript:void(0);" onclick="showMore(<%= "'#{@drop_id}', '#{abbr}', #{size}, #{j}" %>);">More...</a>
           </span>
         </li>
       </div> <!-- close <hide_#> -->
-      <div id="<%= @drop_id %>_hide_<%= @abbr + '_' + @j.to_s %>" style="display:none;">
+      <div id="<%= @drop_id %>_hide_<%= abbr + '_' + j.to_s %>" style="display:none;">
     <% end %> 
    
     <li>
       <span class="clps05col clps"><%= game.start_date_time.strftime("%a, %m/%d") %><br/><%= game.start_date_time.strftime("%I:%M%P") %></span>
-      <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= @isCollege ? game.t1_first_name : game.t1_last_name %></a></span>
-      <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= @isCollege ? game.t2_first_name : game.t2_last_name %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t1_id %>"><%= @isCollege ? names.team_first_name(game.t1_id) : names.team_last_name(game.t1_id) %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.t2_id %>"><%= @isCollege ? names.team_first_name(game.t2_id) : names.team_last_name(game.t2_id) %></a></span>
       <% if game.event_status == "pre-event" %>
         <span class="clps05col clps">
           <a href="javascript:void(0)" onclick="new Ajax.Request('/article/event_preview', {asynchronous:true, evalScripts:true, parameters:'drop_id=<%= @drop_id %>&amp;dragged_id=<%= @dragged_id %>&amp;event_id=<%= game.event_id %>&amp;prev_partial=<%= @partial_path %>'}); return false;">Preview</a>
@@ -75,17 +74,17 @@
 
 <%
     end # close games loop
-    if ( (@j > -1) && (@j > 11) ) && (@j % 12 > 0) then
+    if ( (j > -1) && (j > 11) ) && (j % 12 > 0) then
 %>
-    <div id="<%= @drop_id %>_more_<%= @abbr + '_' + (@size).to_s %>"> 
+    <div id="<%= @drop_id %>_more_<%= abbr + '_' + (size).to_s %>"> 
      <li style="height: 20px">
         <span class="clps05col">
-          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{@abbr}', #{@size}" %>); ">Less...</a>
+          <a href="javascript:void(0);" onclick="finalShowLess(<%= "'#{@drop_id}', '#{abbr}', #{size}" %>); ">Less...</a>
         </span>
       </li>
     </div>
 <% end %>
-    <% if @j != -1 %>
+    <% if j != -1 %>
     </div>  <!-- close last <hide_#> -->
     <% end %>
 <%

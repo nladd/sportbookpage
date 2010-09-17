@@ -11,16 +11,16 @@
 
 <%
   @leagues.size.times do |l|
-	abbr = (@leagues[l].abbreviation).gsub(/[\s']/, "_")
+	abbr = (names.league_abbreviation(@leagues[l].affiliation_id)).gsub(/[\s']/, "_")
 %>
 
-	<li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= @leagues[l].abbreviation %> Standings</li>
+	<li class="subhead" id="<%= abbr + "_" + @drop_id %>"><%= names.league_abbreviation(@leagues[l].affiliation_id) %> Standings</li>
 
 <%
     @sub_affiliations[l].size.times do |d|
 %>
 	<li class="colHead show clps">
-	  <span class="clps03col clps" style="text-align: left"><%= @sub_affiliations[l][d].full_name %></span>
+	  <span class="clps03col clps" style="text-align: left"><%= @isCollege ? team.conference_full_name(@sub_affiliations[l][d].affiliation_id) : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %></span>
 	  <span class="clps12col clps">GP</span>
 	  <span class="clps08col clps">%</span>
 	  <span class="clps05col clps">W - L</span>
@@ -29,7 +29,7 @@
 	  <div class="clear"></div>
 	</li>
 	<li class="colHead hidden expn" style="display:none">
-	  <span class="clps05col clps" style="text-align: left"><%= @sub_affiliations[l][d].full_name %></span>
+	  <span class="clps05col clps" style="text-align: left"><%= @isCollege ? team.conference_full_name(@sub_affiliations[l][d].affiliation_id) : names.division_full_name(@sub_affiliations[l][d].affiliation_id) %></span>
 	  <span class="clps10col clps">GP</span>
 	  <span class="clps10col clps">%</span>
 	  <span class="clps10col clps">W - L</span>
@@ -59,7 +59,7 @@
 %>
 
 	<li style="text-align: center" class="show clps">
-	  <span class="clps03col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= standing.first_name %></a></span>
+	  <span class="clps03col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= @isCollege ? names.team_last_name(standing.team_id) : names.team_first_name(standing.team_id) %></a></span>
 	  <span class="clps12col clps"><%= standing.events_played.to_s %></span>
 	  <span class="clps08col clps"><%= (standing.winning_percentage.to_s)[1..-1] %></span>
 	  <span class="clps05col clps"><%= standing.wins.to_s + " - " + standing.losses.to_s %></span>
@@ -68,7 +68,7 @@
 	  <div class="clear"></div>
 	</li>
 	<li style="text-align: center; display:none" class="hidden expn">
-	  <span class="clps05col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= standing.first_name %></a></span>
+	  <span class="clps05col clps" style="text-align: left"><a href="/team/<%= standing.team_id %>"><%= standing.rank.to_s %>. <%= @isCollege ? names.team_last_name(standing.team_id) : names.team_first_name(standing.team_id) %></a></span>
 	  <span class="clps10col clps"><%= standing.events_played.to_s %></span>
 	  <span class="clps10col clps"><%= (standing.winning_percentage.to_s)[1..-1] %></span>
 	  <span class="clps10col clps"><%= standing.wins.to_s + " - " + standing.losses.to_s %></span>

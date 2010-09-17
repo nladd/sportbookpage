@@ -27,7 +27,7 @@
     <li>
       <span class="clps05col clps"><%= game.start_date_time.strftime("%m/%d/%y") %></span>
       <span class="clps20col clps"><%= home_away %></span>
-      <span class="clps05col clps"><a href="/team/<%= game.opponent_id %>"><%= @isCollege ? game.opponent_first_name : game.opponent_last_name %></a></span>
+      <span class="clps05col clps"><a href="/team/<%= game.opponent_id %>"><%= @isCollege ? names.team_first_name(game.opponent_id) : names.team_last_name(game.opponent_id) %></a></span>
       <span class="clps05col clps"><%= game.t1_score + "-" + game.t2_score + " " + outcome %></span>
       <% if game.event_status == "post-event" %>
         <span class="clps06col clps">

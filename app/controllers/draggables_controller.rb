@@ -685,12 +685,12 @@ class DraggablesController < ApplicationController
               
         if (@filter.blank?) then
           @lines[i] = Affiliation.get_lines(
-                                  @leagues[i].affiliation_id, 24,
+                                  @leagues[i].affiliation_id, 36,
                                   session[:tagged_teams][@leagues[i].affiliation_id.to_i])
         else
           @lines[i] = Affiliation.get_lines(
                                   @leagues[i].affiliation_id,
-                                  24)
+                                  36)
         end
 
       end
