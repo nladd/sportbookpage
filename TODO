@@ -13,6 +13,7 @@
 -advanced fanclub search
 -delete someone from fanclub
 -email when added to a user's fanclub
+-webmail access
 
 -leaders board
 -smarter news articles
@@ -25,7 +26,7 @@
 
 -footer links, homepage, twitter, facebook
 
--startup scripts for nginx, postfix, and dovecot
+-startup scripts for dovecot
 
 -college rankings
 -college home/away records
@@ -44,8 +45,6 @@
 -IE login popup too wide
 
 -missing D2 football conference
--start dovecot
 -loading display when loading new article
--when you open the page, and a separate window pops up to login or create a new user name-- you enter your user name, press tab, and the cursor jumps to the bottom screen
 -nhl preseason games
--college standings/rankings
+-Can we have the "drag me" pop-up larger?
